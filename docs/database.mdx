@@ -1,0 +1,64 @@
+# Database Schema & Vector Search
+
+Wordings.ai uses **Neon Serverless Postgres** as its primary data store, leveraging **PGVector** for all semantic search capabilities.
+
+## 🗄 Core Tables
+
+### `contracts`
+
+Stores document metadata, processing status, and final synthesis.
+
+- `fileContent`: The raw OCR'd text.
+- `structuredContent`: The JSON document map.
+- `analysis`: JSONB field containing the Executive Summary and Plus insights.
+- `riskScore`: Aggregated benchmark score.
+
+### `clauses` & `clause_chunks`
+
+The **Clause Library** (Stage 2).
+
+- `clauses`: Stores the standard wording text and approval status.
+- `clause_chunks`: Stores the high-dimensional vector embeddings for every library clause.
+
+### `contract_chunks`
+
+Temporary semantic chunks for individual contracts (Stage 3).
+
+- Used for RAG retrieval during Rule Evaluation.
+- Scoped by `contractId` and `contractVersionId`.
+
+### `rule_results`
+
+Stores the detailed output of each rule evaluation.
+
+- `status`: Matched/Amber/Red.
+- `reasoning`: The AI-generated justification.
+- `evidence`: JSONB array of source text snippets from the contract.
+
+### `analysis_events`
+
+The audit log and real-time feed for the UI.
+
+- Stores every clause detection and rule event.
+- Scoped by `isGlobal` to manage the Global Standards toggle in the UI.
+
+## 🔍 Vector Search Strategy
+
+We use the **Cosine Distance (`<=>`)** operator for semantic similarity.
+
+### Fast Checklist Matching
+
+```sql
+SELECT id, clause_name, 1 - (embedding <=> :query_vec) as similarity
+FROM clause_chunks
+WHERE 1 - (embedding <=> :query_vec) > 0.65
+ORDER BY similarity DESC
+```
+
+### RAG Evidence Retrieval
+
+For Rule Evaluation, we retrieve the top $K$ chunks where the similarity is highest for the rule's specific search queries.
+
+---
+
+_Last Updated: Wednesday, 13 May 2026_

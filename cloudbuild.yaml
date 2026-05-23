@@ -1,0 +1,70 @@
+steps:
+  # Step 1: Pull the latest image to use as a cache source
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        docker pull gcr.io/$PROJECT_ID/wordingsai-backend:latest || exit 0
+    id: "Pull Cache"
+
+  # Step 2: Build the container image using the cache
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "--cache-from",
+        "gcr.io/$PROJECT_ID/wordingsai-backend:latest",
+        "-t",
+        "gcr.io/$PROJECT_ID/wordingsai-backend:$COMMIT_SHA",
+        "-t",
+        "gcr.io/$PROJECT_ID/wordingsai-backend:latest",
+        "./backend",
+      ]
+    id: "Build Image"
+
+  # Step 3: Push the container image to Google Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/wordingsai-backend:latest"]
+    id: "Push Latest Image"
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/wordingsai-backend:$COMMIT_SHA"]
+    id: "Push Versioned Image"
+
+  # Step 4: Deploy the container to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "wordingsai-backend"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/wordingsai-backend:$COMMIT_SHA"
+      - "--region"
+      - "europe-west2"
+      - "--platform"
+      - "managed"
+      - "--memory"
+      - "8Gi"
+      - "--cpu"
+      - "4"
+      - "--concurrency"
+      - "8"
+      - "--timeout"
+      - "3600"
+      - "--set-env-vars"
+      - "DATABASE_URL=postgresql://neondb_owner:npg_T2wQoMKsYEc3@ep-silent-thunder-amqdl4y1-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require,OPENROUTER_API_KEY=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,GEMINI_API_KEY=AIzaSyByGwK8hrj4pW2etiInR7-YVWhctSh1SwQ,GCP_PROJECT_ID=project-9895c014-d052-4050-bc3,GCP_CLOUD_LOCATION=europe-west2,DOCAI_PROCESSOR_ID=2f0a08fdc1cd3469"
+      - "--service-account"
+      - "wordingsai-service-account-v2@project-9895c014-d052-4050-bc3.iam.gserviceaccount.com"
+      - "--cpu-boost"
+      - "--allow-unauthenticated"
+    id: "Deploy to Cloud Run"
+
+images:
+  - "gcr.io/$PROJECT_ID/wordingsai-backend:$COMMIT_SHA"
+  - "gcr.io/$PROJECT_ID/wordingsai-backend:latest"
+
+options:
+  machineType: "E2_HIGHCPU_8"
+  logging: CLOUD_LOGGING_ONLY

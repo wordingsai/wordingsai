@@ -1,0 +1,46 @@
+allowBuilds:
+  "@google/genai": true
+  "@swc/core": true
+  esbuild: true
+  msw: true
+  protobufjs: true
+  sharp: true
+  supabase: true
+  unrs-resolver: true
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver
+minimumReleaseAgeExclude:
+  - "@ai-sdk/gateway@3.0.118"
+  - "@ai-sdk/google-vertex@4.0.134"
+  - "@ai-sdk/google@3.0.78"
+  - "@ai-sdk/react@3.0.190"
+  - "@google/genai@2.5.0"
+  - "@huggingface/inference@4.13.17"
+  - "@supabase/auth-js@2.106.1"
+  - "@supabase/functions-js@2.106.1"
+  - "@supabase/postgrest-js@2.106.1"
+  - "@supabase/realtime-js@2.106.1"
+  - "@supabase/storage-js@2.106.1"
+  - "@supabase/supabase-js@2.106.1"
+  - "@vitest/expect@4.1.7"
+  - "@vitest/mocker@4.1.7"
+  - "@vitest/pretty-format@4.1.7"
+  - "@vitest/runner@4.1.7"
+  - "@vitest/snapshot@4.1.7"
+  - "@vitest/spy@4.1.7"
+  - "@vitest/ui@4.1.7"
+  - "@vitest/utils@4.1.7"
+  - ai@6.0.188
+  - vitest@4.1.7
+onlyBuiltDependencies:
+  - "@swc/core"
+  - esbuild
+  - msw
+  - protobufjs
+  - supabase
+  - tesseract.js
+patchedDependencies:
+  next-themes@0.4.6: patches/next-themes@0.4.6.patch
+overrides:
+  prosemirror-model: 1.25.7

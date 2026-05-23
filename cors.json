@@ -1,0 +1,15 @@
+[
+  {
+    "origin": ["http://localhost:3000", "https://wordingsai.vercel.app"],
+    "method": ["GET", "PUT", "POST", "DELETE", "HEAD", "OPTIONS"],
+    "responseHeader": [
+      "Content-Type",
+      "x-goog-resumable",
+      "Authorization",
+      "Content-Length",
+      "User-Agent",
+      "x-goog-meta-*"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]

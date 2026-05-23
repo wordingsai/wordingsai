@@ -1,0 +1,58 @@
+# Workspace Isolation Rollout and Safety Extensions
+
+## Preflight checks
+
+Run before applying `src/db/migrations/0001_workspace_isolation_hardening.sql`.
+
+```sql
+-- orphan/invalid workspace references before backfill
+select count(*) as orphan_rules
+from rules r
+left join workspaces w on w.id = r.workspace_id
+where r.workspace_id is null or w.id is null;
+
+select count(*) as orphan_clauses
+from clauses c
+left join workspaces w on w.id = c.workspace_id
+where c.workspace_id is null or w.id is null;
+
+-- duplicate global workspace types per org (must be 0)
+select organization_id, type, count(*)
+from workspaces
+where is_global = true
+group by organization_id, type
+having count(*) > 1;
+```
+
+## Post-migration verification
+
+```sql
+-- all rules/clauses are workspace-bound
+select count(*) from rules where workspace_id is null;
+select count(*) from clauses where workspace_id is null;
+
+-- unresolved rows captured for manual follow-up
+select entity_type, count(*) from workspace_backfill_unresolved group by entity_type;
+
+-- verify global uniqueness index behavior
+select indexname
+from pg_indexes
+where indexname = 'workspace_org_type_global_unique';
+```
+
+## Rollout sequence
+
+1. Deploy guardrails (`resolveActiveWorkspaceContext`, `assertWorkspaceMutable`) first.
+2. Apply migration and run post-migration verification checks.
+3. Deploy strict workspace-scoped services/routes that assume non-null `workspaceId`.
+4. Enable runtime monitoring for `Workspace access denied` and `Global workspaces are read-only`.
+
+## Optional safety extensions design
+
+- **Audit logging**
+  - Add `workspace_audit_logs` table with: `organization_id`, `workspace_id`, `actor_user_id`, `event_type`, `metadata`, `created_at`.
+  - Emit on: workspace switch, workspace creation/duplication, and mutation denial in global workspace.
+- **Soft delete**
+  - Add `deleted_at` on custom workspaces only.
+  - Keep global workspaces immutable and non-deletable.
+  - Filter all workspace pickers/queries with `deleted_at is null`.

@@ -1,0 +1,45 @@
+# Authentication & Multi-Tenancy
+
+Wordings.ai implements a secure, multi-tenant authentication system using **Better Auth**.
+
+## 🔐 Better Auth Implementation
+
+We use Better Auth with the following plugins:
+
+- **Email & Password**: Primary credential-based access.
+- **Organization Plugin**: Handles multi-tenant membership, roles, and invitations.
+- **Two-Factor Authentication (2FA)**: Provides an extra layer of security for legal data.
+
+## 🏗 Multi-Tenant Architecture
+
+### 1. Organizations (Tenants)
+
+Every user belongs to one or more Organizations. All data (Contracts, Clause Libraries, Rules) is strictly parented to an `organizationId`.
+
+### 2. Workspaces (Sub-Tenants)
+
+Within an Organization, users can create Workspaces to isolate different business units or contract portfolios.
+
+- **Default Workspace**: Every organization has at least one default workspace.
+- **Data Scope**: Queries include `WHERE organization_id = ? AND workspace_id = ?`.
+
+### 3. Roles & Permissions
+
+- **Admin**: Full access to Organization settings, billing, and user management.
+- **Member**: Access to create and analyze contracts within assigned workspaces.
+- **Viewer**: Read-only access to analysis results.
+
+## 🛡 Security & Isolation
+
+### API Middleware
+
+Server-side actions and API routes verify the session and validate that the `activeWorkspace` belongs to the authenticated user's organization before executing any operations.
+
+### Data Protection
+
+- **Vercel Data Isolation**: Database connections are scoped and secured.
+- **Credential Safety**: No API keys or secrets are stored in the database or client-side.
+
+---
+
+_Last Updated: Wednesday, 13 May 2026_

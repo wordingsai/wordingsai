@@ -1,0 +1,58 @@
+# Architecture Overview
+
+Wordings.ai is built as a modern, AI-native monorepo designed for high-throughput legal document analysis.
+
+## 🛠 Tech Stack
+
+### Frontend & Core (Next.js)
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Vanilla CSS + TailwindCSS (for utility)
+- **UI Components**: Shadcn/UI + Lucide Icons + Framer Motion (for animations)
+- **State Management**: React Hooks + URL-based state
+- **View Transitions**: `next-view-transitions` for seamless navigation
+
+### Backend & AI Services
+
+- **Background Jobs**: **Inngest** (Serverless queue management)
+- **AI Router**: OpenRouter (access to Claude 3.5 Sonnet, GPT-4o, etc.)
+- **OCR Engine**: Google Cloud Document AI
+- **Vector Search**: PGVector (on Neon Postgres)
+- **Embeddings**: `text-embedding-3-small` (OpenAI)
+
+### Database & Storage
+
+- **Database**: Neon Serverless Postgres
+- **ORM**: Drizzle ORM
+- **Blob Storage**: Supabase Storage (for contract PDFs)
+
+## 🏗 System Design
+
+### 1. Project Structure
+
+The project is a unified TypeScript repository:
+
+- `src/app/`: Next.js App Router (Pages, API Routes).
+- `src/components/`: React UI components.
+- `src/inngest/`: Serverless background job definitions and orchestrators.
+- `src/services/`: Core business logic (Rule Engine, Clause Matching).
+- `src/lib/`: Shared utilities and client initializations.
+
+### 2. Multi-Tenant Isolation
+
+Wordings.ai implements a strict multi-tenant architecture:
+
+- **Organizations**: Highest level of isolation (Billing, Teams).
+- **Workspaces**: Sub-units within organizations (Specific Portfolios, Business Units).
+- **Workspace Isolation**: All queries are scoped by `organizationId` and `workspaceId` to prevent data leakage.
+
+### 3. The 3-Stage Analysis Flow
+
+1. **Extraction**: Neural OCR + Document Structure generation.
+2. **Benchmarking**: Fast semantic matching against the Clause Library.
+3. **Evaluation**: Deep RAG-based vetting against Rule Registries.
+
+---
+
+_Last Updated: Wednesday, 13 May 2026_

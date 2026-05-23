@@ -1,0 +1,42 @@
+# Serverless Backend & AI Architecture
+
+The Wordings.ai backend is built on a serverless architecture using **Next.js API Routes** and **Inngest** for background job orchestration.
+
+## 🚀 Job Orchestration (Inngest)
+
+We use **Inngest** to manage the lifecycle of a contract analysis. This provides durability, retries, and concurrency control without the need for a persistent server.
+
+### `evaluateContractRulesJob` (The Coordinator)
+
+The main state machine that orchestrates the 5-step analysis process:
+
+1.  **Initializing**: Setting up the contract record.
+2.  **OCR/Extraction**: Calling the GCP Document AI service via `extractDocumentGCP`.
+3.  **Fast Analysis**: Benchmarking the document against the Clause Library via `detectMandatoryClauses`.
+4.  **Summary Generation**: Generating the Executive Brief.
+5.  **Deep Analysis**: Coordinating the RAG-based evaluation of each specific rule.
+
+### `evaluateRuleJob` (The Worker)
+
+A specialized worker that handles the evaluation of a single rule in isolation. This allows for massive parallelism (fanning out 100+ rules simultaneously) using serverless function execution.
+
+## 🧠 Core AI Services (TypeScript)
+
+### Rule Engine (`src/services/rule-engine.ts`)
+
+The primary service for legal intelligence, implemented entirely in TypeScript:
+
+- **Semantic Chunking**: Uses a hybrid approach to split documents into meaningful legal clauses.
+- **Vector Matching**: Interfaces with PGVector to perform cosine similarity searches.
+- **RAG Implementation**: Retrieves relevant context chunks to feed into the LLM for high-accuracy rule vetting.
+
+### AI Router (`src/lib/ai-router.ts`)
+
+A multi-tier abstraction layer for LLM calls:
+
+- **OpenRouter Integration**: Dynamically routes requests to various models (Claude, GPT, Gemini).
+- **Cost/Performance Tiers**: Supports "Plus" vs "Basic" logic, where more expensive models are used for complex Stage 3 reasoning.
+
+---
+
+_Last Updated: Wednesday, 13 May 2026_

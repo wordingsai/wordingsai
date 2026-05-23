@@ -1,0 +1,51 @@
+# Wordings.ai Analysis Pipeline
+
+This document outlines the end-to-end flow of the contract analysis engine, from document ingestion to deep legal intelligence.
+
+## Stage 1: Document Ingestion & Mapping (The Foundation)
+
+- **OCR & Text Extraction**: The document is processed using Google Cloud Document AI (Neural Engine). This extracts raw text and identifies layout elements.
+- **Document Mapping**: A hierarchical map (JSON) is generated, identifying headings, sections, and paragraphs.
+- **Pillar 1 - Document Map**: The UI visualizes the entire contract structure, allowing users to navigate the document based on detected headings.
+
+## Stage 2: Fast Analysis & Clause Benchmarking (The Checklist)
+
+- **The Goal**: Analyze every provision in the contract to benchmark them against the corporate **Clause Library**.
+- **The Shift**: We moved from a library-centric view (checking if 100+ standard clauses are there) to a **Contract-Centric** view (checking what each clause in the contract means).
+- **Mechanism**:
+  - **Document Segmentation**: The system breaks the contract into logical segments (paragraphs, headings, or provisions).
+  - **Semantic Matching**: Each segment is embedded and compared against the **Clause Library** (using PGVector cosine similarity).
+  - **Benchmarking (The Color System)**:
+    - **Matched (Green)**: The contract clause has a very high similarity (>98%) to an 'Approved' standard in the library.
+    - **Variation (Amber)**: The clause is semanticly similar to a library entry (>65%) but contains wording variations. Displayed with a **% Match** score.
+    - **Not Matched (Red)**: The provision is present in the contract but does not align with any standard in the library. This highlights custom or non-standard language.
+- **Checklist Structure**: If a contract has 30 clauses, the checklist will show exactly 30 checkpoints.
+- **Evidence Mapping**: Each item in the checklist is linked directly to:
+  - **Source Text**: The verbatim text found in the contract.
+  - **Library Standard**: The corresponding standard from the library that it was matched against.
+  - **Cognitive Reasoning**: AI-generated explanation of why the segment was matched to that specific library provision.
+- **Filtering**: Users can filter the checklist by **Category** or **Status** (Matched, Variation, Not Matched) to focus on risk areas.
+
+## Stage 3: Deep Analysis (Rules Evaluation)
+
+- **The Goal**: Run complex legal logic (The 88+ Rules) against the document evidence.
+- **Mechanism**:
+  - **Full Embedding**: The entire contract is embedded and stored in a contract-specific vector space.
+  - **RAG (Retrieval Augmented Generation)**: For each rule, the engine searches the contract for specific evidence using rule-defined search queries.
+  - **Cognitive Verdict**: The LLM evaluates the retrieved evidence against the rule's criteria (e.g., the War Exclusion matrix).
+- **Output**:
+  - **Rules Evaluation Box**: Displays the rule name, verdict (Matched/Amber/Red), and the **Source Text** extracted from the contract.
+  - **Guidance**: Explains why the clause meets or fails the criteria based on the library's "Acceptance Criteria."
+
+## Summary of Logic Distinction
+
+| Feature        | Fast Analysis (Checklist)      | Deep Analysis (Rules)         |
+| :------------- | :----------------------------- | :---------------------------- |
+| **Purpose**    | Benchmarking against Library   | Detailed Legal Vetting        |
+| **Scope**      | All Library Clauses (118+)     | Selected Intelligence Modules |
+| **Comparison** | Clause vs. Library Standard    | Contract vs. Legal Criteria   |
+| **Output**     | Found/Missing Status + % Match | Expert Reasoning + Evidence   |
+
+---
+
+_Created on: Wednesday, 13 May 2026_

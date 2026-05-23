@@ -1,0 +1,59 @@
+# Frontend Application
+
+The Wordings.ai frontend is a high-performance React application designed for real-time legal data visualization.
+
+## 🏗 Framework & Patterns
+
+### Next.js 15
+
+- **App Router**: Uses file-based routing with layouts and loading states.
+- **Server Components (RSC)**: Used for data fetching in non-interactive areas (e.g., Settings, Dashboard lists).
+- **Client Components**: Used for the heavy interactive analysis pages where real-time polling and animations are required.
+
+### Smooth UI Engine
+
+- **Framer Motion**: Used for panel transitions, checklist item entries, and feedback loops.
+- **Custom Progress Interpolation**: Implemented in `useAnalysisSync` to provide a "1-by-1" smooth progress bar experience during long-running background tasks.
+
+## 🪝 Key Hooks
+
+### `useAnalysisSync(contractId)`
+
+The "heart" of the analysis UI.
+
+- **Polling**: Automatically polls the backend every 3 seconds while a contract is in the `reviewing` state.
+- **Hydration**: Merges backend status updates with local optimistic state.
+- **Watchdog**: Implements a 5-minute timeout protection with automatic retries if the pipeline stalls.
+- **Smooth Progress**: Interpolates the `analysisProgress` value to provide a continuous, non-jumping bar.
+
+### `useActiveWorkspace()`
+
+Manages the context of the currently selected organization and workspace, ensuring the UI always reflects the correct tenant data.
+
+## 🧱 Key Components
+
+### `AnalysisChecklist.tsx`
+
+- Renders the Stage 2 results.
+- Supports filtering by category and status.
+- Implements semantic "Match %" visualization for Amber clauses.
+
+### `DocumentStructure.tsx`
+
+- Visualizes the Stage 1 output.
+- Recursive component that renders the nested sections of a contract.
+- Supports deep-linking/highlighting to specific paragraphs.
+
+### `PdfViewer.tsx`
+
+- Integrated PDF rendering with cross-reference capabilities to the analysis results.
+
+## 🎨 Styling Philosophy
+
+- **Vanilla CSS**: Used for core layout components to ensure maximum flexibility and performance.
+- **TailwindCSS**: Used for rapid utility-based styling and responsive tweaks.
+- **Shadcn/UI**: Provides the foundational primitive components (Switch, Button, Badge, Accordion).
+
+---
+
+_Last Updated: Wednesday, 13 May 2026_

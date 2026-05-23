@@ -1,0 +1,12 @@
+diff --git a/esm/popover/index.parts.js b/esm/popover/index.parts.js
+index 9b7e9a2..f7e2d9b 100644
+--- a/esm/popover/index.parts.js
++++ b/esm/popover/index.parts.js
+@@ -9,4 +9,4 @@ export { I as PositionerContext } from '../esm/chunks/CDDUR6E7.js';
+ export { J as Trigger } from '../esm/chunks/A6MBP6M4.js';
+ export { O as Positioner } from '../esm/chunks/CDDUR6E7.js';
+ export { P as Popup } from '../esm/chunks/6M3H56RM.js';
+-export { K as Arrow } from '../esm/chunks/S75HYM5V.js';w
+\ No newline at end of file
++export { K as Arrow } from '../esm/chunks/S75HYM5V.js';
+\ No newline at end of file
