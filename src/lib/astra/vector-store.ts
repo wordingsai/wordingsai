@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { ASTRA_COLLECTIONS, ASTRA_MAX_DISTANCE } from "./config";
-import { getAstraCollection } from "./client";
+import { getAstraCollection, withAstraRetry } from "./client";
 import {
   buildAstraClauseChunkDocument,
   buildAstraContractChunkDocument,
@@ -25,7 +25,10 @@ const vectorizeText = vectorizePayloadText;
 
 export async function deleteAstraClauseChunks(clauseId: string): Promise<void> {
   const col = await getAstraCollection(ASTRA_COLLECTIONS.clauseChunks);
-  await col.deleteMany({ clauseId }, { timeout: 60_000 });
+  await withAstraRetry(
+    () => col.deleteMany({ clauseId }, { timeout: 60_000 }),
+    { label: "deleteAstraClauseChunks" },
+  );
 }
 
 export async function insertAstraClauseChunks(args: {
@@ -52,7 +55,10 @@ export async function insertAstraClauseChunks(args: {
     }),
   );
 
-  await col.insertMany(docs, { timeout: 120_000 });
+  await withAstraRetry(
+    () => col.insertMany(docs, { timeout: 120_000 }),
+    { label: "insertAstraClauseChunks" },
+  );
   return docs.length;
 }
 
@@ -112,7 +118,10 @@ export async function deleteAstraContractChunks(
   contractVersionId: string,
 ): Promise<void> {
   const col = await getAstraCollection(ASTRA_COLLECTIONS.contractChunks);
-  await col.deleteMany({ contractVersionId }, { timeout: 60_000 });
+  await withAstraRetry(
+    () => col.deleteMany({ contractVersionId }, { timeout: 60_000 }),
+    { label: "deleteAstraContractChunks" },
+  );
 }
 
 export async function insertAstraContractChunks(args: {
@@ -136,7 +145,10 @@ export async function insertAstraContractChunks(args: {
     }),
   );
 
-  await col.insertMany(docs, { timeout: 120_000 });
+  await withAstraRetry(
+    () => col.insertMany(docs, { timeout: 120_000 }),
+    { label: "insertAstraContractChunks" },
+  );
   return docs.length;
 }
 
@@ -205,8 +217,12 @@ export async function upsertAstraAiGeneration(args: {
     updatedAt: now,
   };
 
-  await col.deleteOne({ _id: docId });
-  await col.insertOne(doc, { timeout: 60_000 });
+  await withAstraRetry(() => col.deleteOne({ _id: docId }), {
+    label: "upsertAstraAiGeneration:delete",
+  });
+  await withAstraRetry(() => col.insertOne(doc, { timeout: 60_000 }), {
+    label: "upsertAstraAiGeneration:insert",
+  });
   return docId;
 }
 
@@ -284,7 +300,10 @@ function warExclusionVectorizeSource(row: WarExclusionAstraInput): string {
 
 export async function deleteAstraWarExclusion(id: string): Promise<void> {
   const col = await getAstraCollection(ASTRA_COLLECTIONS.warExclusions);
-  await col.deleteMany({ _id: id }, { timeout: 60_000 });
+  await withAstraRetry(
+    () => col.deleteMany({ _id: id }, { timeout: 60_000 }),
+    { label: "deleteAstraWarExclusion" },
+  );
 }
 
 export async function insertAstraWarExclusion(
@@ -292,26 +311,32 @@ export async function insertAstraWarExclusion(
 ): Promise<void> {
   const col = await getAstraCollection(ASTRA_COLLECTIONS.warExclusions);
   const text = warExclusionVectorizeSource(args);
-  await col.deleteOne({ _id: args.id });
-  await col.insertOne(
-    {
-      _id: args.id,
-      docType: "war_exclusion" as ChunkDocType,
-      organizationId: args.organizationId,
-      title: args.title,
-      clauseText: args.clauseText,
-      category: args.category ?? null,
-      bias: args.bias ?? null,
-      type: args.type ?? null,
-      treatyFac: args.treatyFac ?? null,
-      conditions: args.conditions ?? null,
-      keywords: args.keywords ?? null,
-      legalComments: args.legalComments ?? null,
-      content: text,
-      $vectorize: text,
-      createdAt: new Date().toISOString(),
-    },
-    { timeout: 60_000 },
+  await withAstraRetry(() => col.deleteOne({ _id: args.id }), {
+    label: "insertAstraWarExclusion:delete",
+  });
+  await withAstraRetry(
+    () =>
+      col.insertOne(
+        {
+          _id: args.id,
+          docType: "war_exclusion" as ChunkDocType,
+          organizationId: args.organizationId,
+          title: args.title,
+          clauseText: args.clauseText,
+          category: args.category ?? null,
+          bias: args.bias ?? null,
+          type: args.type ?? null,
+          treatyFac: args.treatyFac ?? null,
+          conditions: args.conditions ?? null,
+          keywords: args.keywords ?? null,
+          legalComments: args.legalComments ?? null,
+          content: text,
+          $vectorize: text,
+          createdAt: new Date().toISOString(),
+        },
+        { timeout: 60_000 },
+      ),
+    { label: "insertAstraWarExclusion:insert" },
   );
 }
 

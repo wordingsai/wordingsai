@@ -65,3 +65,54 @@ export async function getAstraCollection(
   }
   return pending;
 }
+
+/**
+ * Astra DB Free tier hibernates after inactivity. The first request after wake
+ * returns HTTP 400 with "resuming from hibernation" and the DB becomes
+ * available within ~30s. This wrapper retries hibernation errors with
+ * exponential backoff so callers don't have to think about it.
+ */
+const HIBERNATION_PATTERNS = [
+  /resuming from hibernation/i,
+  /database is being initialized/i,
+  /will be available in the next few minutes/i,
+];
+
+function isHibernationError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return HIBERNATION_PATTERNS.some((re) => re.test(msg));
+}
+
+export async function withAstraRetry<T>(
+  op: () => Promise<T>,
+  {
+    maxAttempts = 6,
+    initialDelayMs = 3_000,
+    maxDelayMs = 20_000,
+    label = "astra-op",
+  }: {
+    maxAttempts?: number;
+    initialDelayMs?: number;
+    maxDelayMs?: number;
+    label?: string;
+  } = {},
+): Promise<T> {
+  let lastErr: unknown;
+  let delay = initialDelayMs;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await op();
+    } catch (err) {
+      lastErr = err;
+      if (!isHibernationError(err) || attempt === maxAttempts) {
+        throw err;
+      }
+      console.warn(
+        `[Astra] ${label} hit hibernation (attempt ${attempt}/${maxAttempts}); waiting ${delay}ms before retry`,
+      );
+      await new Promise((r) => setTimeout(r, delay));
+      delay = Math.min(delay * 2, maxDelayMs);
+    }
+  }
+  throw lastErr;
+}
