@@ -321,15 +321,11 @@ export default function ContractsPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex gap-1 p-1 bg-surface-container-low border border-outline-variant rounded-2xl">
+            <div className="flex gap-0.5 p-1 bg-surface-container-low border border-outline-variant rounded-lg">
               <Button
                 variant={viewMode === "active" ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setViewMode("active")}
-                className={cn(
-                  "h-10 px-6 rounded-xl text-xs font-medium uppercase tracking-wider",
-                  viewMode === "active" ? "shadow-lg shadow-primary/20" : "",
-                )}
               >
                 Active
               </Button>
@@ -338,13 +334,13 @@ export default function ContractsPage() {
                 size="sm"
                 onClick={() => setViewMode("archive")}
                 className={cn(
-                  "h-10 px-6 rounded-xl text-xs font-medium uppercase tracking-wider flex items-center gap-2",
+                  "gap-1.5",
                   viewMode === "archive"
-                    ? "bg-amber-500 text-white shadow-lg shadow-amber-500/20"
+                    ? "bg-amber-500 text-white hover:bg-amber-500/90"
                     : "",
                 )}
               >
-                <Archive className="w-4 h-4" />
+                <Archive className="size-3.5" />
                 Archive
               </Button>
               <Button
@@ -352,25 +348,22 @@ export default function ContractsPage() {
                 size="sm"
                 onClick={() => setViewMode("bin")}
                 className={cn(
-                  "h-10 px-6 rounded-xl text-xs font-medium uppercase tracking-wider flex items-center gap-2",
+                  "gap-1.5",
                   viewMode === "bin"
-                    ? "bg-destructive text-destructive-foreground shadow-lg shadow-destructive/20"
+                    ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     : "",
                 )}
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="size-3.5" />
                 Bin
               </Button>
             </div>
 
             {isSuperUser && viewMode === "active" && (
               <Link href="/contracts/upload" className="w-full lg:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-md flex items-center justify-center gap-2 transition-all "
-                >
-                  <Plus className="w-5 h-5" />
-                  ADD NEW WORDING
+                <Button size="lg" className="w-full lg:w-auto gap-2">
+                  <Plus className="size-4" />
+                  Add new wording
                 </Button>
               </Link>
             )}
