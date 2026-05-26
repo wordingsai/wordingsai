@@ -258,27 +258,27 @@ export function NavUser({
               <DropdownMenuSeparator className="my-2 opacity-50" />
               <DropdownMenuGroup className="space-y-1">
                 <Link href="/settings">
-                  <DropdownMenuItem className="rounded-xl text-xs font-medium uppercase tracking-wider py-3 cursor-pointer">
-                    <BadgeCheck className="mr-2 size-4 opacity-50" />
-                    Account Config
+                  <DropdownMenuItem className="cursor-pointer">
+                    <BadgeCheck className="mr-2 size-4 opacity-60" />
+                    Account settings
                   </DropdownMenuItem>
                 </Link>
                 <Link href="/settings?tab=subscription">
-                  <DropdownMenuItem className="rounded-xl text-xs font-medium uppercase tracking-wider py-3 cursor-pointer">
-                    <CreditCard className="mr-2 size-4 opacity-50" />
-                    Billing & Usage
+                  <DropdownMenuItem className="cursor-pointer">
+                    <CreditCard className="mr-2 size-4 opacity-60" />
+                    Billing & usage
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="my-2 opacity-50" />
               <DropdownMenuGroup className="space-y-1">
-                <DropdownMenuLabel className="px-2 py-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/40">
+                <DropdownMenuLabel className="px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-on-surface-variant/50">
                   Accounts
                 </DropdownMenuLabel>
                 {sessions.map((s) => (
                   <DropdownMenuItem
                     key={s.session.id}
-                    className="rounded-xl text-xs font-medium uppercase tracking-wider py-3 cursor-pointer flex items-center gap-3"
+                    className="cursor-pointer flex items-center gap-2.5"
                     onClick={() =>
                       handleSwitchSession(
                         s.session.token || s.session.sessionToken,
@@ -286,37 +286,37 @@ export function NavUser({
                     }
                   >
                     <div className="relative size-6 shrink-0">
-                      <Avatar className="h-6 w-6 rounded-lg border border-outline-variant">
+                      <Avatar className="h-6 w-6 rounded-md border border-outline-variant">
                         <AvatarImage src={s.user.image || s.user.avatar} />
-                        <AvatarFallback className="text-[10px] font-semibold bg-primary/10 text-primary">
+                        <AvatarFallback className="text-[10px] font-medium bg-primary/10 text-primary">
                           {s.user.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="flex flex-col min-w-0 flex-1">
-                      <span className="font-semibold text-on-surface truncate normal-case">
+                      <span className="text-sm text-on-surface truncate">
                         {s.user.name || "User"}
                       </span>
-                      <span className="text-[9px] text-on-surface-variant/70 truncate lowercase tracking-normal font-medium">
+                      <span className="text-[11px] text-on-surface-variant/70 truncate">
                         {s.user.email}
                       </span>
                     </div>
                   </DropdownMenuItem>
                 ))}
                 <Link href="/add-account">
-                  <DropdownMenuItem className="rounded-xl text-xs font-medium uppercase tracking-wider py-3 cursor-pointer text-primary hover:bg-primary/5 focus:bg-primary/5 focus:text-primary">
+                  <DropdownMenuItem className="cursor-pointer text-primary hover:bg-primary/5 focus:bg-primary/5 focus:text-primary">
                     <Plus className="mr-2 size-4" />
-                    Add Account
+                    Add account
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="my-2 opacity-50" />
               <DropdownMenuItem
-                className="rounded-xl text-xs font-medium uppercase tracking-wider py-3 text-destructive focus:text-destructive cursor-pointer"
+                className="text-destructive focus:text-destructive cursor-pointer"
                 onClick={() => setShowLogoutDialog(true)}
               >
                 <LogOut className="mr-2 size-4" />
-                Terminate Session
+                Sign out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -324,28 +324,25 @@ export function NavUser({
       </SidebarMenu>
 
       <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-        <AlertDialogContent className="rounded-xl p-10 border-outline-variant shadow-2xl">
+        <AlertDialogContent className="border-outline-variant">
           <AlertDialogHeader>
-            <div className="h-16 w-16 bg-destructive/10 rounded-3xl flex items-center justify-center mb-6">
-              <LogOut className="h-8 w-8 text-destructive" />
+            <div className="size-10 bg-destructive/10 rounded-lg flex items-center justify-center mb-3">
+              <LogOut className="size-5 text-destructive" />
             </div>
-            <AlertDialogTitle className="text-xl font-semibold tracking-tight">
-              Terminate Session?
+            <AlertDialogTitle className="text-base font-semibold tracking-tight">
+              Sign out?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-base font-medium text-on-surface-variant pt-2">
-              Your current cognitive session will be closed. You will need to
-              re-authenticate to access your intelligence scopes.
+            <AlertDialogDescription className="text-sm text-on-surface-variant pt-1">
+              You'll need to sign in again to access your workspace.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="mt-10 gap-3">
-            <AlertDialogCancel className="rounded-2xl text-xs font-medium uppercase tracking-wider h-14 border-outline-variant hover:bg-surface-container-high transition-all">
-              Abort
-            </AlertDialogCancel>
+          <AlertDialogFooter className="mt-4 gap-2">
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleLogout}
-              className="rounded-2xl text-xs font-medium uppercase tracking-wider h-14 bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg shadow-destructive/20 transition-all active:scale-95"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Confirm Termination
+              Sign out
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
