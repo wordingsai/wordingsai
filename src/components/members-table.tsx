@@ -50,7 +50,7 @@ export default function MembersTable({ members }: MembersTableProps) {
             <TableCell>
               <Badge
                 variant="outline"
-                className="rounded-full font-black text-[9px] uppercase tracking-widest px-3 py-1 bg-surface-container border-outline-variant text-on-surface-variant"
+                className="rounded-full font-semibold text-[9px] uppercase tracking-widest px-3 py-1 bg-surface-container border-outline-variant text-on-surface-variant"
               >
                 {member.role}
               </Badge>

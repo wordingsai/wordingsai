@@ -113,7 +113,7 @@ export const FileUpload = ({
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           layout
-                          className="shrink-0 rounded-lg bg-neutral-100 px-2.5 py-1 text-[12px] font-black uppercase tracking-tight text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50"
+                          className="shrink-0 rounded-lg bg-neutral-100 px-2.5 py-1 text-[12px] font-semibold uppercase tracking-tight text-neutral-500 dark:bg-neutral-800 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50"
                         >
                           {(file.size / (1024 * 1024)).toFixed(2)} MB
                         </motion.p>

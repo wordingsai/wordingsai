@@ -124,7 +124,7 @@ export default function IndividualRulePage(props: {
 
   if (!rule)
     return (
-      <div className="p-20 text-center font-black uppercase tracking-widest opacity-20">
+      <div className="p-20 text-center font-semibold uppercase tracking-widest opacity-20">
         Rule record not found
       </div>
     );
@@ -144,14 +144,14 @@ export default function IndividualRulePage(props: {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/rules"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
                 >
                   Rule Configuration
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-on-surface-variant" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
                   {rule.name}
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -188,7 +188,7 @@ export default function IndividualRulePage(props: {
               variant="outline"
               size="lg"
               disabled={!isPSA && (rule.isGlobal || rule.isEditable === false)}
-              className="rounded-2xl border-outline-variant font-black uppercase tracking-widest text-[11px] h-12 px-6"
+              className="rounded-2xl border-outline-variant font-semibold uppercase tracking-widest text-[11px] h-12 px-6"
               onClick={() => (window.location.href = `/rules/${rule.id}/edit`)}
             >
               <Settings className="w-4 h-4 mr-2" /> Edit
@@ -196,7 +196,7 @@ export default function IndividualRulePage(props: {
             <Button
               size="lg"
               disabled={!isPSA && (rule.isGlobal || rule.isEditable === false)}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-6 h-12 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2 transition-all "
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 h-12 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2 transition-all "
               onClick={() => (window.location.href = `/rules/${rule.id}/edit`)}
             >
               <Plus className="w-5 h-5" /> NEW VERSION
@@ -469,7 +469,7 @@ export default function IndividualRulePage(props: {
                   Structural Checklist
                 </h4>
               </div>
-              <Badge className="bg-primary/5 text-primary border-none text-[9px] font-black">
+              <Badge className="bg-primary/5 text-primary border-none text-[9px] font-semibold">
                 {definition.whatToCheck?.length || 0} STEPS
               </Badge>
             </div>
@@ -480,7 +480,7 @@ export default function IndividualRulePage(props: {
                     key={i}
                     className="flex items-start gap-3 p-3.5 bg-background border border-outline-variant/50 rounded-2xl text-sm font-medium"
                   >
-                    <span className="text-primary font-black text-[10px] mt-0.5 shrink-0">
+                    <span className="text-primary font-semibold text-[10px] mt-0.5 shrink-0">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     {item}
@@ -503,7 +503,7 @@ export default function IndividualRulePage(props: {
                   Clause References
                 </h4>
               </div>
-              <Badge className="bg-secondary/5 text-secondary border-none text-[9px] font-black">
+              <Badge className="bg-secondary/5 text-secondary border-none text-[9px] font-semibold">
                 {definition.clauseReferences?.length || 0} REFS
               </Badge>
             </div>

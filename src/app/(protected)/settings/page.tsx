@@ -274,7 +274,7 @@ function OrganizationSettingsTab() {
             <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
               Intelligence Scope
             </span>
-            <span className="text-xs font-black uppercase text-primary tracking-widest flex items-center gap-1.5">
+            <span className="text-xs font-semibold uppercase text-primary tracking-widest flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 fill-primary text-primary" />{" "}
               {plan || "FAST"} Plan
             </span>
@@ -283,7 +283,7 @@ function OrganizationSettingsTab() {
         <CardContent className="p-10 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-6 bg-surface-container-low border border-outline-variant/30 rounded-3xl space-y-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/60 block">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 block">
                 Workspace Name
               </span>
               <span className="text-sm font-semibold text-on-surface truncate block uppercase">
@@ -291,7 +291,7 @@ function OrganizationSettingsTab() {
               </span>
             </div>
             <div className="p-6 bg-surface-container-low border border-outline-variant/30 rounded-3xl space-y-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/60 block">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 block">
                 Active Member Seats
               </span>
               <span className="text-sm font-semibold text-primary block uppercase">
@@ -300,7 +300,7 @@ function OrganizationSettingsTab() {
               </span>
             </div>
             <div className="p-6 bg-surface-container-low border border-outline-variant/30 rounded-3xl space-y-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/60 block">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/60 block">
                 Establishment Date
               </span>
               <span className="text-sm font-bold text-on-surface block">
@@ -321,7 +321,7 @@ function OrganizationSettingsTab() {
             <div className="flex gap-3">
               <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="text-xs font-black uppercase tracking-widest text-primary">
+                <span className="text-xs font-semibold uppercase tracking-widest text-primary">
                   Workspace Statement
                 </span>
                 <p className="text-sm font-medium text-on-surface-variant">
@@ -341,7 +341,7 @@ function OrganizationSettingsTab() {
           {/* Invitation Code Management */}
           <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left border-2 border-primary/20">
             <CardHeader className="p-8 border-b border-outline-variant bg-primary/5">
-              <CardTitle className="text-lg font-semibold uppercase text-on-surface">
+              <CardTitle className="text-base font-semibold text-on-surface">
                 Organization Invite Code
               </CardTitle>
               <CardDescription className="font-medium text-on-surface-variant">
@@ -378,7 +378,7 @@ function OrganizationSettingsTab() {
               <Button
                 onClick={handleGenerateCode}
                 disabled={generatingCode}
-                className="h-16 px-8 rounded-2xl font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-xl shadow-primary/20 shrink-0"
+                className="h-16 px-8 rounded-2xl font-semibold uppercase tracking-widest bg-primary text-primary-foreground shadow-xl shadow-primary/20 shrink-0"
               >
                 {generatingCode ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -395,7 +395,7 @@ function OrganizationSettingsTab() {
           {/* Pending Join Requests */}
           <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
             <CardHeader className="p-8 border-b border-outline-variant bg-amber-50 dark:bg-amber-950/20">
-              <CardTitle className="text-lg font-semibold uppercase text-on-surface flex items-center gap-3">
+              <CardTitle className="text-base font-semibold text-on-surface flex items-center gap-3">
                 <Clock className="w-6 h-6 text-amber-500" /> Pending Join
                 Requests
               </CardTitle>
@@ -406,7 +406,7 @@ function OrganizationSettingsTab() {
             </CardHeader>
             <CardContent className="p-6 md:p-10 space-y-6">
               {loadingRequests ? (
-                <div className="text-center py-10 opacity-50 font-black uppercase tracking-widest text-sm">
+                <div className="text-center py-10 opacity-50 font-semibold uppercase tracking-widest text-sm">
                   Loading Requests...
                 </div>
               ) : joinRequests.length === 0 ? (
@@ -414,7 +414,7 @@ function OrganizationSettingsTab() {
                   <div className="w-12 h-12 rounded-2xl bg-surface-container flex items-center justify-center">
                     <CheckCircle2 className="w-6 h-6 text-muted-foreground" />
                   </div>
-                  <span className="font-black uppercase tracking-widest text-xs">
+                  <span className="font-semibold uppercase tracking-widest text-xs">
                     All caught up! No pending requests.
                   </span>
                 </div>
@@ -426,12 +426,12 @@ function OrganizationSettingsTab() {
                         <div className="flex items-center gap-4">
                           <Avatar className="h-12 w-12 rounded-2xl">
                             <AvatarImage src={req.user.image ?? undefined} />
-                            <AvatarFallback className="font-black bg-primary/10 text-primary">
+                            <AvatarFallback className="font-semibold bg-primary/10 text-primary">
                               {req.user.name?.charAt(0).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <h3 className="font-black text-on-surface">
+                            <h3 className="font-semibold text-on-surface">
                               {req.user.name}
                             </h3>
                             <p className="text-xs font-medium text-on-surface-variant">
@@ -444,7 +444,7 @@ function OrganizationSettingsTab() {
                             onClick={() =>
                               handleRequestAction(req.id, "accepted")
                             }
-                            className="h-10 px-4 rounded-xl bg-primary text-primary-foreground font-black uppercase text-[10px] tracking-widest shadow-lg shadow-primary/10"
+                            className="h-10 px-4 rounded-xl bg-primary text-primary-foreground font-semibold uppercase text-[10px] tracking-widest shadow-lg shadow-primary/10"
                           >
                             Approve
                           </Button>
@@ -453,7 +453,7 @@ function OrganizationSettingsTab() {
                             onClick={() =>
                               handleRequestAction(req.id, "rejected")
                             }
-                            className="h-10 px-4 rounded-xl border-destructive/20 text-destructive font-black uppercase text-[10px] tracking-widest hover:bg-destructive/10"
+                            className="h-10 px-4 rounded-xl border-destructive/20 text-destructive font-semibold uppercase text-[10px] tracking-widest hover:bg-destructive/10"
                           >
                             Reject
                           </Button>
@@ -497,7 +497,7 @@ function OrganizationSettingsTab() {
 
       <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
         <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-          <CardTitle className="text-lg font-semibold uppercase text-on-surface">
+          <CardTitle className="text-base font-semibold text-on-surface">
             Organization Members
           </CardTitle>
           <CardDescription className="font-medium text-on-surface-variant">
@@ -517,12 +517,12 @@ function OrganizationSettingsTab() {
                     <div className="flex items-center gap-4">
                       <Avatar className="h-12 w-12 rounded-2xl border-2 border-background shadow-md">
                         <AvatarImage src={m.user.image ?? undefined} />
-                        <AvatarFallback className="font-black bg-primary/10 text-primary">
+                        <AvatarFallback className="font-semibold bg-primary/10 text-primary">
                           {m.user.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <h3 className="font-black text-on-surface tracking-tight">
+                        <h3 className="font-semibold text-on-surface tracking-tight">
                           {m.user.name}{" "}
                           {session?.user?.id === m.user.id && "(You)"}
                         </h3>
@@ -619,7 +619,7 @@ function OrganizationSettingsTab() {
       {/* Danger Zone */}
       <Card className="bg-destructive/5 border-destructive/20 rounded-xl shadow-sm overflow-hidden text-left border-2">
         <CardHeader className="p-8 border-b border-destructive/20 bg-destructive/5">
-          <CardTitle className="text-xl font-black uppercase text-destructive flex items-center gap-2">
+          <CardTitle className="text-xl font-semibold uppercase text-destructive flex items-center gap-2">
             <TriangleAlert className="w-5 h-5" /> Danger Zone
           </CardTitle>
           <CardDescription className="font-medium text-destructive/70">
@@ -630,7 +630,7 @@ function OrganizationSettingsTab() {
           {/* Leave Organization */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-2xl border border-destructive/10 bg-destructive/5">
             <div className="flex-1 min-w-0">
-              <h4 className="font-black text-on-surface uppercase tracking-tight text-sm">
+              <h4 className="font-semibold text-on-surface uppercase tracking-tight text-sm">
                 Leave Organization
               </h4>
               <p className="text-xs font-medium text-on-surface-variant max-w-md">
@@ -651,7 +651,7 @@ function OrganizationSettingsTab() {
           {isSuperUser && (
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-6 rounded-2xl border-2 border-destructive/30 bg-destructive/10">
               <div className="flex-1 min-w-0">
-                <h4 className="font-black text-destructive uppercase tracking-tight text-sm flex items-center gap-2">
+                <h4 className="font-semibold text-destructive uppercase tracking-tight text-sm flex items-center gap-2">
                   <Trash2 className="w-4 h-4" /> Delete Organization
                 </h4>
                 <p className="text-xs font-medium text-on-surface-variant max-w-md mt-1">
@@ -775,7 +775,7 @@ function OrganizationSettingsTab() {
               </span>
             </AlertDialogDescription>
             <div className="mt-4 space-y-2">
-              <Label className="text-xs font-black uppercase tracking-widest text-destructive">
+              <Label className="text-xs font-semibold uppercase tracking-widest text-destructive">
                 Type your organization name to confirm
               </Label>
               <div className="font-mono text-sm bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-2 text-destructive font-bold">
@@ -868,7 +868,7 @@ function SubscriptionSettingsTab() {
         <CardHeader className="p-8 border-b border-outline-variant bg-primary/5">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-lg font-semibold uppercase text-on-surface flex items-center gap-3">
+              <CardTitle className="text-base font-semibold text-on-surface flex items-center gap-3">
                 <CreditCard className="w-6 h-6 text-primary" /> Current Plan
               </CardTitle>
               <CardDescription className="font-medium text-on-surface-variant">
@@ -913,11 +913,11 @@ function SubscriptionSettingsTab() {
                 >
                   <div>
                     {isCurrent && (
-                      <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-[8px] font-black tracking-widest uppercase">
+                      <div className="absolute top-4 right-4 bg-primary text-primary-foreground px-3 py-1 rounded-full text-[8px] font-semibold tracking-widest uppercase">
                         ACTIVE
                       </div>
                     )}
-                    <h3 className="font-black uppercase tracking-tight text-lg mb-2 flex items-center gap-2">
+                    <h3 className="font-semibold uppercase tracking-tight text-lg mb-2 flex items-center gap-2">
                       {p.name}{" "}
                       {isPlus && <Sparkles className="w-4 h-4 text-primary" />}
                     </h3>
@@ -986,7 +986,7 @@ function SubscriptionSettingsTab() {
                 <Zap className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h4 className="font-black text-on-surface uppercase tracking-tight">
+                <h4 className="font-semibold text-on-surface uppercase tracking-tight">
                   Unlock Premium Features
                 </h4>
                 <p className="text-xs font-medium text-on-surface-variant max-w-sm">
@@ -1140,7 +1140,7 @@ export default function SettingsPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-xl transition-all font-black uppercase tracking-widest text-[11px]",
+                  "w-full flex items-center justify-between p-4 rounded-xl transition-all font-semibold uppercase tracking-widest text-[11px]",
                   activeTab === tab.id
                     ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                     : "text-on-surface-variant hover:bg-surface-container-high",
@@ -1165,7 +1165,7 @@ export default function SettingsPage() {
             {activeTab === "profile" && (
               <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-                  <CardTitle className="text-lg font-semibold uppercase text-on-surface">
+                  <CardTitle className="text-base font-semibold text-on-surface">
                     Profile Identity
                   </CardTitle>
                   <CardDescription className="font-medium text-on-surface-variant">
@@ -1182,7 +1182,7 @@ export default function SettingsPage() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="space-y-4">
-                      <h3 className="text-lg font-black text-on-surface">
+                      <h3 className="text-lg font-semibold text-on-surface">
                         Profile Picture
                       </h3>
                       <div className="flex gap-2">
@@ -1278,7 +1278,7 @@ export default function SettingsPage() {
             {activeTab === "appearance" && (
               <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-                  <CardTitle className="text-lg font-semibold uppercase text-on-surface">
+                  <CardTitle className="text-base font-semibold text-on-surface">
                     Visual Appearance
                   </CardTitle>
                   <CardDescription className="font-medium text-on-surface-variant">
@@ -1288,7 +1288,7 @@ export default function SettingsPage() {
                 <CardContent className="p-10 space-y-10">
                   <div className="flex items-center justify-between p-8 bg-surface-container-highest/20 rounded-3xl border border-outline-variant/30">
                     <div className="space-y-1">
-                      <h3 className="text-lg font-black text-on-surface uppercase tracking-tight">
+                      <h3 className="text-lg font-semibold text-on-surface uppercase tracking-tight">
                         Main Theme
                       </h3>
                       <p className="text-sm font-medium text-on-surface-variant">
@@ -1310,7 +1310,7 @@ export default function SettingsPage() {
             {activeTab === "security" && (
               <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-                  <CardTitle className="text-lg font-semibold uppercase text-on-surface">
+                  <CardTitle className="text-base font-semibold text-on-surface">
                     Security & Privacy
                   </CardTitle>
                   <CardDescription className="font-medium text-on-surface-variant">
@@ -1325,7 +1325,7 @@ export default function SettingsPage() {
                           <Lock className="w-5 h-5 text-primary group-hover:text-white" />
                         </div>
                         <div>
-                          <h4 className="font-black text-on-surface uppercase tracking-tight">
+                          <h4 className="font-semibold text-on-surface uppercase tracking-tight">
                             Reset Password
                           </h4>
                           <p className="text-xs font-medium text-on-surface-variant">

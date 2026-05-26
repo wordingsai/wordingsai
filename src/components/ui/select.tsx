@@ -41,7 +41,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex w-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-low text-on-surface text-[11px] font-black uppercase tracking-widest py-3.5 px-4 transition-all outline-none select-none focus:ring-2 focus:ring-primary/20 focus:border-primary data-placeholder:text-on-surface-variant disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "flex w-full items-center justify-between rounded-xl border border-outline-variant bg-surface-container-low text-on-surface text-[11px] font-semibold uppercase tracking-widest py-3.5 px-4 transition-all outline-none select-none focus:ring-2 focus:ring-primary/20 focus:border-primary data-placeholder:text-on-surface-variant disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -106,7 +106,7 @@ function SelectLabel({
     <SelectPrimitive.GroupLabel
       data-slot="select-label"
       className={cn(
-        "px-3 py-2 text-[10px] uppercase tracking-widest text-primary font-black",
+        "px-3 py-2 text-[10px] uppercase tracking-widest text-primary font-semibold",
         className,
       )}
       {...props}
@@ -123,7 +123,7 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-on-surface outline-hidden select-none not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 hover:bg-primary/10 focus:bg-primary focus:text-primary-foreground",
+        "relative flex w-full cursor-default items-center px-4 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest text-on-surface outline-hidden select-none not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 hover:bg-primary/10 focus:bg-primary focus:text-primary-foreground",
         className,
       )}
       {...props}

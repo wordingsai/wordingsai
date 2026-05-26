@@ -249,7 +249,7 @@ export default function IndividualClausePage() {
 
   if (!clause)
     return (
-      <div className="p-20 text-center font-black uppercase tracking-widest opacity-20">
+      <div className="p-20 text-center font-semibold uppercase tracking-widest opacity-20">
         Clause record not found
       </div>
     );
@@ -265,14 +265,14 @@ export default function IndividualClausePage() {
                 <BreadcrumbItem>
                   <BreadcrumbLink
                     href="/clause-library"
-                    className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                    className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
                   >
                     Regulatory Framework
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="text-on-surface-variant" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">
+                  <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
                     {clause.clauseName}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
@@ -335,7 +335,7 @@ export default function IndividualClausePage() {
               </Button>
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-md flex items-center gap-2 transition-all "
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-md flex items-center gap-2 transition-all "
                 onClick={exportClause}
               >
                 <Download className="w-5 h-5" /> EXPORT ASSET
@@ -385,7 +385,7 @@ export default function IndividualClausePage() {
               <CardHeader className="p-8 pb-4">
                 <div className="flex items-center gap-3">
                   <Sparkles className="w-6 h-6 text-primary" />
-                  <CardTitle className="text-lg font-black uppercase tracking-tight text-primary">
+                  <CardTitle className="text-base font-semibold text-primary">
                     Neural Insights
                   </CardTitle>
                 </div>
@@ -402,7 +402,7 @@ export default function IndividualClausePage() {
                 {clause.aiRecommendedUse &&
                   clause.aiRecommendedUse.length > 0 && (
                     <div className="space-y-4 pt-6 border-t border-primary/10">
-                      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+                      <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
                         Suggested Implementation Domains
                       </h4>
                       <div className="flex flex-wrap gap-2">
@@ -529,7 +529,7 @@ export default function IndividualClausePage() {
                     key={idx}
                     className="flex items-center bg-primary/10 pl-3 pr-1 py-1 rounded-full border border-primary/20"
                   >
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
                       {kw}
                     </span>
                     {clause.isEditable && (
@@ -560,7 +560,7 @@ export default function IndividualClausePage() {
                     }}
                     placeholder="ADD KEYWORD..."
                     disabled={updatingKeywords}
-                    className="h-12 bg-background border-outline-variant rounded-xl text-xs font-black uppercase tracking-widest pr-12 focus-visible:ring-primary"
+                    className="h-12 bg-background border-outline-variant rounded-xl text-xs font-semibold uppercase tracking-widest pr-12 focus-visible:ring-primary"
                   />
                   <Button
                     size="sm"
@@ -580,7 +580,7 @@ export default function IndividualClausePage() {
                 <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
                   <History className="w-3 h-3 text-secondary" /> Version Control
                 </h3>
-                <Badge className="bg-secondary/10 text-secondary border-none font-black text-[9px]">
+                <Badge className="bg-secondary/10 text-secondary border-none font-semibold text-[9px]">
                   {versionHistory.length} ENTRIES
                 </Badge>
               </div>
@@ -593,7 +593,7 @@ export default function IndividualClausePage() {
                     <div className="flex justify-between items-start mb-2">
                       <span
                         className={cn(
-                          "text-xs font-black uppercase tracking-widest",
+                          "text-xs font-semibold uppercase tracking-widest",
                           v.isActive
                             ? "text-primary"
                             : "text-on-surface-variant",
@@ -621,7 +621,7 @@ export default function IndividualClausePage() {
               </div>
               <Button
                 variant="ghost"
-                className="w-full h-14 rounded-none font-black uppercase tracking-widest text-[11px] border-t border-outline-variant/30 hover:bg-surface-container-high"
+                className="w-full h-14 rounded-none font-semibold uppercase tracking-widest text-[11px] border-t border-outline-variant/30 hover:bg-surface-container-high"
               >
                 Full Differential View
               </Button>
@@ -642,7 +642,7 @@ export default function IndividualClausePage() {
             </DialogTitle>
             <DialogDescription className="text-base font-medium leading-relaxed">
               This creates a private, editable copy of{" "}
-              <span className="font-black text-on-surface">
+              <span className="font-semibold text-on-surface">
                 {clause.clauseName}
               </span>{" "}
               scoped to your active workspace only. It will receive an
@@ -654,14 +654,14 @@ export default function IndividualClausePage() {
           <DialogFooter className="mt-6 flex gap-3">
             <Button
               variant="outline"
-              className="flex-1 h-12 rounded-2xl font-black uppercase tracking-widest text-[11px] border-outline-variant"
+              className="flex-1 h-12 rounded-2xl font-semibold uppercase tracking-widest text-[11px] border-outline-variant"
               onClick={() => setShowCopyDialog(false)}
               disabled={isCopying}
             >
               Cancel
             </Button>
             <Button
-              className="flex-1 h-12 rounded-2xl font-black uppercase tracking-widest text-[11px] bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+              className="flex-1 h-12 rounded-2xl font-semibold uppercase tracking-widest text-[11px] bg-primary text-primary-foreground shadow-lg shadow-primary/20"
               onClick={handleCopyClause}
               disabled={isCopying}
             >

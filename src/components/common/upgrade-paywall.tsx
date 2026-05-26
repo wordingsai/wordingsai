@@ -80,18 +80,19 @@ export function UpgradePaywall({
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row items-center gap-3 pt-4">
             <Link href="/upgrade" className="w-full sm:w-auto">
-              <Button className="w-full h-14 px-10 rounded-[1.5rem] bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20">
-                Upgrade Now <ArrowRight className="ml-2 w-4 h-4" />
+              <Button size="lg" className="w-full gap-2">
+                Upgrade now <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
             <Link href="/dashboard" className="w-full sm:w-auto">
               <Button
                 variant="ghost"
-                className="w-full h-14 px-10 rounded-[1.5rem] text-xs font-medium uppercase tracking-wider text-on-surface-variant"
+                size="lg"
+                className="w-full text-on-surface-variant"
               >
-                Return to Safety
+                Return to dashboard
               </Button>
             </Link>
           </div>
@@ -116,7 +117,7 @@ export function UpgradePaywall({
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-on-surface uppercase tracking-tight leading-none">
+                  <h3 className="text-base font-semibold text-on-surface tracking-tight leading-none">
                     {featureName}
                   </h3>
                   <p className="text-sm text-on-surface-variant font-medium leading-relaxed">

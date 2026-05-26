@@ -56,7 +56,7 @@ export function TruncatedText({
           type="button"
           variant="ghost"
           size="sm"
-          className="h-7 px-2 text-[9px] font-black uppercase tracking-widest text-primary"
+          className="h-7 px-2 text-[9px] font-semibold uppercase tracking-widest text-primary"
           onClick={() => setExpanded((v) => !v)}
         >
           {expanded ? (

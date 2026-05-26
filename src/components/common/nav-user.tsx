@@ -142,18 +142,18 @@ export function NavUser({
               >
                 <Avatar className="h-9 w-9 rounded-xl shadow-sm group-hover:scale-105 transition-transform border border-outline-variant/30">
                   <AvatarImage src={user.avatar ?? undefined} alt={user.name} />
-                  <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-black uppercase text-xs">
+                  <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-semibold uppercase text-xs">
                     {user.name?.charAt(0) || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight ml-1">
                   <div className="flex items-center gap-1.5">
-                    <span className="truncate font-black uppercase text-[11px] tracking-tight text-on-surface">
+                    <span className="truncate font-semibold uppercase text-[11px] tracking-tight text-on-surface">
                       {user.name}
                     </span>
                     <Badge
                       className={cn(
-                        "h-4 px-1.5 text-[8px] font-black uppercase tracking-tighter border-none",
+                        "h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter border-none",
                         plan === "plus"
                           ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
                           : plan === "basic"
@@ -191,13 +191,13 @@ export function NavUser({
                         src={user.avatar ?? undefined}
                         alt={user.name}
                       />
-                      <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-black">
+                      <AvatarFallback className="rounded-xl bg-primary/10 text-primary font-semibold">
                         {user.name?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <div className="flex items-center gap-2">
-                        <span className="truncate font-black uppercase text-xs tracking-tight">
+                        <span className="truncate font-semibold uppercase text-xs tracking-tight">
                           {user.name}
                         </span>
                         {plan === "plus" && (
@@ -222,7 +222,7 @@ export function NavUser({
                   </Link>
                 )}
                 <div className="px-2 py-2">
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-on-surface-variant/40">
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/40">
                     Intelligence Level
                   </span>
                   <div className="mt-2 flex items-center justify-between p-2 rounded-xl bg-surface-container-low border border-outline-variant/20">
@@ -272,7 +272,7 @@ export function NavUser({
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="my-2 opacity-50" />
               <DropdownMenuGroup className="space-y-1">
-                <DropdownMenuLabel className="px-2 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-on-surface-variant/40">
+                <DropdownMenuLabel className="px-2 py-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/40">
                   Accounts
                 </DropdownMenuLabel>
                 {sessions.map((s) => (
@@ -288,13 +288,13 @@ export function NavUser({
                     <div className="relative size-6 shrink-0">
                       <Avatar className="h-6 w-6 rounded-lg border border-outline-variant">
                         <AvatarImage src={s.user.image || s.user.avatar} />
-                        <AvatarFallback className="text-[10px] font-black bg-primary/10 text-primary">
+                        <AvatarFallback className="text-[10px] font-semibold bg-primary/10 text-primary">
                           {s.user.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     </div>
                     <div className="flex flex-col min-w-0 flex-1">
-                      <span className="font-black text-on-surface truncate normal-case">
+                      <span className="font-semibold text-on-surface truncate normal-case">
                         {s.user.name || "User"}
                       </span>
                       <span className="text-[9px] text-on-surface-variant/70 truncate lowercase tracking-normal font-medium">

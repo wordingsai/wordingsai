@@ -64,7 +64,7 @@ const OnBoardingPage = (props: {
 
       <div className="relative z-10 w-full max-w-2xl text-center space-y-12">
         <section className="space-y-4 flex flex-col items-center">
-          <h1 className="text-[30px] font-black tracking-[-0.025em] text-foreground">
+          <h1 className="text-[30px] font-semibold tracking-[-0.025em] text-foreground">
             Welcome
           </h1>
 

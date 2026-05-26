@@ -246,7 +246,7 @@ export default function ClauseLibraryClient({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
                   Regulatory Framework
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -267,17 +267,17 @@ export default function ClauseLibraryClient({
 
           <div className="flex flex-col items-stretch lg:items-end gap-2 w-full lg:w-auto">
             {!canMutate && !isPlanPending && (
-              <span className="text-[9px] font-black text-amber-500 uppercase tracking-[0.15em] bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20 text-center">
+              <span className="text-[9px] font-semibold text-amber-500 uppercase tracking-[0.15em] bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20 text-center">
                 Upgrade to add clauses
               </span>
             )}
             {activeWorkspace?.isGlobal && isPlus && (
-              <span className="text-[9px] font-black text-primary uppercase tracking-[0.15em] bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20 text-center">
+              <span className="text-[9px] font-semibold text-primary uppercase tracking-[0.15em] bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20 text-center">
                 Creating here saves privately to your org
               </span>
             )}
             {activeWorkspace?.isGlobal && !isPlus && (
-              <span className="text-[9px] font-black text-primary uppercase tracking-[0.15em] bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20 text-center">
+              <span className="text-[9px] font-semibold text-primary uppercase tracking-[0.15em] bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20 text-center">
                 Global workspace is read-only
               </span>
             )}
@@ -413,7 +413,7 @@ export default function ClauseLibraryClient({
               <div className="py-24 text-center px-6">
                 <div className="flex flex-col items-center gap-4 opacity-30">
                   <FileSearch className="w-16 h-16" />
-                  <p className="text-lg font-black uppercase tracking-widest leading-tight">
+                  <p className="text-lg font-semibold uppercase tracking-widest leading-tight">
                     No wordings found in library.
                   </p>
                 </div>
@@ -441,7 +441,7 @@ export default function ClauseLibraryClient({
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap mb-1">
                                   {clause.source && (
-                                    <span className="text-[10px] font-black bg-primary/10 text-primary px-2 py-0.5 rounded-md uppercase tracking-widest border border-primary/20">
+                                    <span className="text-[10px] font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-md uppercase tracking-widest border border-primary/20">
                                       #{clause.source}
                                     </span>
                                   )}
@@ -449,12 +449,12 @@ export default function ClauseLibraryClient({
                                     {clause.clauseName}
                                   </h3>
                                   {clause.isGlobal && (
-                                    <Badge className="h-4 px-1.5 text-[8px] font-black uppercase tracking-tighter bg-primary/10 text-primary border-primary/20 rounded-sm">
+                                    <Badge className="h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter bg-primary/10 text-primary border-primary/20 rounded-sm">
                                       Global
                                     </Badge>
                                   )}
                                   {clause.code && (
-                                    <Badge className="h-4 px-1.5 text-[8px] font-black uppercase tracking-tighter bg-violet-500/10 text-violet-500 border-violet-500/20 rounded-sm">
+                                    <Badge className="h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter bg-violet-500/10 text-violet-500 border-violet-500/20 rounded-sm">
                                       {clause.code}
                                     </Badge>
                                   )}
@@ -673,7 +673,7 @@ export default function ClauseLibraryClient({
                   <TableCell colSpan={5} className="py-40 text-center">
                     <div className="flex flex-col items-center gap-4 opacity-30">
                       <FileSearch className="size-20" />
-                      <p className="text-xl font-black uppercase tracking-[0.2em]">
+                      <p className="text-xl font-semibold uppercase tracking-[0.2em]">
                         No wordings found in library
                       </p>
                     </div>
@@ -697,7 +697,7 @@ export default function ClauseLibraryClient({
 
         {/* Pagination Footer */}
         <div className="p-6 lg:p-10 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-8 bg-surface-container-highest/20 rounded-b-[2rem] lg:rounded-b-[3rem]">
-          <div className="text-[10px] lg:text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant text-center sm:text-left">
+          <div className="text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant text-center sm:text-left">
             Capacity: <span className="text-on-surface">{filtered.length}</span>{" "}
             Wordings
           </div>
@@ -717,7 +717,7 @@ export default function ClauseLibraryClient({
                     key={i}
                     variant={page === i + 1 ? "default" : "outline"}
                     className={cn(
-                      "h-10 w-10 rounded-xl font-black text-xs",
+                      "h-10 w-10 rounded-xl font-semibold text-xs",
                       page === i + 1
                         ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                         : "bg-transparent border-outline-variant hover:bg-background",
@@ -729,7 +729,7 @@ export default function ClauseLibraryClient({
                 ))}
               </div>
 
-              <div className="flex lg:hidden items-center px-4 font-black text-[11px] uppercase tracking-widest text-on-surface-variant">
+              <div className="flex lg:hidden items-center px-4 font-semibold text-[11px] uppercase tracking-widest text-on-surface-variant">
                 {page} / {totalPages}
               </div>
 
@@ -796,7 +796,7 @@ function ClauseRow({
                 <div className="flex flex-col truncate max-w-[350px]">
                   <div className="flex items-center gap-3 mb-1">
                     {clause.source && (
-                      <span className="text-[10px] font-black bg-primary/10 text-primary px-2 py-0.5 rounded-md uppercase tracking-widest border border-primary/20 shrink-0">
+                      <span className="text-[10px] font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-md uppercase tracking-widest border border-primary/20 shrink-0">
                         {clause.source}
                       </span>
                     )}
@@ -804,12 +804,12 @@ function ClauseRow({
                       {clause.clauseName}
                     </span>
                     {clause.isGlobal && (
-                      <Badge className="h-4 px-1.5 text-[8px] font-black uppercase tracking-tighter bg-primary/10 text-primary border-primary/20 rounded-sm">
+                      <Badge className="h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter bg-primary/10 text-primary border-primary/20 rounded-sm">
                         Global
                       </Badge>
                     )}
                     {clause.code && (
-                      <Badge className="h-4 px-1.5 text-[8px] font-black uppercase tracking-tighter bg-violet-500/10 text-violet-500 border-violet-500/20 rounded-sm">
+                      <Badge className="h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter bg-violet-500/10 text-violet-500 border-violet-500/20 rounded-sm">
                         {clause.code}
                       </Badge>
                     )}
@@ -844,7 +844,7 @@ function ClauseRow({
               </Badge>
             </TableCell>
 
-            <TableCell className="text-on-surface-variant font-black uppercase text-[11px] tracking-[0.15em]">
+            <TableCell className="text-on-surface-variant font-semibold uppercase text-[11px] tracking-[0.15em]">
               {clause.library}
             </TableCell>
 

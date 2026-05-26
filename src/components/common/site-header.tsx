@@ -194,7 +194,7 @@ export function SiteHeader() {
         {activeOrg?.name && (
           <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-surface-container-low border border-outline-variant/40 shadow-sm shrink-0">
             <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-on-surface truncate max-w-[160px]">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface truncate max-w-[160px]">
               {activeOrg.name}
             </span>
           </div>
@@ -216,7 +216,7 @@ export function SiteHeader() {
               >
                 <Bell className="h-5 w-5 text-on-surface-variant" />
                 {totalNotifs > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[8px] font-black text-primary-foreground shadow-lg shadow-primary/20">
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[8px] font-semibold text-primary-foreground shadow-lg shadow-primary/20">
                     {totalNotifs}
                   </span>
                 )}
@@ -229,7 +229,7 @@ export function SiteHeader() {
             >
               <div className="bg-surface-container-highest/10 p-6 border-b border-outline-variant flex justify-between items-center">
                 <div className="space-y-0.5">
-                  <h3 className="font-black uppercase tracking-[0.25em] text-[10px] text-on-surface-variant/60">
+                  <h3 className="font-semibold uppercase tracking-[0.25em] text-[10px] text-on-surface-variant/60">
                     Neural Updates
                   </h3>
                   <div className="flex items-center gap-2">
@@ -239,7 +239,7 @@ export function SiteHeader() {
                     {totalNotifs > 0 && (
                       <button
                         onClick={handleClearAll}
-                        className="text-[9px] font-black text-primary uppercase tracking-widest hover:underline ml-2"
+                        className="text-[9px] font-semibold text-primary uppercase tracking-widest hover:underline ml-2"
                       >
                         Clear All
                       </button>
@@ -248,7 +248,7 @@ export function SiteHeader() {
                 </div>
                 {(notifications.length > 0 ||
                   generalNotifications.length > 0) && (
-                  <Badge className="bg-primary/10 text-primary border-none rounded-lg font-black text-[9px] uppercase tracking-widest">
+                  <Badge className="bg-primary/10 text-primary border-none rounded-lg font-semibold text-[9px] uppercase tracking-widest">
                     {notifications.length + generalNotifications.length} New
                   </Badge>
                 )}
@@ -295,7 +295,7 @@ export function SiteHeader() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex justify-between items-start mb-1">
-                                <p className="text-[11px] font-black text-on-surface uppercase tracking-tight truncate">
+                                <p className="text-[11px] font-semibold text-on-surface uppercase tracking-tight truncate">
                                   {notif.title}
                                 </p>
                                 <span className="text-[9px] font-bold text-on-surface-variant/40 uppercase whitespace-nowrap ml-2">
@@ -325,13 +325,13 @@ export function SiteHeader() {
                               <AvatarImage
                                 src={notif.user.image ?? undefined}
                               />
-                              <AvatarFallback className="font-black bg-primary/10 text-primary uppercase">
+                              <AvatarFallback className="font-semibold bg-primary/10 text-primary uppercase">
                                 {notif.user.name?.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1 min-w-0">
                               <div className="flex justify-between items-start mb-1">
-                                <p className="text-[11px] font-black text-on-surface uppercase tracking-tight truncate">
+                                <p className="text-[11px] font-semibold text-on-surface uppercase tracking-tight truncate">
                                   {notif.user.name}
                                 </p>
                                 <span className="text-[9px] font-bold text-on-surface-variant/40 uppercase">
@@ -404,7 +404,7 @@ export function SiteHeader() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-start mb-1">
-                              <p className="text-[11px] font-black text-on-surface uppercase tracking-tight truncate">
+                              <p className="text-[11px] font-semibold text-on-surface uppercase tracking-tight truncate">
                                 {activity.title}
                               </p>
                               <span className="text-[9px] font-bold text-on-surface-variant/40 uppercase whitespace-nowrap ml-2">
@@ -430,7 +430,7 @@ export function SiteHeader() {
               <div className="p-4 bg-surface-container-highest/10 border-t border-outline-variant text-center">
                 <Link
                   href="/dashboard"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-primary hover:underline flex items-center justify-center gap-2"
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary hover:underline flex items-center justify-center gap-2"
                 >
                   Access Neural Hub <ArrowUpRight className="size-3" />
                 </Link>
@@ -457,7 +457,7 @@ export function SiteHeader() {
                     src={session.user.image ?? undefined}
                     alt={session.user.name || ""}
                   />
-                  <AvatarFallback className="bg-primary/10 text-primary font-black uppercase">
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold uppercase">
                     {session.user.name?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
@@ -472,12 +472,12 @@ export function SiteHeader() {
                     <div className="flex items-center gap-3 px-3 py-3 bg-surface-container-highest/10 rounded-xl mb-2">
                       <Avatar className="h-10 w-10 rounded-lg">
                         <AvatarImage src={session.user.image ?? undefined} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-black">
+                        <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                           {session.user.name?.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col min-w-0">
-                        <p className="text-[11px] font-black uppercase tracking-tight text-on-surface truncate">
+                        <p className="text-[11px] font-semibold uppercase tracking-tight text-on-surface truncate">
                           {session.user.name}
                         </p>
                         <p className="text-[10px] font-medium text-on-surface-variant/70 truncate">
@@ -494,7 +494,7 @@ export function SiteHeader() {
                 </DropdownMenuGroup>
                 {sessions.length > 0 && (
                   <DropdownMenuGroup className="space-y-1">
-                    <DropdownMenuLabel className="px-2 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-on-surface-variant/40">
+                    <DropdownMenuLabel className="px-2 py-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/40">
                       Switch Account
                     </DropdownMenuLabel>
                     {sessions.map((s) => (
@@ -509,12 +509,12 @@ export function SiteHeader() {
                       >
                         <Avatar className="h-6 w-6 rounded-lg">
                           <AvatarImage src={s.user.image} />
-                          <AvatarFallback className="text-[10px] font-black bg-primary/10 text-primary">
+                          <AvatarFallback className="text-[10px] font-semibold bg-primary/10 text-primary">
                             {s.user.name?.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1">
-                          <span className="font-black text-on-surface truncate normal-case">
+                          <span className="font-semibold text-on-surface truncate normal-case">
                             {s.user.name || "User"}
                           </span>
                           <span className="text-[9px] text-on-surface-variant/70 truncate lowercase tracking-normal font-medium">

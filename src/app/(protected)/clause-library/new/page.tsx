@@ -151,14 +151,14 @@ export default function NewClausePage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/clause-library"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
                 >
                   Regulatory Framework
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-on-surface-variant" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
                   Initialize New Wording
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -213,7 +213,7 @@ export default function NewClausePage() {
                   onValueChange={(val) => setCategory(val || "")}
                   required
                 >
-                  <SelectTrigger className="h-14 bg-background border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[11px]">
+                  <SelectTrigger className="h-14 bg-background border-outline-variant rounded-2xl font-semibold uppercase tracking-widest text-[11px]">
                     <SelectValue placeholder="Select Domain" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
@@ -233,7 +233,7 @@ export default function NewClausePage() {
                 <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                   Semantic Wording (Actual Text)
                 </Label>
-                <Badge className="bg-primary/5 text-primary border-primary/20 text-[9px] font-black uppercase px-2 py-0.5">
+                <Badge className="bg-primary/5 text-primary border-primary/20 text-[9px] font-semibold uppercase px-2 py-0.5">
                   High Precision Required
                 </Badge>
               </div>
@@ -337,7 +337,7 @@ export default function NewClausePage() {
               type="submit"
               size="lg"
               disabled={loading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-5 py-2 rounded-md flex items-center gap-3 text-lg transition-all "
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-5 py-2 rounded-md flex items-center gap-3 text-lg transition-all "
             >
               {loading ? (
                 <>

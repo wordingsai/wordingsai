@@ -294,7 +294,7 @@ export default function ContractsPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
                   Portfolio Management
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -367,7 +367,7 @@ export default function ContractsPage() {
               <Link href="/contracts/upload" className="w-full lg:w-auto">
                 <Button
                   size="lg"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-md flex items-center justify-center gap-2 transition-all "
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-md flex items-center justify-center gap-2 transition-all "
                 >
                   <Plus className="w-5 h-5" />
                   ADD NEW WORDING
@@ -472,7 +472,7 @@ export default function ContractsPage() {
                         setDateFrom(undefined);
                         setDateTo(undefined);
                       }}
-                      className="h-7 px-2 rounded-lg text-[9px] font-black uppercase"
+                      className="h-7 px-2 rounded-lg text-[9px] font-semibold uppercase"
                     >
                       Clear
                     </Button>
@@ -801,7 +801,7 @@ export default function ContractsPage() {
                           <Badge
                             variant="outline"
                             className={cn(
-                              "rounded-full font-black text-[8px] uppercase tracking-tighter px-2 py-1 h-fit",
+                              "rounded-full font-semibold text-[8px] uppercase tracking-tighter px-2 py-1 h-fit",
                               getStatusStyle(contract.auditStatus || "pending"),
                             )}
                           >

@@ -152,7 +152,7 @@ export const HeroSection = () => {
             Next-Gen Contract Tech
           </div>
 
-          <h1 className="text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight text-slate-900 dark:text-white">
             Analyze Contracts <span className="text-primary">Smarter</span> with
             AI
           </h1>
@@ -198,7 +198,7 @@ export const HeroSection = () => {
                   <Sparkles className="text-primary size-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-black uppercase text-slate-500 tracking-wider">
+                  <h4 className="text-xs font-semibold uppercase text-slate-500 tracking-wider">
                     Treaty Risk Analyzer
                   </h4>
                   <p className="text-[10px] text-slate-400">
@@ -216,7 +216,7 @@ export const HeroSection = () => {
                     setExpandedClauseId(null);
                   }}
                   className={cn(
-                    "px-3 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider transition-all",
+                    "px-3 py-1.5 rounded-md text-[9px] font-semibold uppercase tracking-wider transition-all",
                     selectedDocKey === "quota"
                       ? "bg-primary text-white"
                       : "text-slate-500 hover:text-slate-900 dark:hover:text-white",
@@ -231,7 +231,7 @@ export const HeroSection = () => {
                     setExpandedClauseId(null);
                   }}
                   className={cn(
-                    "px-3 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider transition-all",
+                    "px-3 py-1.5 rounded-md text-[9px] font-semibold uppercase tracking-wider transition-all",
                     selectedDocKey === "cat"
                       ? "bg-primary text-white"
                       : "text-slate-500 hover:text-slate-900 dark:hover:text-white",
@@ -281,7 +281,7 @@ export const HeroSection = () => {
               {/* Progress Line */}
               {scanProgress >= 0 && (
                 <div className="mt-4 space-y-1.5">
-                  <div className="flex justify-between text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                  <div className="flex justify-between text-[9px] font-semibold text-slate-400 uppercase tracking-widest">
                     <span>Segmenting Clauses</span>
                     <span>{scanProgress}%</span>
                   </div>
@@ -350,7 +350,7 @@ export const HeroSection = () => {
                           <div className="flex items-center gap-2">
                             <span
                               className={cn(
-                                "px-2 py-0.5 text-[8px] font-black uppercase rounded",
+                                "px-2 py-0.5 text-[8px] font-semibold uppercase rounded",
                                 clause.severity === "red"
                                   ? "bg-rose-500/10 text-rose-500"
                                   : clause.severity === "amber"
@@ -376,7 +376,7 @@ export const HeroSection = () => {
                         {isExpanded && (
                           <div className="px-3.5 pb-3.5 pt-1 text-[10px] border-t border-slate-200 dark:border-white/5 space-y-3 animate-in slide-in-from-top-2 duration-200">
                             <div>
-                              <span className="font-black text-slate-400 uppercase tracking-widest block mb-0.5">
+                              <span className="font-semibold text-slate-400 uppercase tracking-widest block mb-0.5">
                                 Treaty Wording
                               </span>
                               <p className="text-slate-700 dark:text-slate-300 font-medium bg-slate-100 dark:bg-zinc-900 p-2 rounded-lg leading-relaxed">
@@ -384,7 +384,7 @@ export const HeroSection = () => {
                               </p>
                             </div>
                             <div>
-                              <span className="font-black text-slate-400 uppercase tracking-widest block mb-0.5">
+                              <span className="font-semibold text-slate-400 uppercase tracking-widest block mb-0.5">
                                 Corporate Standard Guideline
                               </span>
                               <p className="text-slate-700 dark:text-slate-300 font-medium bg-slate-100 dark:bg-zinc-900 p-2 rounded-lg leading-relaxed">
@@ -394,7 +394,7 @@ export const HeroSection = () => {
                             <div className="p-2.5 rounded-lg bg-primary/5 border border-primary/20 flex gap-2">
                               <Sparkles className="text-primary size-4 shrink-0 mt-0.5" />
                               <div>
-                                <span className="font-black text-primary uppercase tracking-widest block mb-0.5">
+                                <span className="font-semibold text-primary uppercase tracking-widest block mb-0.5">
                                   AI Recommendation
                                 </span>
                                 <p className="text-slate-800 dark:text-slate-200 font-bold leading-relaxed">

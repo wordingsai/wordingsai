@@ -305,7 +305,7 @@ export default function RuleRecommendationsPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/40">
+          <div className="flex items-center justify-center gap-6 text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/40">
             <div className="flex items-center gap-2">
               <Zap className="w-3 h-3" /> OCR Matrix
             </div>
@@ -354,7 +354,7 @@ export default function RuleRecommendationsPage() {
           <Button
             onClick={handleStartFullAnalysis}
             disabled={authorizing || rules.length === 0}
-            className="rounded-2xl h-16 px-10 font-black uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all group"
+            className="rounded-2xl h-16 px-10 font-semibold uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all group"
           >
             {authorizing ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -379,7 +379,7 @@ export default function RuleRecommendationsPage() {
                 </h2>
                 <Badge
                   variant="outline"
-                  className="rounded-full px-3 py-1 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px]"
+                  className="rounded-full px-3 py-1 bg-primary/5 text-primary border-primary/20 font-semibold uppercase text-[10px]"
                 >
                   {recommendedRules.length} Matching
                 </Badge>
@@ -464,7 +464,7 @@ export default function RuleRecommendationsPage() {
           <div className="lg:col-span-4">
             <div className="sticky top-12 space-y-6">
               <div className="bg-surface-container-low border border-outline-variant rounded-lg p-8 space-y-6">
-                <h3 className="text-lg font-black uppercase tracking-tight text-on-surface flex items-center gap-2">
+                <h3 className="text-base font-semibold text-on-surface flex items-center gap-2">
                   <FileText className="w-5 h-5 text-primary" /> Document
                   Fingerprint
                 </h3>
@@ -510,7 +510,7 @@ export default function RuleRecommendationsPage() {
                   <Zap className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-black uppercase tracking-tight text-on-surface text-sm">
+                  <h4 className="font-semibold uppercase tracking-tight text-on-surface text-sm">
                     Neural Efficiency
                   </h4>
                   <p className="text-[10px] font-bold text-on-surface-variant uppercase">
@@ -569,7 +569,7 @@ function RuleCard({
           <div className="flex items-center gap-3">
             <h4
               className={cn(
-                "font-black uppercase tracking-tight transition-colors truncate",
+                "font-semibold uppercase tracking-tight transition-colors truncate",
                 selected
                   ? "text-on-surface"
                   : "text-on-surface-variant group-hover:text-on-surface",
@@ -579,7 +579,7 @@ function RuleCard({
               {rule.name}
             </h4>
             {rule.isRecommended && !compact && (
-              <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 font-black uppercase text-[8px] tracking-[0.1em]">
+              <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/20 font-semibold uppercase text-[8px] tracking-[0.1em]">
                 Recommended
               </Badge>
             )}

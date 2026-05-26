@@ -101,7 +101,7 @@ export default function PricingPage() {
 
       {/* Soft-launch banner */}
       <div className="max-w-[1700px] mx-auto px-8 mb-12 text-center">
-        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest">
+        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-widest">
           <Rocket className="w-3.5 h-3.5" />
           Soft Launch — All Plans Available as Trial
         </div>
@@ -162,7 +162,7 @@ export default function PricingPage() {
                             {plan.name}
                           </Badge>
                           {plan.highlight && (
-                            <div className="flex items-center gap-1.5 text-[10px] font-black text-white/90 uppercase tracking-widest">
+                            <div className="flex items-center gap-1.5 text-[10px] font-semibold text-white/90 uppercase tracking-widest">
                               <Sparkles className="w-3 h-3" />
                               Most Popular
                             </div>
@@ -204,7 +204,7 @@ export default function PricingPage() {
                         {!isEnterprise && (
                           <span
                             className={cn(
-                              "text-xs font-black uppercase tracking-widest opacity-60 hidden",
+                              "text-xs font-semibold uppercase tracking-widest opacity-60 hidden",
                             )}
                           ></span>
                         )}
@@ -246,7 +246,7 @@ export default function PricingPage() {
                       onClick={() => handleSelectPlan(plan.id)}
                       disabled={isCurrent || loading !== null}
                       className={cn(
-                        "w-full h-16 px-8 rounded-lg font-black uppercase tracking-[0.15em] text-sm transition-all duration-500 shadow-xl",
+                        "w-full h-16 px-8 rounded-lg font-semibold uppercase tracking-[0.15em] text-sm transition-all duration-500 shadow-xl",
                         plan.highlight
                           ? "bg-white text-primary hover:bg-white/95 shadow-white/40 disabled:shadow-none"
                           : "bg-primary text-primary-foreground hover:bg-primary/95 shadow-primary/30",

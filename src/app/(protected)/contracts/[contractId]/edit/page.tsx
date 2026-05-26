@@ -180,7 +180,7 @@ export default function EditContractPage() {
           </p>
           <Button
             onClick={() => window.history.back()}
-            className="mt-8 rounded-full font-black uppercase tracking-widest px-8"
+            className="mt-8 rounded-full font-semibold uppercase tracking-widest px-8"
           >
             Return
           </Button>
@@ -246,7 +246,7 @@ export default function EditContractPage() {
       <main className="flex-1 flex items-center justify-center bg-background min-h-[50vh]">
         <div className="flex flex-col items-center gap-4 text-primary animate-pulse">
           <Loader2 className="w-12 h-12 animate-spin" />
-          <span className="font-black uppercase tracking-widest text-xs">
+          <span className="font-semibold uppercase tracking-widest text-xs">
             Loading Neural Data...
           </span>
         </div>
@@ -263,7 +263,7 @@ export default function EditContractPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/contracts"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
                 >
                   Portfolio Archive
                 </BreadcrumbLink>
@@ -272,14 +272,14 @@ export default function EditContractPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href={`/contracts/${contractId}`}
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
                 >
                   {contractName || "Contract"}
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-on-surface-variant" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
                   Re-calibrate
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -440,7 +440,7 @@ export default function EditContractPage() {
               <div className="lg:col-span-3 space-y-6 pt-12 border-t border-outline-variant/30">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1">
-                    <h3 className="text-xl font-black text-on-surface uppercase tracking-tight flex items-center gap-2">
+                    <h3 className="text-xl font-semibold text-on-surface uppercase tracking-tight flex items-center gap-2">
                       <BookOpen className="w-5 h-5 text-primary" /> Rules List
                     </h3>
                     <p className="text-sm font-medium text-on-surface-variant">
@@ -454,7 +454,7 @@ export default function EditContractPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => handleSelectOnlyKind("exclusion")}
-                      className="rounded-xl font-black uppercase tracking-widest text-[9px] h-10 px-4 border-rose-500/20 text-rose-500 hover:bg-rose-500/10 transition-colors"
+                      className="rounded-xl font-semibold uppercase tracking-widest text-[9px] h-10 px-4 border-rose-500/20 text-rose-500 hover:bg-rose-500/10 transition-colors"
                     >
                       Exclusion Rules
                     </Button>
@@ -463,7 +463,7 @@ export default function EditContractPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => handleSelectOnlyKind("condition")}
-                      className="rounded-xl font-black uppercase tracking-widest text-[9px] h-10 px-4 border-amber-500/20 text-amber-500 hover:bg-amber-500/10 transition-colors"
+                      className="rounded-xl font-semibold uppercase tracking-widest text-[9px] h-10 px-4 border-amber-500/20 text-amber-500 hover:bg-amber-500/10 transition-colors"
                     >
                       Condition Rules
                     </Button>
@@ -475,7 +475,7 @@ export default function EditContractPage() {
                       variant="outline"
                       size="sm"
                       onClick={handleSelectAll}
-                      className="rounded-xl font-black uppercase tracking-widest text-[9px] h-10 px-4 border-primary/20 text-primary hover:bg-primary/10 transition-colors"
+                      className="rounded-xl font-semibold uppercase tracking-widest text-[9px] h-10 px-4 border-primary/20 text-primary hover:bg-primary/10 transition-colors"
                     >
                       Select All
                     </Button>
@@ -484,7 +484,7 @@ export default function EditContractPage() {
                       variant="outline"
                       size="sm"
                       onClick={handleDeselectAll}
-                      className="rounded-xl font-black uppercase tracking-widest text-[9px] h-10 px-4 border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors"
+                      className="rounded-xl font-semibold uppercase tracking-widest text-[9px] h-10 px-4 border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors"
                     >
                       Deselect All
                     </Button>
@@ -501,7 +501,7 @@ export default function EditContractPage() {
                     ))
                   ) : availableRules.length === 0 ? (
                     <div className="col-span-full py-12 text-center bg-surface-container/50 rounded-lg border border-dashed border-outline-variant">
-                      <p className="text-on-surface-variant font-black uppercase tracking-widest text-xs">
+                      <p className="text-on-surface-variant font-semibold uppercase tracking-widest text-xs">
                         No rules found in this workspace
                       </p>
                     </div>
@@ -531,7 +531,7 @@ export default function EditContractPage() {
                           <div className="flex items-center gap-2">
                             <Badge
                               variant="outline"
-                              className="text-[8px] font-black uppercase px-2 py-0 h-4 border-outline-variant/50 text-on-surface-variant"
+                              className="text-[8px] font-semibold uppercase px-2 py-0 h-4 border-outline-variant/50 text-on-surface-variant"
                             >
                               {rule.category}
                             </Badge>
@@ -547,7 +547,7 @@ export default function EditContractPage() {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-black px-5 py-2 rounded-md flex items-center gap-3 text-lg  transition-all"
+                  className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-5 py-2 rounded-md flex items-center gap-3 text-lg  transition-all"
                 >
                   {submitting ? (
                     <>

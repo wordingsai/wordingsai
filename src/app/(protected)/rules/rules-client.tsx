@@ -248,7 +248,7 @@ export default function RulesClient() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
                   Rule Configuration
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -532,7 +532,7 @@ export default function RulesClient() {
                               {rule.isGlobal ? "Global" : "Organization"}
                             </span>
                           </div>
-                          <h3 className="text-lg lg:text-xl font-black text-on-surface leading-tight group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem] lg:min-h-[3.5rem]">
+                          <h3 className="text-lg lg:text-xl font-semibold text-on-surface leading-tight group-hover:text-primary transition-colors line-clamp-2 min-h-[3rem] lg:min-h-[3.5rem]">
                             {rule.name.includes(" — ")
                               ? rule.name.split(" — ")[1]
                               : rule.name}
@@ -550,7 +550,7 @@ export default function RulesClient() {
                             <div className="flex items-center gap-2 flex-wrap">
                               {(rule.currentVersion.ruleDefinition.whatToCheck
                                 ?.length ?? 0) > 0 && (
-                                <span className="text-[9px] font-black px-2 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
+                                <span className="text-[9px] font-semibold px-2 py-1 rounded-full bg-primary/5 text-primary border border-primary/10">
                                   {
                                     rule.currentVersion.ruleDefinition
                                       .whatToCheck!.length
@@ -560,7 +560,7 @@ export default function RulesClient() {
                               )}
                               {(rule.currentVersion.ruleDefinition
                                 .clauseReferences?.length ?? 0) > 0 && (
-                                <span className="text-[9px] font-black px-2 py-1 rounded-full bg-secondary/5 text-secondary border border-secondary/10">
+                                <span className="text-[9px] font-semibold px-2 py-1 rounded-full bg-secondary/5 text-secondary border border-secondary/10">
                                   {
                                     rule.currentVersion.ruleDefinition
                                       .clauseReferences!.length
@@ -577,7 +577,7 @@ export default function RulesClient() {
                             <Badge
                               variant="outline"
                               className={cn(
-                                "rounded-full font-black text-[9px] lg:text-[10px] uppercase tracking-tighter px-2.5",
+                                "rounded-full font-semibold text-[9px] lg:text-[10px] uppercase tracking-tighter px-2.5",
                                 rule.status === "active"
                                   ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                                   : "bg-surface-container text-on-surface-variant",
@@ -590,7 +590,7 @@ export default function RulesClient() {
                             <Badge
                               variant="outline"
                               className={cn(
-                                "rounded-full font-black text-[9px] lg:text-[10px] uppercase tracking-tighter px-2.5",
+                                "rounded-full font-semibold text-[9px] lg:text-[10px] uppercase tracking-tighter px-2.5",
                                 getRuleKind(rule) === "exclusion"
                                   ? "bg-rose-500/10 text-rose-500 border-rose-500/20"
                                   : "bg-sky-500/10 text-sky-500 border-sky-500/20",
@@ -603,7 +603,7 @@ export default function RulesClient() {
                           </div>
                           <Link
                             href={`/rules/${rule.id}`}
-                            className="text-primary text-[10px] lg:text-xs font-black uppercase tracking-widest hover:underline whitespace-nowrap"
+                            className="text-primary text-[10px] lg:text-xs font-semibold uppercase tracking-widest hover:underline whitespace-nowrap"
                           >
                             Review
                           </Link>
@@ -707,7 +707,7 @@ export default function RulesClient() {
                   key={i}
                   variant={page === i + 1 ? "default" : "outline"}
                   className={cn(
-                    "h-10 w-10 rounded-xl font-black text-xs",
+                    "h-10 w-10 rounded-xl font-semibold text-xs",
                     page === i + 1
                       ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                       : "bg-transparent border-outline-variant hover:bg-background",
@@ -719,7 +719,7 @@ export default function RulesClient() {
               ))}
             </div>
 
-            <div className="flex sm:hidden items-center px-4 font-black text-[11px] uppercase tracking-widest text-on-surface-variant">
+            <div className="flex sm:hidden items-center px-4 font-semibold text-[11px] uppercase tracking-widest text-on-surface-variant">
               {page} / {totalPages}
             </div>
 

@@ -235,7 +235,7 @@ export const ChatWidget: React.FC = () => {
                     </div>
                     {msg.sources && msg.sources.length > 0 && (
                       <div className="mt-4 border-t border-border/30 pt-3">
-                        <p className="mb-2 text-[9px] font-black uppercase tracking-tighter text-muted-foreground/60">
+                        <p className="mb-2 text-[9px] font-semibold uppercase tracking-tighter text-muted-foreground/60">
                           Sources
                         </p>
                         <div className="flex flex-wrap gap-1.5">

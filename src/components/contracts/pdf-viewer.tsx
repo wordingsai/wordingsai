@@ -179,7 +179,7 @@ export const PdfViewer = memo(function PdfViewer({
               <div className="size-20 rounded-full border-4 border-primary/10 border-t-primary animate-spin [animation-duration:3s]" />
             </div>
             <div className="flex flex-col items-center gap-1.5">
-              <span className="text-xs font-black uppercase tracking-[0.3em] text-primary">
+              <span className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                 Decoding Neural Engine
               </span>
               <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-60">

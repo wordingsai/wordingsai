@@ -102,7 +102,7 @@ export function CreateWorkspaceDialog({
             <BrainCircuit className="size-6 sm:size-8" />
           </div>
           <div>
-            <DialogTitle className="text-xl sm:text-lg font-semibold text-on-surface uppercase tracking-tight">
+            <DialogTitle className="text-base font-semibold text-on-surface tracking-tight">
               New Intelligence Scope
             </DialogTitle>
             <DialogDescription className="text-[10px] sm:text-[11px] font-bold text-on-surface-variant/60 uppercase tracking-widest mt-1 sm:mt-1.5 flex items-center gap-2">

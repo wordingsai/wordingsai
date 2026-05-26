@@ -139,12 +139,12 @@ export function DocumentStructure({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 md:p-5 bg-surface-container-low border border-outline-variant/30 rounded-2xl">
         <div className="min-w-0">
           {data.title ? (
-            <h2 className="text-base md:text-lg font-black uppercase tracking-tight text-on-surface flex items-center gap-2 truncate">
+            <h2 className="text-base md:text-base font-semibold text-on-surface flex items-center gap-2 truncate">
               <BookOpen className="w-4 h-4 shrink-0 text-primary" />
               <span className="truncate">{data.title}</span>
             </h2>
           ) : (
-            <h2 className="text-base md:text-lg font-black uppercase tracking-tight text-on-surface flex items-center gap-2">
+            <h2 className="text-base md:text-base font-semibold text-on-surface flex items-center gap-2">
               <ListTree className="w-4 h-4 shrink-0 text-primary" />
               Contract outline
             </h2>
@@ -268,7 +268,7 @@ export function DocumentStructure({
                           >
                             <div className="flex items-start gap-2 min-w-0">
                               {sub.number && (
-                                <span className="text-[8px] font-black text-primary/60 uppercase shrink-0 pt-0.5">
+                                <span className="text-[8px] font-semibold text-primary/60 uppercase shrink-0 pt-0.5">
                                   {sub.number}
                                 </span>
                               )}

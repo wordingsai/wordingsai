@@ -212,14 +212,14 @@ export default function NewRulePage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/rules"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
                 >
                   Rule Configuration
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-on-surface-variant" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
                   New Logic Definition
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -299,7 +299,7 @@ export default function NewRulePage() {
                       onValueChange={(val) => setCategory(val || "")}
                       required
                     >
-                      <SelectTrigger className="h-14 bg-background border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[11px]">
+                      <SelectTrigger className="h-14 bg-background border-outline-variant rounded-2xl font-semibold uppercase tracking-widest text-[11px]">
                         <SelectValue placeholder="Select Domain" />
                       </SelectTrigger>
                       <SelectContent className="rounded-xl">
@@ -359,7 +359,7 @@ export default function NewRulePage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => addField(setWhatToCheck)}
-                        className="h-7 text-[9px] font-black uppercase"
+                        className="h-7 text-[9px] font-semibold uppercase"
                       >
                         Add Step
                       </Button>
@@ -399,7 +399,7 @@ export default function NewRulePage() {
                         variant="ghost"
                         size="sm"
                         onClick={() => addField(setClauseReferences)}
-                        className="h-7 text-[9px] font-black uppercase"
+                        className="h-7 text-[9px] font-semibold uppercase"
                       >
                         Add Ref
                       </Button>
@@ -432,7 +432,7 @@ export default function NewRulePage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Target className="w-5 h-5 text-primary" />
-                      <h2 className="text-xl font-black tracking-tight uppercase">
+                      <h2 className="text-xl font-semibold tracking-tight uppercase">
                         Keyword packages (Biased Semantics)
                       </h2>
                     </div>
@@ -591,7 +591,7 @@ export default function NewRulePage() {
               type="submit"
               size="lg"
               disabled={loading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-5 py-2 rounded-md flex items-center gap-3 text-lg transition-all "
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-5 py-2 rounded-md flex items-center gap-3 text-lg transition-all "
             >
               {loading ? (
                 <>

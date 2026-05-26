@@ -207,13 +207,13 @@ export function AnalysisChecklist({
                     </div>
                     <div className="flex-1 min-w-0 overflow-hidden">
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <h4 className="font-black text-xs sm:text-sm uppercase tracking-tight text-on-surface truncate max-w-full">
+                        <h4 className="font-semibold text-xs sm:text-sm uppercase tracking-tight text-on-surface truncate max-w-full">
                           {clauseName}
                         </h4>
                         <Badge
                           variant="outline"
                           className={cn(
-                            "text-[8px] sm:text-[9px] uppercase font-black tracking-widest px-1.5 py-0 border-none shrink-0",
+                            "text-[8px] sm:text-[9px] uppercase font-semibold tracking-widest px-1.5 py-0 border-none shrink-0",
                             isGreen
                               ? "bg-emerald-500 text-white"
                               : isAmber
@@ -246,7 +246,7 @@ export function AnalysisChecklist({
                     <div className="flex flex-col items-end gap-0.5 shrink-0">
                       <span
                         className={cn(
-                          "text-[9px] sm:text-[10px] font-black",
+                          "text-[9px] sm:text-[10px] font-semibold",
                           isGreen
                             ? "text-emerald-500"
                             : isAmber
@@ -375,7 +375,7 @@ function FilterStat({
       </span>
       <span
         className={cn(
-          "text-base sm:text-xl font-black tracking-tighter",
+          "text-base sm:text-xl font-semibold tracking-tighter",
           styles.text,
         )}
       >

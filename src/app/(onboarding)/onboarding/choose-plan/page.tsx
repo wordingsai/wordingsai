@@ -84,7 +84,7 @@ export default function OnboardingChoosePlanPage() {
                       {plan.name}
                     </Badge>
                     {plan.highlight && (
-                      <div className="flex items-center gap-1 text-xs font-black uppercase tracking-wider text-primary">
+                      <div className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-primary">
                         <Sparkles className="w-3 h-3" />
                         Most Popular
                       </div>
@@ -122,7 +122,7 @@ export default function OnboardingChoosePlanPage() {
                 {plan.id === "fast" ? (
                   <Button
                     onClick={goToDashboard}
-                    className="w-full h-12 rounded-xl font-black uppercase"
+                    className="w-full h-12 rounded-xl font-semibold uppercase"
                     variant={isCurrent ? "outline" : "default"}
                     disabled={loading !== null}
                   >
@@ -132,7 +132,7 @@ export default function OnboardingChoosePlanPage() {
                   <Button
                     onClick={() => handleSelectPlan(plan.id)}
                     className={cn(
-                      "w-full h-12 rounded-xl font-black uppercase",
+                      "w-full h-12 rounded-xl font-semibold uppercase",
                       plan.id === "plus"
                         ? "bg-primary text-primary-foreground"
                         : "",

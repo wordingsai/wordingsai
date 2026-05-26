@@ -48,7 +48,7 @@ export default function AllUsers({ users, organizationId }: AllUsersProps) {
       <div className="flex flex-col gap-3">
         {users.length === 0 ? (
           <div className="py-10 text-center opacity-40">
-            <p className="text-xs font-black uppercase tracking-widest text-on-surface-variant">
+            <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
               No external identifies discovered.
             </p>
           </div>
@@ -61,12 +61,12 @@ export default function AllUsers({ users, organizationId }: AllUsersProps) {
               <div className="flex items-center gap-5 mb-4 sm:mb-0">
                 <Avatar className="size-14 rounded-2xl border-4 border-background shadow-lg transition-transform group-hover:scale-105">
                   <AvatarImage src={user.image ?? undefined} />
-                  <AvatarFallback className="bg-primary/10 text-primary font-black text-lg">
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
                     {user.name?.[0]?.toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="space-y-1">
-                  <h4 className="font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">
+                  <h4 className="font-semibold text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">
                     {user.name}
                   </h4>
                   <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-on-surface-variant">

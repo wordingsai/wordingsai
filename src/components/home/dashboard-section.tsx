@@ -66,10 +66,10 @@ export const DashboardSection = () => {
       <div className="max-w-6xl mx-auto px-10">
         {/* Header */}
         <div className="text-center mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-widest">
             <Activity className="size-4 animate-pulse" /> Live System Simulation
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black tracking-tight text-slate-900 dark:text-white uppercase">
+          <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 dark:text-white uppercase">
             Portfolio Risk Analytics
           </h2>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-base font-medium">
@@ -98,10 +98,10 @@ export const DashboardSection = () => {
                 <FileText className="text-primary size-5" />
               </div>
             </div>
-            <div className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tighter">
+            <div className="text-4xl lg:text-5xl font-semibold text-slate-900 dark:text-white tracking-tighter">
               24
             </div>
-            <div className="mt-4 text-[10px] text-emerald-500 font-black uppercase tracking-widest flex items-center gap-1 bg-emerald-500/10 w-fit px-2.5 py-1 rounded-full">
+            <div className="mt-4 text-[10px] text-emerald-500 font-semibold uppercase tracking-widest flex items-center gap-1 bg-emerald-500/10 w-fit px-2.5 py-1 rounded-full">
               <TrendingUp className="size-3" /> +12% MoM
             </div>
           </div>
@@ -123,10 +123,10 @@ export const DashboardSection = () => {
                 <AlertTriangle className="text-rose-500 size-5" />
               </div>
             </div>
-            <div className="text-4xl lg:text-5xl font-black text-rose-500 tracking-tighter">
+            <div className="text-4xl lg:text-5xl font-semibold text-rose-500 tracking-tighter">
               3
             </div>
-            <div className="mt-4 text-[10px] text-rose-500 font-black uppercase tracking-widest flex items-center gap-1 bg-rose-500/10 w-fit px-2.5 py-1 rounded-full">
+            <div className="mt-4 text-[10px] text-rose-500 font-semibold uppercase tracking-widest flex items-center gap-1 bg-rose-500/10 w-fit px-2.5 py-1 rounded-full">
               Critical Alerts
             </div>
           </div>
@@ -148,10 +148,10 @@ export const DashboardSection = () => {
                 <Handshake className="text-secondary size-5" />
               </div>
             </div>
-            <div className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tighter">
+            <div className="text-4xl lg:text-5xl font-semibold text-slate-900 dark:text-white tracking-tighter">
               164
             </div>
-            <div className="mt-4 text-[10px] text-slate-500 font-black uppercase tracking-widest px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-full w-fit">
+            <div className="mt-4 text-[10px] text-slate-500 font-semibold uppercase tracking-widest px-3 py-1 bg-slate-100 dark:bg-white/5 rounded-full w-fit">
               94% Compliant
             </div>
           </div>
@@ -173,10 +173,10 @@ export const DashboardSection = () => {
                 <ShieldCheck className="text-emerald-500 size-5" />
               </div>
             </div>
-            <div className="text-4xl lg:text-5xl font-black text-emerald-500 tracking-tighter">
+            <div className="text-4xl lg:text-5xl font-semibold text-emerald-500 tracking-tighter">
               92.4%
             </div>
-            <div className="mt-4 text-[10px] text-emerald-500 font-black uppercase tracking-widest px-3 py-1 bg-emerald-500/10 rounded-full w-fit">
+            <div className="mt-4 text-[10px] text-emerald-500 font-semibold uppercase tracking-widest px-3 py-1 bg-emerald-500/10 rounded-full w-fit">
               Highly Optimized
             </div>
           </div>
@@ -246,42 +246,42 @@ export const DashboardSection = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-zinc-800/20 border border-slate-200/50 dark:border-white/5 rounded-xl hover:border-emerald-500/30 transition-all group">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-slate-400">
+                        <span className="text-xs font-semibold text-slate-400">
                           01
                         </span>
                         <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-white group-hover:text-primary transition-colors">
                           Sanctions Exclusion Clause (LMA5092)
                         </span>
                       </div>
-                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black rounded-lg uppercase">
+                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-semibold rounded-lg uppercase">
                         98% Fit
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-zinc-800/20 border border-slate-200/50 dark:border-white/5 rounded-xl hover:border-emerald-500/30 transition-all group">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-slate-400">
+                        <span className="text-xs font-semibold text-slate-400">
                           02
                         </span>
                         <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-white group-hover:text-primary transition-colors">
                           Reinsurance Intermediary Authorization
                         </span>
                       </div>
-                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black rounded-lg uppercase">
+                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-semibold rounded-lg uppercase">
                         96% Fit
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-zinc-800/20 border border-slate-200/50 dark:border-white/5 rounded-xl hover:border-emerald-500/30 transition-all group">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-slate-400">
+                        <span className="text-xs font-semibold text-slate-400">
                           03
                         </span>
                         <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-white group-hover:text-primary transition-colors">
                           Errors & Omissions Treaty Buffer
                         </span>
                       </div>
-                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black rounded-lg uppercase">
+                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-semibold rounded-lg uppercase">
                         95% Fit
                       </span>
                     </div>
@@ -297,42 +297,42 @@ export const DashboardSection = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-zinc-800/20 border border-slate-200/50 dark:border-white/5 rounded-xl hover:border-rose-500/30 transition-all group">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-slate-400">
+                        <span className="text-xs font-semibold text-slate-400">
                           01
                         </span>
                         <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-white group-hover:text-rose-500 transition-colors">
                           15-Day Loss Notification Restriction
                         </span>
                       </div>
-                      <span className="px-2.5 py-1 bg-rose-500/10 text-rose-500 text-[9px] font-black rounded-lg uppercase">
+                      <span className="px-2.5 py-1 bg-rose-500/10 text-rose-500 text-[9px] font-semibold rounded-lg uppercase">
                         Critical
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-zinc-800/20 border border-slate-200/50 dark:border-white/5 rounded-xl hover:border-rose-500/30 transition-all group">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-slate-400">
+                        <span className="text-xs font-semibold text-slate-400">
                           02
                         </span>
                         <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-white group-hover:text-rose-500 transition-colors">
                           Arbitration Seat Clause Jurisdiction
                         </span>
                       </div>
-                      <span className="px-2.5 py-1 bg-amber-500/10 text-amber-500 text-[9px] font-black rounded-lg uppercase">
+                      <span className="px-2.5 py-1 bg-amber-500/10 text-amber-500 text-[9px] font-semibold rounded-lg uppercase">
                         Warning
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between p-3.5 bg-slate-50 dark:bg-zinc-800/20 border border-slate-200/50 dark:border-white/5 rounded-xl hover:border-rose-500/30 transition-all group">
                       <div className="flex items-center gap-3">
-                        <span className="text-xs font-black text-slate-400">
+                        <span className="text-xs font-semibold text-slate-400">
                           03
                         </span>
                         <span className="text-xs lg:text-sm font-bold text-slate-700 dark:text-white group-hover:text-rose-500 transition-colors">
                           Insolvency Clause Assessment
                         </span>
                       </div>
-                      <span className="px-2.5 py-1 bg-amber-500/10 text-amber-500 text-[9px] font-black rounded-lg uppercase">
+                      <span className="px-2.5 py-1 bg-amber-500/10 text-amber-500 text-[9px] font-semibold rounded-lg uppercase">
                         Warning
                       </span>
                     </div>
@@ -395,7 +395,7 @@ export const DashboardSection = () => {
 
                 {/* Right Circular Gauge */}
                 <div className="lg:col-span-5 bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-lg p-6 lg:p-8 flex flex-col items-center justify-center text-center">
-                  <h4 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">
+                  <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">
                     Audit Resolution Index
                   </h4>
 
@@ -426,7 +426,7 @@ export const DashboardSection = () => {
                       <span className="text-2xl font-semibold text-slate-900 dark:text-white">
                         88%
                       </span>
-                      <span className="text-[9px] font-black uppercase text-emerald-500 tracking-wider">
+                      <span className="text-[9px] font-semibold uppercase text-emerald-500 tracking-wider">
                         Approved
                       </span>
                     </div>
@@ -453,7 +453,7 @@ export const DashboardSection = () => {
                           : "bg-emerald-500",
                       )}
                     />
-                    <span className="text-xs font-black uppercase tracking-wider text-slate-500">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                       Ingestion Status:{" "}
                       {isSimulating ? "Analyzing Treaty Wordings" : "Ready"}
                     </span>

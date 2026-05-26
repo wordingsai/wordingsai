@@ -232,7 +232,7 @@ export default function AnalyticsPage(props: {
         <div className="space-y-8 animate-in fade-in duration-500">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 bg-surface-container-low border border-outline-variant p-10 rounded-xl shadow-sm">
-              <h3 className="text-lg font-semibold text-on-surface mb-10 uppercase tracking-tight flex items-center gap-3">
+              <h3 className="text-base font-semibold text-on-surface mb-10 flex items-center gap-3">
                 <PieChart className="size-7 text-primary" /> Portfolio
                 Composition
               </h3>
@@ -278,7 +278,7 @@ export default function AnalyticsPage(props: {
 
             <div className="lg:col-span-4 bg-primary p-10 rounded-xl text-white shadow-2xl shadow-primary/20 flex flex-col justify-between">
               <div>
-                <h3 className="text-lg font-semibold mb-4 uppercase tracking-tight">
+                <h3 className="text-base font-semibold mb-4">
                   Portfolio Health
                 </h3>
                 <p className="text-white/80 text-sm font-medium leading-relaxed mb-10">
@@ -288,7 +288,7 @@ export default function AnalyticsPage(props: {
               </div>
               <div className="space-y-8">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-widest">
+                  <span className="text-xs font-semibold uppercase tracking-widest">
                     Approved
                   </span>
                   <span className="text-lg font-semibold">
@@ -304,7 +304,7 @@ export default function AnalyticsPage(props: {
                   />
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-widest text-white/60">
+                  <span className="text-xs font-semibold uppercase tracking-widest text-white/60">
                     Requires Review
                   </span>
                   <span className="text-lg font-semibold">
@@ -353,11 +353,11 @@ function KpiCard({
           {value}
         </div>
         {trend ? (
-          <div className="mt-4 text-[10px] text-emerald-500 font-black uppercase tracking-widest flex items-center gap-1.5 bg-emerald-500/10 w-fit px-3 py-1 rounded-full">
+          <div className="mt-4 text-[10px] text-emerald-500 font-semibold uppercase tracking-widest flex items-center gap-1.5 bg-emerald-500/10 w-fit px-3 py-1 rounded-full">
             <TrendingUp className="w-3 h-3" /> {trend}
           </div>
         ) : (
-          <div className="mt-4 text-[10px] text-on-surface-variant font-black uppercase tracking-widest px-3 py-1 bg-surface-container rounded-full w-fit">
+          <div className="mt-4 text-[10px] text-on-surface-variant font-semibold uppercase tracking-widest px-3 py-1 bg-surface-container rounded-full w-fit">
             {subValue}
           </div>
         )}
@@ -369,7 +369,7 @@ function KpiCard({
 function ClauseTrendList({ title, items, status, color }: any) {
   return (
     <div className="bg-surface-container-low border border-outline-variant rounded-xl p-10 shadow-sm">
-      <h3 className="text-xl font-black text-on-surface mb-8 uppercase tracking-tight flex items-center gap-3">
+      <h3 className="text-xl font-semibold text-on-surface mb-8 uppercase tracking-tight flex items-center gap-3">
         <Flame
           className={cn(
             "size-6",
@@ -389,7 +389,7 @@ function ClauseTrendList({ title, items, status, color }: any) {
             className="flex items-center justify-between p-4 rounded-2xl bg-surface-container-high/50 border border-outline-variant/30 group hover:border-primary/30 transition-all"
           >
             <div className="flex items-center gap-4">
-              <span className="text-xs font-black text-on-surface-variant/40 w-4">
+              <span className="text-xs font-semibold text-on-surface-variant/40 w-4">
                 {i + 1}
               </span>
               <span className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
@@ -400,7 +400,7 @@ function ClauseTrendList({ title, items, status, color }: any) {
               <Badge
                 variant="outline"
                 className={cn(
-                  "text-[8px] font-black uppercase",
+                  "text-[8px] font-semibold uppercase",
                   color === "rose"
                     ? "bg-rose-500/10 text-rose-500"
                     : color === "amber"
@@ -430,7 +430,7 @@ function ClauseTrendList({ title, items, status, color }: any) {
 function LatestClauseList({ title, items }: any) {
   return (
     <div className="bg-surface-container-low border border-outline-variant rounded-xl p-10 shadow-sm">
-      <h3 className="text-xl font-black text-on-surface mb-8 uppercase tracking-tight flex items-center gap-3">
+      <h3 className="text-xl font-semibold text-on-surface mb-8 uppercase tracking-tight flex items-center gap-3">
         <Clock className="size-6 text-indigo-500" /> {title}
       </h3>
       <div className="space-y-4">
@@ -445,7 +445,7 @@ function LatestClauseList({ title, items }: any) {
               </div>
               <div>
                 <p className="text-sm font-bold text-on-surface">{item.name}</p>
-                <p className="text-[9px] font-black uppercase text-on-surface-variant/60">
+                <p className="text-[9px] font-semibold uppercase text-on-surface-variant/60">
                   {format(new Date(item.createdAt), "dd MMM yyyy")}
                 </p>
               </div>

@@ -126,14 +126,14 @@ export function WorkspaceSwitcher() {
               </div>
               <div className="flex flex-col gap-0.5 overflow-hidden">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] font-black uppercase tracking-tight text-on-surface">
+                  <span className="text-[11px] font-semibold uppercase tracking-tight text-on-surface">
                     Wordings AI
                   </span>
                   <span className="text-on-surface-variant/40 font-bold text-[10px]">
                     —
                   </span>
                 </div>
-                <span className="truncate font-black text-[11px] uppercase tracking-widest text-primary">
+                <span className="truncate font-semibold text-[11px] uppercase tracking-widest text-primary">
                   {activeWorkspace?.name || "Active Workspace"}
                 </span>
               </div>
@@ -148,14 +148,14 @@ export function WorkspaceSwitcher() {
         >
           <div className="px-4 py-4 mb-2 border-b border-outline-variant/30 flex items-center justify-between">
             <div className="space-y-0.5">
-              <span className="text-[10px] font-black uppercase tracking-[0.25em] text-on-surface-variant/60">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-on-surface-variant/60">
                 Cognitive Scope
               </span>
-              <p className="text-xs font-black text-on-surface uppercase tracking-tight">
+              <p className="text-xs font-semibold text-on-surface uppercase tracking-tight">
                 Active Environments
               </p>
             </div>
-            <Badge className="bg-primary/10 text-primary border-none text-[8px] font-black uppercase tracking-tighter">
+            <Badge className="bg-primary/10 text-primary border-none text-[8px] font-semibold uppercase tracking-tighter">
               {workspaces.length} Scopes
             </Badge>
           </div>

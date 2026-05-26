@@ -13,7 +13,7 @@ export const HowItWorksSection = () => {
 
         <div className="relative flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
           <div className="flex flex-col items-center text-center max-w-[280px] relative z-10">
-            <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-900 border-4 border-primary/20 flex items-center justify-center text-primary font-black text-2xl mb-6 shadow-xl">
+            <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-900 border-4 border-primary/20 flex items-center justify-center text-primary font-semibold text-2xl mb-6 shadow-xl">
               1
             </div>
             <h4 className="font-bold mb-2 text-slate-900 dark:text-white">
@@ -28,7 +28,7 @@ export const HowItWorksSection = () => {
           <div className="hidden md:block absolute top-10 left-[25%] w-[15%] border-t-2 border-dashed border-slate-300 dark:border-zinc-800" />
 
           <div className="flex flex-col items-center text-center max-w-[280px] relative z-10">
-            <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-900 border-4 border-primary/20 flex items-center justify-center text-primary font-black text-2xl mb-6 shadow-xl">
+            <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-900 border-4 border-primary/20 flex items-center justify-center text-primary font-semibold text-2xl mb-6 shadow-xl">
               2
             </div>
             <h4 className="font-bold mb-2 text-slate-900 dark:text-white">
@@ -43,7 +43,7 @@ export const HowItWorksSection = () => {
           <div className="hidden md:block absolute top-10 right-[25%] w-[15%] border-t-2 border-dashed border-slate-300 dark:border-zinc-800" />
 
           <div className="flex flex-col items-center text-center max-w-[280px] relative z-10">
-            <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-900 border-4 border-primary/20 flex items-center justify-center text-primary font-black text-2xl mb-6 shadow-xl">
+            <div className="w-20 h-20 rounded-full bg-zinc-100 dark:bg-zinc-900 border-4 border-primary/20 flex items-center justify-center text-primary font-semibold text-2xl mb-6 shadow-xl">
               3
             </div>
             <h4 className="font-bold mb-2 text-slate-900 dark:text-white">

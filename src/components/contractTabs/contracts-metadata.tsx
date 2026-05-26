@@ -104,7 +104,7 @@ export const ContractsMetadata = ({
 
           <div className="grid md:grid-cols-2 gap-x-8 gap-y-8">
             <div className="md:col-span-2 flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Contract Name
               </Label>
 
@@ -128,7 +128,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Reinsured
               </Label>
 
@@ -152,7 +152,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Broker
               </Label>
 
@@ -176,7 +176,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Contract Type
               </Label>
 
@@ -207,7 +207,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Period From
               </Label>
 
@@ -236,7 +236,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Period To
               </Label>
 
@@ -265,7 +265,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Status
               </Label>
 
@@ -388,7 +388,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
                 Department
               </Label>
 
@@ -431,14 +431,14 @@ export const ContractsMetadata = ({
 
           <div className="text-sm space-y-4">
             <div className="flex justify-between items-center py-1 border-b border-border/50 pb-3">
-              <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 Created By
               </span>
               <span className="font-medium">{contract.userId}</span>
             </div>
 
             <div className="flex justify-between items-center py-1 border-b border-border/50 pb-3">
-              <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 Uploaded
               </span>
               <span className="font-medium">
@@ -447,7 +447,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex justify-between items-center py-1 border-b border-border/50 pb-3">
-              <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 Last Modified
               </span>
               <span className="font-medium">
@@ -456,7 +456,7 @@ export const ContractsMetadata = ({
             </div>
 
             <div className="flex justify-between items-center py-1">
-              <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 File Size
               </span>
               <span className="font-medium">{contract.fileSize}</span>

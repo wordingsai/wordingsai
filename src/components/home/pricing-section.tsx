@@ -8,7 +8,7 @@ export const PricingSection = () => {
     <section className="py-24 bg-white dark:bg-background" id="pricing">
       <div className="max-w-6xl mx-auto px-10">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-widest mb-6">
             🚀 Soft Launch — Trial Access
           </div>
           <h2 className="text-3xl font-bold tracking-tight mb-4 text-slate-900 dark:text-white">

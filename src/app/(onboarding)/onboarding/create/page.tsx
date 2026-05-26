@@ -205,7 +205,7 @@ const OnBoardingCreatePage = () => {
             {step === 1 && (
               <>
                 <div className="text-center space-y-2">
-                  <h1 className="text-[30px] font-black text-on-surface">
+                  <h1 className="text-[30px] font-semibold text-on-surface">
                     Create a new organization
                   </h1>
                   <p className="text-[14px] text-on-surface-variant">
@@ -268,7 +268,7 @@ const OnBoardingCreatePage = () => {
                 {!isSuccess ? (
                   <>
                     <div className="text-center space-y-2">
-                      <h1 className="text-[28px] font-black text-on-surface">
+                      <h1 className="text-[28px] font-semibold text-on-surface">
                         Invite your team
                       </h1>
                       <p className="text-sm text-on-surface-variant">
@@ -351,7 +351,7 @@ const OnBoardingCreatePage = () => {
                     </div>
 
                     <div>
-                      <h1 className="text-[28px] font-black text-on-surface">
+                      <h1 className="text-[28px] font-semibold text-on-surface">
                         Organization Created!
                       </h1>
                       <p className="text-sm text-on-surface-variant mt-2">

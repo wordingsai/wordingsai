@@ -31,14 +31,14 @@ export default async function OrganizationPage({ params }: { params: Params }) {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/dashboard"
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
                 >
                   Operational Overview
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-on-surface-variant" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface">
+                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
                   Organization Profile
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -60,7 +60,7 @@ export default async function OrganizationPage({ params }: { params: Params }) {
           <div className="flex gap-2">
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-md flex items-center gap-2 transition-all "
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-md flex items-center gap-2 transition-all "
             >
               <Settings className="w-5 h-5" /> UNIT CONFIGURATION
             </Button>
@@ -73,7 +73,7 @@ export default async function OrganizationPage({ params }: { params: Params }) {
         <section className="space-y-6">
           <div className="flex items-center gap-3 px-2">
             <Users2 className="w-6 h-6 text-primary" />
-            <h2 className="text-2xl font-black text-on-surface uppercase tracking-tight">
+            <h2 className="text-2xl font-semibold text-on-surface uppercase tracking-tight">
               Active Directory
             </h2>
           </div>
@@ -89,7 +89,7 @@ export default async function OrganizationPage({ params }: { params: Params }) {
         <section className="space-y-6">
           <div className="flex items-center gap-3 px-2">
             <ShieldCheck className="w-6 h-6 text-secondary" />
-            <h2 className="text-2xl font-black text-on-surface uppercase tracking-tight">
+            <h2 className="text-2xl font-semibold text-on-surface uppercase tracking-tight">
               Access Governance
             </h2>
           </div>
