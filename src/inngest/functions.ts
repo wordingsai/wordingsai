@@ -56,7 +56,7 @@ export const evaluateRuleJob = inngest.createFunction(
     id: "evaluate-rule-worker",
     triggers: [{ event: "contract/rule.evaluate" }],
     concurrency: {
-      limit: 10,
+      limit: 5,
       key: "event.data.organizationId",
     },
     retries: 2,
