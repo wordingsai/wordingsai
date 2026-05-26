@@ -28,7 +28,7 @@ export default function NotFound() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-10">
           <Link href="/">
-            <Button className="bg-primary text-primary-foreground font-black px-8 py-7 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-3 hover:scale-[1.05] active:scale-95 transition-all text-sm uppercase tracking-widest">
+            <Button className="bg-primary text-primary-foreground font-black rounded-md flex items-center gap-3 hover:scale-[1.05] active:scale-95 transition-all text-sm uppercase tracking-widest">
               <Home className="w-5 h-5" />
               Return Home
             </Button>
@@ -37,7 +37,7 @@ export default function NotFound() {
           <Button
             variant="outline"
             onClick={() => window.history.back()}
-            className="border-outline-variant text-on-surface-variant font-black px-8 py-7 rounded-2xl flex items-center gap-3 hover:bg-surface-container-high transition-all text-sm uppercase tracking-widest"
+            className="border-outline-variant text-on-surface-variant rounded-md flex items-center gap-3 hover:bg-surface-container-high transition-all text-sm uppercase tracking-widest"
           >
             <MoveLeft className="w-5 h-5" />
             Go Back

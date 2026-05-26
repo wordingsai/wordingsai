@@ -61,7 +61,7 @@ export default function RootLayout({
             <TooltipProvider>{children}</TooltipProvider>
             {/* <ChatWidget /> */}
           </ViewTransitions>
-          <Toaster richColors closeButton />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

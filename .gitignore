@@ -46,3 +46,10 @@ google-cloud-sdk
 backup_file.sql
 
 .vercel
+
+# Internal project assets (Notion exports, sample PDFs, chat logs)
+resources/
+
+# One-off dev scripts that don't need to ship
+scripts/upload-test-contract.mjs
+.env.vercel-import

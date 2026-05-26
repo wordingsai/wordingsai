@@ -641,7 +641,7 @@ function OrganizationSettingsTab() {
             <Button
               onClick={() => setShowLeaveDialog(true)}
               variant="destructive"
-              className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-destructive/20 shrink-0"
+              className="rounded-md shrink-0"
             >
               Leave Organization
             </Button>
@@ -666,7 +666,7 @@ function OrganizationSettingsTab() {
                   setShowDeleteDialog(true);
                 }}
                 variant="destructive"
-                className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-destructive/30 shrink-0 bg-destructive hover:bg-destructive/80"
+                className="rounded-md shrink-0 bg-destructive hover:bg-destructive/80"
               >
                 Delete Organization
               </Button>
@@ -689,12 +689,12 @@ function OrganizationSettingsTab() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-10 gap-4">
-            <AlertDialogCancel className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[11px] border-outline-variant">
+            <AlertDialogCancel className="rounded-md border-outline-variant">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleLeaveOrganization}
-              className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[11px] bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20"
+              className="rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20"
             >
               Confirm Leave
             </AlertDialogAction>
@@ -723,7 +723,7 @@ function OrganizationSettingsTab() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-10 gap-4">
-            <AlertDialogCancel className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[11px] border-outline-variant">
+            <AlertDialogCancel className="rounded-md border-outline-variant">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
@@ -745,7 +745,7 @@ function OrganizationSettingsTab() {
                   setMemberToDelete(null);
                 }
               }}
-              className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[11px] bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20"
+              className="rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20"
             >
               Confirm Remove
             </AlertDialogAction>
@@ -792,7 +792,7 @@ function OrganizationSettingsTab() {
           <AlertDialogFooter className="mt-8 gap-4">
             <AlertDialogCancel
               onClick={() => setConfirmOrgName("")}
-              className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[11px] border-outline-variant"
+              className="rounded-md border-outline-variant"
             >
               Cancel
             </AlertDialogCancel>
@@ -801,7 +801,7 @@ function OrganizationSettingsTab() {
               disabled={
                 confirmOrgName.trim() !== activeOrg?.name?.trim() || deleting
               }
-              className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest text-[11px] bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20 disabled:opacity-40"
+              className="rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20 disabled:opacity-40"
             >
               {deleting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -996,7 +996,7 @@ function SubscriptionSettingsTab() {
               </div>
             </div>
             <Link href="/upgrade">
-              <Button className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-xl shadow-primary/20 flex items-center gap-2">
+              <Button className="rounded-md bg-primary text-primary-foreground shadow-xl shadow-primary/20 flex items-center gap-2">
                 GO PREMIUM <ChevronRight className="w-4 h-4" />
               </Button>
             </Link>
@@ -1261,7 +1261,7 @@ export default function SettingsPage() {
                     <Button
                       onClick={handleSaveChanges}
                       disabled={saving}
-                      className="bg-primary text-primary-foreground font-black px-8 py-6 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2  transition-all"
+                      className="bg-primary text-primary-foreground rounded-md flex items-center gap-2  transition-all"
                     >
                       {saving ? (
                         <Loader2 className="w-4 h-4 animate-spin" />

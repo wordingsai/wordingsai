@@ -20,7 +20,7 @@ export default function Error({
     <div className="flex min-h-screen flex-col items-center justify-center p-6 bg-background text-center">
       <div className="relative mb-8">
         <div className="absolute -inset-4 bg-destructive/10 rounded-full blur-3xl opacity-50"></div>
-        <div className="relative flex h-24 w-24 items-center justify-center rounded-[2rem] bg-destructive/10 border-4 border-destructive/20 shadow-2xl">
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-lg bg-destructive/10 border-4 border-destructive/20 shadow-2xl">
           <AlertCircle className="h-12 w-12 text-destructive animate-pulse" />
         </div>
       </div>

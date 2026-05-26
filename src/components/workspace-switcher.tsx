@@ -115,7 +115,7 @@ export function WorkspaceSwitcher() {
         <PopoverTrigger asChild>
           <button
             className={cn(
-              "w-full flex items-center justify-between bg-surface-container-low border border-outline-variant hover:bg-surface-container-high px-3 h-16 rounded-[1.25rem] transition-all duration-300 shadow-sm group",
+              "w-full flex items-center justify-between bg-surface-container-low border border-outline-variant hover:bg-surface-container-high px-3 h-12 rounded-lg transition-all duration-300 shadow-sm group",
               open &&
                 "ring-2 ring-primary/20 border-primary/50 bg-surface-container-high",
             )}

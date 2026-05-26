@@ -107,7 +107,7 @@ export function UpgradePaywall({
               </div>
 
               <div className="space-y-6">
-                <div className="w-16 h-16 rounded-3xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20">
+                <div className="size-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary border border-secondary/20">
                   {featureName.includes("Rules") ? (
                     <Zap className="w-8 h-8" />
                   ) : (

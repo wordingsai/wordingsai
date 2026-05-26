@@ -864,7 +864,7 @@ export default function ContractAnalysisPage() {
                 runAnalysis(true);
               }}
               disabled={analysisLoading || isProcessing}
-              className="flex-1 lg:flex-none bg-primary text-primary-foreground font-black px-8 h-12 rounded-xl shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transition-all  text-[10px]"
+              className="flex-1 lg:flex-none bg-primary text-primary-foreground rounded-md flex items-center justify-center gap-2 transition-all  text-[10px]"
             >
               {analysisLoading || isProcessing ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -1447,7 +1447,7 @@ export default function ContractAnalysisPage() {
                         <Button
                           onClick={() => runAnalysis(true)}
                           disabled={analysisLoading || isProcessing}
-                          className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest shadow-xl flex items-center gap-3"
+                          className="rounded-md flex items-center gap-3"
                         >
                           {analysisLoading || isProcessing ? (
                             <Loader2 className="size-5 animate-spin" />
@@ -1463,7 +1463,7 @@ export default function ContractAnalysisPage() {
                         <Button
                           onClick={() => runRulesEvaluation()}
                           disabled={analysisLoading || isProcessing}
-                          className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest shadow-xl flex items-center gap-3"
+                          className="rounded-md flex items-center gap-3"
                         >
                           {isProcessing ? (
                             <Loader2 className="size-5 animate-spin" />
@@ -1480,7 +1480,7 @@ export default function ContractAnalysisPage() {
                           variant="outline"
                           onClick={() => runAnalysis(true, "full")}
                           disabled={isProcessing}
-                          className="h-14 px-8 rounded-2xl font-black uppercase tracking-widest"
+                          className="rounded-md"
                         >
                           Re-run full pipeline
                         </Button>

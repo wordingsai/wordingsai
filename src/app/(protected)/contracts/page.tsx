@@ -387,7 +387,7 @@ export default function ContractsPage() {
               placeholder="Search by name, reinsured, or broker..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-12 bg-surface-container-low border-outline-variant h-14 rounded-2xl text-base lg:text-lg font-medium shadow-sm transition-all focus:ring-4 focus:ring-primary/10"
+              className="pl-9 bg-surface-container-low border-outline-variant transition-all focus:ring-4 focus:ring-primary/10"
             />
           </div>
 
@@ -518,7 +518,7 @@ export default function ContractsPage() {
                   setDateFrom(undefined);
                   setDateTo(undefined);
                 }}
-                className="h-14 w-14 rounded-2xl hover:bg-destructive/10 text-destructive transition-all"
+                className="rounded-md hover:bg-destructive/10 text-destructive transition-all"
               >
                 <X className="w-5 h-5" />
               </Button>

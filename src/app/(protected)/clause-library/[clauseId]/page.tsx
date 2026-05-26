@@ -317,7 +317,7 @@ export default function IndividualClausePage() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="rounded-2xl border-outline-variant font-black uppercase tracking-widest text-[11px] h-14 px-8 hover:bg-surface-container-highest"
+                  className="rounded-md border-outline-variant hover:bg-surface-container-highest"
                   onClick={() =>
                     router.push(`/clause-library/${clauseId}/edit`)
                   }
@@ -328,7 +328,7 @@ export default function IndividualClausePage() {
               <Button
                 variant="outline"
                 size="lg"
-                className="rounded-2xl border-primary/40 text-primary font-black uppercase tracking-widest text-[11px] h-14 px-8 hover:bg-primary/5"
+                className="rounded-md border-primary/40 text-primary hover:bg-primary/5"
                 onClick={() => setShowCopyDialog(true)}
               >
                 <BookCopy className="w-4 h-4 mr-2" /> Copy Clause

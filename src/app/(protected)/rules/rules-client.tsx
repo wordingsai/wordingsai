@@ -288,7 +288,7 @@ export default function RulesClient() {
               disabled={!canMutate}
               onClick={() => canMutate && router.push("/rules/new")}
               className={cn(
-                "h-14 lg:h-16 bg-primary hover:bg-primary/90 text-primary-foreground font-black px-8 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-3 transition-all",
+                "bg-primary hover:bg-primary/90 text-primary-foreground rounded-md flex items-center justify-center gap-3 transition-all",
                 canMutate
                   ? ""
                   : "opacity-50 cursor-not-allowed grayscale",
@@ -311,7 +311,7 @@ export default function RulesClient() {
             placeholder="Search rules..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-12 bg-surface-container-low border-outline-variant h-14 rounded-2xl text-base lg:text-lg font-medium shadow-sm transition-all focus:ring-4 focus:ring-primary/10"
+            className="pl-9 bg-surface-container-low border-outline-variant transition-all focus:ring-4 focus:ring-primary/10"
           />
         </div>
 

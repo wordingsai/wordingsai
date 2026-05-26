@@ -139,7 +139,7 @@ export function CreateWorkspaceDialog({
                   value={type}
                   onValueChange={(val) => val && setType(val)}
                 >
-                  <SelectTrigger className="h-14 rounded-2xl">
+                  <SelectTrigger className="">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent className="rounded-2xl">
@@ -231,7 +231,7 @@ export function CreateWorkspaceDialog({
                     value={sourceWorkspaceId}
                     onValueChange={(val) => val && setSourceWorkspaceId(val)}
                   >
-                    <SelectTrigger className="h-14 rounded-2xl">
+                    <SelectTrigger className="">
                       <SelectValue placeholder="Select source model..." />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl">
@@ -256,14 +256,14 @@ export function CreateWorkspaceDialog({
           <Button
             variant="ghost"
             onClick={() => onOpenChange(false)}
-            className="rounded-2xl text-xs font-medium uppercase tracking-wider h-12 sm:h-14 px-8 w-full sm:w-auto"
+            className="rounded-md w-full sm:w-auto"
           >
             Cancel
           </Button>
           <Button
             onClick={handleCreate}
             disabled={loading}
-            className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[11px] rounded-2xl h-12 sm:h-14 px-8 sm:px-12 shadow-lg shadow-primary/20  transition-all w-full sm:w-auto"
+            className="bg-primary text-primary-foreground rounded-md  transition-all w-full sm:w-auto"
           >
             {loading ? (
               <Loader2 className="size-4 animate-spin mr-2" />

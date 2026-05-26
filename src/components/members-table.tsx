@@ -21,16 +21,16 @@ export default function MembersTable({ members }: MembersTableProps) {
       <TableCaption>A list of organization members.</TableCaption>
       <TableHeader className="bg-surface-container-highest/30">
         <TableRow className="hover:bg-transparent border-outline-variant/50">
-          <TableHead className="py-5 px-8 font-black uppercase tracking-widest text-[10px] text-on-surface-variant">
+          <TableHead className="py-5 px-8 text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             Username
           </TableHead>
-          <TableHead className="font-black uppercase tracking-widest text-[10px] text-on-surface-variant">
+          <TableHead className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             Email
           </TableHead>
-          <TableHead className="font-black uppercase tracking-widest text-[10px] text-on-surface-variant">
+          <TableHead className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             Role
           </TableHead>
-          <TableHead className="text-right px-8 font-black uppercase tracking-widest text-[10px] text-on-surface-variant">
+          <TableHead className="text-right px-8 text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             Actions
           </TableHead>
         </TableRow>
