@@ -316,7 +316,7 @@ export default function UploadPage() {
 
   return (
     <main className="flex-1 p-6 lg:p-8 bg-background transition-colors duration-300">
-      <div className="mb-6 max-w-4xl">
+      <div className="mb-6">
         <Breadcrumb className="mb-4">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -346,32 +346,96 @@ export default function UploadPage() {
         </p>
       </div>
 
-      <div className="w-full max-w-4xl">
+      <div className="w-full">
         {step === 1 ? (
-          <div
-            {...getRootProps()}
-            className={cn(
-              "relative group cursor-pointer p-14 border-2 border-dashed rounded-xl transition-all duration-300",
-              isDragActive
-                ? "bg-primary/5 border-primary"
-                : "bg-surface-container-low border-outline-variant hover:border-primary/50 hover:bg-surface-container",
-            )}
-          >
-            <input {...getInputProps()} />
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="size-14 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                <Upload className="size-6 text-primary" />
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+            <div
+              {...getRootProps()}
+              className={cn(
+                "relative group cursor-pointer min-h-[420px] flex items-center justify-center p-10 border-2 border-dashed rounded-xl transition-all duration-300",
+                isDragActive
+                  ? "bg-primary/5 border-primary"
+                  : "bg-surface-container-low border-outline-variant hover:border-primary/50 hover:bg-surface-container",
+              )}
+            >
+              <input {...getInputProps()} />
+              <div className="flex flex-col items-center text-center gap-4">
+                <div className="size-14 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                  <Upload className="size-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-base font-semibold text-on-surface">
+                    Drop document here
+                  </h3>
+                  <p className="text-sm text-on-surface-variant mt-1">
+                    PDF or DOCX, up to 50 MB
+                  </p>
+                </div>
+                <Button size="default">Select file</Button>
               </div>
-              <div>
-                <h3 className="text-base font-semibold text-on-surface">
-                  Drop document here
-                </h3>
-                <p className="text-sm text-on-surface-variant mt-1">
-                  PDF or DOCX, up to 50 MB
-                </p>
-              </div>
-              <Button size="default">Select file</Button>
             </div>
+
+            {/* Right-side helper panel */}
+            <aside className="space-y-4">
+              <div className="bg-surface-container-low border border-outline-variant rounded-xl p-5 space-y-4">
+                <div className="flex items-center gap-2">
+                  <Zap className="size-4 text-primary" />
+                  <h4 className="text-sm font-semibold text-on-surface">
+                    What happens next
+                  </h4>
+                </div>
+                <ol className="space-y-3 text-sm text-on-surface-variant">
+                  <li className="flex gap-3">
+                    <span className="flex-none size-5 rounded-full bg-primary/10 text-primary text-[11px] font-medium flex items-center justify-center">
+                      1
+                    </span>
+                    <span className="leading-snug">
+                      Document uploads to secure storage.
+                    </span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="flex-none size-5 rounded-full bg-primary/10 text-primary text-[11px] font-medium flex items-center justify-center">
+                      2
+                    </span>
+                    <span className="leading-snug">
+                      AI extracts metadata (reinsured, type, period) for your
+                      review.
+                    </span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="flex-none size-5 rounded-full bg-primary/10 text-primary text-[11px] font-medium flex items-center justify-center">
+                      3
+                    </span>
+                    <span className="leading-snug">
+                      Rules engine evaluates against your clause library.
+                    </span>
+                  </li>
+                </ol>
+              </div>
+
+              <div className="bg-surface-container-low border border-outline-variant rounded-xl p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <FileText className="size-4 text-secondary" />
+                  <h4 className="text-sm font-semibold text-on-surface">
+                    Supported formats
+                  </h4>
+                </div>
+                <ul className="text-sm text-on-surface-variant space-y-1.5">
+                  <li className="flex items-center gap-2">
+                    <span className="size-1 rounded-full bg-on-surface-variant/60" />
+                    PDF (scanned or text-based)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1 rounded-full bg-on-surface-variant/60" />
+                    DOCX (Word documents)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="size-1 rounded-full bg-on-surface-variant/60" />
+                    Max file size: 50 MB
+                  </li>
+                </ul>
+              </div>
+            </aside>
           </div>
         ) : (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
