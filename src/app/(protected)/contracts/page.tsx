@@ -948,32 +948,30 @@ export default function ContractsPage() {
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
       >
-        <AlertDialogContent className="rounded-xl p-10 max-w-[90vw] md:max-w-lg">
+        <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl lg:text-2xl font-semibold tracking-tight">
+            <AlertDialogTitle className="text-base font-semibold tracking-tight">
               {viewMode === "active" || viewMode === "archive"
-                ? "Move to Bin"
-                : "Confirm Permanent Deletion"}
+                ? "Move to bin?"
+                : "Delete permanently?"}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-base lg:text-lg font-medium leading-relaxed">
+            <AlertDialogDescription className="text-sm text-on-surface-variant">
               {viewMode === "active" || viewMode === "archive"
-                ? "This document will be moved to the bin. You can restore it within 7 days before it is permanently deleted."
-                : "This action is irreversible. The contract and all its associated neural analysis, extraction data, and audit history will be permanently removed."}
+                ? "This contract will be moved to the bin. You can restore it within 7 days before it is permanently deleted."
+                : "This action cannot be undone. The contract and its analysis history will be permanently removed."}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="mt-8 lg:mt-10 gap-3">
-            <AlertDialogCancel className="rounded-md border-outline-variant">
-              Cancel
-            </AlertDialogCancel>
+          <AlertDialogFooter className="mt-4 gap-2">
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteId && handleDelete(deleteId)}
-              className="rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20"
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {isDeleting
-                ? "Deleting..."
+                ? "Deleting…"
                 : viewMode === "active" || viewMode === "archive"
-                  ? "Move to Bin"
-                  : "Delete Permanently"}
+                  ? "Move to bin"
+                  : "Delete permanently"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

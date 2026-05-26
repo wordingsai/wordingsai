@@ -632,46 +632,45 @@ export default function IndividualClausePage() {
 
       {/* Copy Clause Confirmation Dialog */}
       <Dialog open={showCopyDialog} onOpenChange={setShowCopyDialog}>
-        <DialogContent className="rounded-lg p-8 max-w-md border-outline-variant">
+        <DialogContent className="max-w-md">
           <DialogHeader className="gap-2">
-            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-2">
-              <BookCopy className="w-6 h-6 text-primary" />
+            <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center mb-1">
+              <BookCopy className="size-5 text-primary" />
             </div>
-            <DialogTitle className="text-xl font-semibold tracking-tight">
-              Copy to Your Library
+            <DialogTitle className="text-base font-semibold tracking-tight">
+              Copy to your library
             </DialogTitle>
-            <DialogDescription className="text-base font-medium leading-relaxed">
-              This creates a private, editable copy of{" "}
-              <span className="font-semibold text-on-surface">
+            <DialogDescription className="text-sm text-on-surface-variant leading-relaxed">
+              Creates a private, editable copy of{" "}
+              <span className="font-medium text-on-surface">
                 {clause.clauseName}
               </span>{" "}
-              scoped to your active workspace only. It will receive an
+              scoped to your active workspace. It will receive an
               auto-generated reference code (e.g.{" "}
               <span className="font-mono text-primary">WAI-001-PR</span>). Other
-              workspaces will not see this copy.
+              workspaces won't see this copy.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="mt-6 flex gap-3">
+          <DialogFooter className="mt-4 gap-2">
             <Button
               variant="outline"
-              className="flex-1 h-12 rounded-2xl font-semibold uppercase tracking-widest text-[11px] border-outline-variant"
               onClick={() => setShowCopyDialog(false)}
               disabled={isCopying}
             >
               Cancel
             </Button>
             <Button
-              className="flex-1 h-12 rounded-2xl font-semibold uppercase tracking-widest text-[11px] bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+              className="gap-2"
               onClick={handleCopyClause}
               disabled={isCopying}
             >
               {isCopying ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating...
+                  <Loader2 className="size-4 animate-spin" /> Creating…
                 </>
               ) : (
                 <>
-                  <BookCopy className="w-4 h-4 mr-2" /> Create Copy
+                  <BookCopy className="size-4" /> Create copy
                 </>
               )}
             </Button>
