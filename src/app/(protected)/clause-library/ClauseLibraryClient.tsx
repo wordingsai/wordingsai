@@ -286,16 +286,14 @@ export default function ClauseLibraryClient({
               disabled={!canMutate || isPlanPending}
               onClick={() => canMutate && router.push("/clause-library/new")}
               className={cn(
-                "bg-primary hover:bg-primary/90 text-primary-foreground rounded-md flex items-center justify-center gap-3 transition-all",
+                "gap-2",
                 canMutate && !isPlanPending
                   ? ""
-                  : "opacity-50 cursor-not-allowed grayscale",
+                  : "opacity-50 cursor-not-allowed",
               )}
             >
-              <BookOpen className="size-5" />
-              <span className="tracking-widest uppercase text-xs">
-                Add to Library
-              </span>
+              <BookOpen className="size-4" />
+              Add to library
             </Button>
           </div>
         </div>

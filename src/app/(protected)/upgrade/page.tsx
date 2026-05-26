@@ -243,19 +243,20 @@ export default function PricingPage() {
 
                     {/* CTA Button */}
                     <Button
+                      size="lg"
                       onClick={() => handleSelectPlan(plan.id)}
                       disabled={isCurrent || loading !== null}
                       className={cn(
-                        "w-full h-16 px-8 rounded-lg font-semibold uppercase tracking-[0.15em] text-sm transition-all duration-500 shadow-xl",
+                        "w-full transition-colors",
                         plan.highlight
-                          ? "bg-white text-primary hover:bg-white/95 shadow-white/40 disabled:shadow-none"
-                          : "bg-primary text-primary-foreground hover:bg-primary/95 shadow-primary/30",
+                          ? "bg-white text-primary hover:bg-white/95"
+                          : "bg-primary text-primary-foreground hover:bg-primary/95",
                         isCurrent &&
-                          "opacity-50 cursor-default grayscale scale-100 shadow-none border-4 border-current bg-transparent",
+                          "opacity-50 cursor-default border border-current bg-transparent",
                       )}
                     >
                       {loading === plan.id ? (
-                        <Loader2 className="w-6 h-6 animate-spin" />
+                        <Loader2 className="size-4 animate-spin" />
                       ) : isCurrent ? (
                         "CURRENT PLAN"
                       ) : isEnterprise ? (

@@ -376,16 +376,17 @@ function OrganizationSettingsTab() {
                 )}
               </div>
               <Button
+                size="lg"
                 onClick={handleGenerateCode}
                 disabled={generatingCode}
-                className="h-16 px-8 rounded-2xl font-semibold uppercase tracking-widest bg-primary text-primary-foreground shadow-xl shadow-primary/20 shrink-0"
+                className="shrink-0 gap-2"
               >
                 {generatingCode ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="size-4 animate-spin" />
                 ) : (
                   <>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    {inviteCode ? "Regenerate Code" : "Generate Invite Code"}
+                    <RefreshCw className="size-4" />
+                    {inviteCode ? "Regenerate code" : "Generate invite code"}
                   </>
                 )}
               </Button>

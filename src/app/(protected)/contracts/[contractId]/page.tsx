@@ -1683,14 +1683,15 @@ export default function ContractAnalysisPage() {
                       variance mapping and semantic risk assessments.
                     </p>
                     <Button
+                      size="lg"
                       onClick={() => runAnalysis(true)}
                       disabled={analysisLoading || isProcessing}
-                      className="h-16 px-10 rounded-2xl font-semibold uppercase tracking-widest shadow-2xl flex items-center gap-3 bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-all hover:scale-105"
+                      className="gap-2 bg-secondary text-secondary-foreground hover:bg-secondary/90 transition-all"
                     >
                       {analysisLoading || isProcessing ? (
-                        <Loader2 className="size-5 animate-spin" />
+                        <Loader2 className="size-4 animate-spin" />
                       ) : (
-                        <Zap className="size-5" />
+                        <Zap className="size-4" />
                       )}
                       {isProcessing
                         ? "Processing Deep Rules..."

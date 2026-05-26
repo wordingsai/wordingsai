@@ -288,16 +288,12 @@ export default function RulesClient() {
               disabled={!canMutate}
               onClick={() => canMutate && router.push("/rules/new")}
               className={cn(
-                "bg-primary hover:bg-primary/90 text-primary-foreground rounded-md flex items-center justify-center gap-3 transition-all",
-                canMutate
-                  ? ""
-                  : "opacity-50 cursor-not-allowed grayscale",
+                "gap-2",
+                canMutate ? "" : "opacity-50 cursor-not-allowed",
               )}
             >
-              <Plus className="w-5 h-5" />
-              <span className="tracking-widest uppercase text-xs">
-                CREATE NEW RULE
-              </span>
+              <Plus className="size-4" />
+              Create new rule
             </Button>
           </div>
         </div>

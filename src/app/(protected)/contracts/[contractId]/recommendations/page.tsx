@@ -352,16 +352,17 @@ export default function RuleRecommendationsPage() {
           </div>
 
           <Button
+            size="lg"
             onClick={handleStartFullAnalysis}
             disabled={authorizing || rules.length === 0}
-            className="rounded-2xl h-16 px-10 font-semibold uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-105 transition-all group"
+            className="gap-2 transition-all group"
           >
             {authorizing ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="size-4 animate-spin" />
             ) : (
               <>
-                Authorize Evaluation
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Authorize evaluation
+                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
               </>
             )}
           </Button>
