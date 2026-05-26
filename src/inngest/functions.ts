@@ -231,7 +231,7 @@ export const evaluateContractRulesJob = inngest.createFunction(
   {
     id: "evaluate-contract-rules",
     triggers: [{ event: "contract/evaluate" }],
-    concurrency: { limit: 10 },
+    concurrency: { limit: 5 },
     retries: 1,
     onFailure: async ({ error, event }) => {
       const failedPayload = event.data.event?.data as

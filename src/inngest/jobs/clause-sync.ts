@@ -5,7 +5,7 @@ export const syncLibraryClauseJob = inngest.createFunction(
   {
     id: "sync-library-clause",
     triggers: [{ event: "clause/sync" }],
-    concurrency: { limit: 10 },
+    concurrency: { limit: 5 },
   },
   async ({ event, step }) => {
     const { clauseId } = event.data as { clauseId: string };
