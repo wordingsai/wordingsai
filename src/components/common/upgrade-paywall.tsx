@@ -89,7 +89,7 @@ export function UpgradePaywall({
             <Link href="/dashboard" className="w-full sm:w-auto">
               <Button
                 variant="ghost"
-                className="w-full h-14 px-10 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] text-on-surface-variant"
+                className="w-full h-14 px-10 rounded-[1.5rem] text-xs font-medium uppercase tracking-wider text-on-surface-variant"
               >
                 Return to Safety
               </Button>
@@ -100,8 +100,8 @@ export function UpgradePaywall({
         {/* Right Side: Feature Visualizer Card */}
         <div className="lg:col-span-2">
           <div className="relative group">
-            <div className="absolute -inset-4 bg-gradient-to-tr from-primary/30 to-secondary/30 rounded-[3rem] blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-            <div className="relative bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-8 shadow-2xl overflow-hidden">
+            <div className="absolute -inset-4 bg-gradient-to-tr from-primary/30 to-secondary/30 rounded-xl blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
+            <div className="relative bg-surface-container-low border border-outline-variant rounded-xl p-8 shadow-2xl overflow-hidden">
               <div className="absolute top-0 right-0 p-6 opacity-10">
                 <Sparkles className="w-32 h-32 text-primary" />
               </div>
@@ -138,7 +138,7 @@ export function UpgradePaywall({
                       className="h-full bg-primary"
                     />
                   </div>
-                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                  <div className="flex justify-between text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                     <span>Performance</span>
                     <span className="text-primary">+150% Advantage</span>
                   </div>

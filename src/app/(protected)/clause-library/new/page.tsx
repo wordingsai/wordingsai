@@ -168,7 +168,7 @@ export default function NewClausePage() {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
               New Clause Entry
             </h1>
             <p className="text-on-surface-variant text-lg font-medium max-w-2xl">
@@ -179,7 +179,7 @@ export default function NewClausePage() {
 
           <Button
             variant="ghost"
-            className="rounded-2xl font-black uppercase tracking-widest text-[10px] py-6 px-8 hover:bg-surface-container-highest"
+            className="rounded-2xl text-xs font-medium uppercase tracking-wider py-6 px-8 hover:bg-surface-container-highest"
             onClick={() => router.back()}
           >
             <ArrowLeft className="w-4 h-4 mr-2" /> DISCARD ENTRY
@@ -189,23 +189,23 @@ export default function NewClausePage() {
 
       <div className="mt-12 w-full">
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-8 lg:p-12 shadow-sm space-y-10">
+          <div className="bg-surface-container-low border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm space-y-10">
             {/* Base Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
                   Clause Identification (Name)
                 </Label>
                 <Input
                   value={clauseName}
                   onChange={(e) => setClauseName(e.target.value)}
                   placeholder="e.g. Accounts & Bordereaux Standard"
-                  className="h-14 bg-background border-outline-variant rounded-2xl font-bold transition-all focus:ring-4 focus:ring-primary/10"
+                  className="bg-background transition-all focus:ring-4 focus:ring-primary/10"
                   required
                 />
               </div>
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
                   Regulatory Domain (Category)
                 </Label>
                 <Select
@@ -230,7 +230,7 @@ export default function NewClausePage() {
             {/* Content */}
             <div className="space-y-3">
               <div className="flex items-center justify-between ml-1">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                   Semantic Wording (Actual Text)
                 </Label>
                 <Badge className="bg-primary/5 text-primary border-primary/20 text-[9px] font-black uppercase px-2 py-0.5">
@@ -241,7 +241,7 @@ export default function NewClausePage() {
                 value={clauseText}
                 onChange={(e) => setClauseText(e.target.value)}
                 placeholder="Paste the definitive treaty wording here..."
-                className="min-h-[250px] bg-background border-outline-variant rounded-[2rem] font-medium p-6 transition-all focus:ring-4 focus:ring-primary/10 leading-relaxed"
+                className="min-h-[250px] bg-background border-outline-variant rounded-lg font-medium p-6 transition-all focus:ring-4 focus:ring-primary/10 leading-relaxed"
                 required
               />
             </div>
@@ -249,7 +249,7 @@ export default function NewClausePage() {
             {/* Metadata */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-6 border-t border-outline-variant/30">
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <FileText className="w-3 h-3" /> Heading Classification
                 </Label>
                 <Input
@@ -260,7 +260,7 @@ export default function NewClausePage() {
                 />
               </div>
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <Archive className="w-3 h-3" /> Source Archive
                 </Label>
                 <Input
@@ -271,7 +271,7 @@ export default function NewClausePage() {
                 />
               </div>
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <Tag className="w-3 h-3" /> Library Origin
                 </Label>
                 <Input
@@ -283,7 +283,7 @@ export default function NewClausePage() {
                 />
               </div>
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <ShieldCheck className="w-3 h-3" /> Approval Status
                 </Label>
                 <Select
@@ -306,7 +306,7 @@ export default function NewClausePage() {
               <div className="flex items-center gap-3 p-6 bg-primary/5 rounded-2xl border border-primary/10">
                 <Globe className="w-5 h-5 text-primary" />
                 <div className="flex-1">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-primary block">
+                  <Label className="text-xs font-medium uppercase tracking-wider text-primary block">
                     Global Distribution
                   </Label>
                   <p className="text-[10px] font-bold text-on-surface-variant">
@@ -318,7 +318,7 @@ export default function NewClausePage() {
                   type="button"
                   variant={isGlobal ? "default" : "outline"}
                   onClick={() => setIsGlobal(!isGlobal)}
-                  className="rounded-xl font-black text-[10px] uppercase h-10 px-4 transition-all"
+                  className="rounded-xl text-xs font-medium uppercase h-10 px-4 transition-all"
                 >
                   {isGlobal ? "GLOBAL ACTIVE" : "CUSTOM ONLY"}
                 </Button>
@@ -337,7 +337,7 @@ export default function NewClausePage() {
               type="submit"
               size="lg"
               disabled={loading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-12 py-8 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-3 text-lg transition-all hover:scale-[1.02]"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-5 py-2 rounded-md flex items-center gap-3 text-lg transition-all "
             >
               {loading ? (
                 <>

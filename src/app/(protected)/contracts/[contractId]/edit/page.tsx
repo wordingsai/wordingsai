@@ -295,7 +295,7 @@ export default function EditContractPage() {
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
               </Link>
-              <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+              <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
                 Re-Calibrate
               </h1>
             </div>
@@ -309,7 +309,7 @@ export default function EditContractPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
         <div className="xl:col-span-12">
-          <div className="bg-surface-container-low border border-outline-variant rounded-[3rem] p-8 lg:p-12 shadow-sm">
+          <div className="bg-surface-container-low border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm">
             <div className="flex items-center gap-4 mb-12">
               <div className="p-3 bg-secondary/10 rounded-2xl">
                 <Sparkles className="w-6 h-6 text-secondary" />
@@ -330,7 +330,7 @@ export default function EditContractPage() {
             >
               {/* Unique Market Reference */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <FileText className="w-3 h-3 text-primary" />{" "}
                   {workspaceType === "property"
                     ? "Policy Number"
@@ -340,13 +340,13 @@ export default function EditContractPage() {
                   value={contractName}
                   onChange={(e) => setContractName(e.target.value)}
                   placeholder="e.g. B133821CON0016"
-                  className="h-14 bg-background border-outline-variant rounded-2xl font-bold transition-all focus:ring-4 focus:ring-primary/10"
+                  className="bg-background transition-all focus:ring-4 focus:ring-primary/10"
                 />
               </div>
 
               {/* Reinsured */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <Building2 className="w-3 h-3 text-secondary" />{" "}
                   {workspaceType === "property" ? "Policyholder" : "Reinsured"}
                 </Label>
@@ -354,26 +354,26 @@ export default function EditContractPage() {
                   value={reinsured}
                   onChange={(e) => setReinsured(e.target.value)}
                   placeholder="e.g. Global Re Corp"
-                  className="h-14 bg-background border-outline-variant rounded-2xl font-bold transition-all focus:ring-4 focus:ring-secondary/10"
+                  className="bg-background transition-all focus:ring-4 focus:ring-secondary/10"
                 />
               </div>
 
               {/* Broker */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <Users className="w-3 h-3 text-indigo-500" /> Broker
                 </Label>
                 <Input
                   value={broker}
                   onChange={(e) => setBroker(e.target.value)}
                   placeholder="e.g. Aon, Willis Towers Watson"
-                  className="h-14 bg-background border-outline-variant rounded-2xl font-bold transition-all focus:ring-4 focus:ring-indigo-500/10"
+                  className="bg-background transition-all focus:ring-4 focus:ring-indigo-500/10"
                 />
               </div>
 
               {/* Contract Type */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <LayoutGrid className="w-3 h-3 text-amber-500" />{" "}
                   {workspaceType === "property" ? "Type" : "Contract Type"}
                 </Label>
@@ -381,13 +381,13 @@ export default function EditContractPage() {
                   value={contractType}
                   onChange={(e) => setContractType(e.target.value)}
                   placeholder="e.g. Excess Aviation of Loss"
-                  className="h-14 bg-background border-outline-variant rounded-2xl font-bold transition-all focus:ring-4 focus:ring-amber-500/10"
+                  className="bg-background transition-all focus:ring-4 focus:ring-amber-500/10"
                 />
               </div>
 
               {/* Period From */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <CalendarIcon className="w-3 h-3 text-violet-500" /> Period
                   From
                 </Label>
@@ -414,7 +414,7 @@ export default function EditContractPage() {
 
               {/* Period To */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
                   <CalendarIcon className="w-3 h-3 text-rose-500" /> Period To
                 </Label>
                 <Popover>
@@ -500,7 +500,7 @@ export default function EditContractPage() {
                       />
                     ))
                   ) : availableRules.length === 0 ? (
-                    <div className="col-span-full py-12 text-center bg-surface-container/50 rounded-[2rem] border border-dashed border-outline-variant">
+                    <div className="col-span-full py-12 text-center bg-surface-container/50 rounded-lg border border-dashed border-outline-variant">
                       <p className="text-on-surface-variant font-black uppercase tracking-widest text-xs">
                         No rules found in this workspace
                       </p>
@@ -547,7 +547,7 @@ export default function EditContractPage() {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-black px-12 py-8 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-3 text-lg hover:scale-[1.02] transition-all"
+                  className="w-full md:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-black px-5 py-2 rounded-md flex items-center gap-3 text-lg  transition-all"
                 >
                   {submitting ? (
                     <>

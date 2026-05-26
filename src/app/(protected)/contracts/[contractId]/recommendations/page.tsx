@@ -279,9 +279,9 @@ export default function RuleRecommendationsPage() {
         <div className="max-w-md w-full space-y-8 animate-in fade-in duration-700">
           <div className="relative inline-block">
             <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-150 animate-pulse" />
-            <div className="relative bg-surface-container-low border border-outline-variant p-8 rounded-[2.5rem] shadow-2xl">
+            <div className="relative bg-surface-container-low border border-outline-variant p-8 rounded-xl shadow-2xl">
               <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-6" />
-              <h1 className="text-2xl font-black uppercase tracking-tighter text-on-surface mb-2">
+              <h1 className="text-xl font-semibold tracking-tight text-on-surface mb-2">
                 {authorizing
                   ? "Authorizing Matched Rules"
                   : "Neural Scan in Progress"}
@@ -293,7 +293,7 @@ export default function RuleRecommendationsPage() {
               </p>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-1">
+                <div className="flex justify-between text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-1">
                   <span>{analysisStatus}</span>
                   <span>{displayProgress}%</span>
                 </div>
@@ -334,7 +334,7 @@ export default function RuleRecommendationsPage() {
               <div className="p-2 bg-emerald-500/10 rounded-lg">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">
+              <span className="text-xs font-medium uppercase tracking-wider text-emerald-500">
                 Neural Scan Complete
               </span>
             </div>
@@ -374,7 +374,7 @@ export default function RuleRecommendationsPage() {
             <section className="space-y-6">
               <div className="flex items-center gap-3">
                 <Sparkles className="w-5 h-5 text-primary" />
-                <h2 className="text-xl font-black uppercase tracking-tight text-on-surface">
+                <h2 className="text-base font-semibold tracking-tight text-on-surface">
                   Recommended Intelligence Modules
                 </h2>
                 <Badge
@@ -396,7 +396,7 @@ export default function RuleRecommendationsPage() {
                     />
                   ))
                 ) : (
-                  <div className="p-8 border-2 border-dashed border-outline-variant rounded-[2rem] text-center space-y-3">
+                  <div className="p-8 border-2 border-dashed border-outline-variant rounded-lg text-center space-y-3">
                     <p className="text-on-surface-variant font-medium">
                       No specific modules recommended based on current
                       detection.
@@ -434,12 +434,12 @@ export default function RuleRecommendationsPage() {
               </section>
             ) : (
               recommendedRules.length === 0 && (
-                <div className="p-12 bg-surface-container-low border border-outline-variant rounded-[3rem] text-center space-y-6">
+                <div className="p-12 bg-surface-container-low border border-outline-variant rounded-xl text-center space-y-6">
                   <div className="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto">
                     <AlertCircle className="w-8 h-8 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-xl font-black uppercase tracking-tight text-on-surface">
+                    <h3 className="text-base font-semibold tracking-tight text-on-surface">
                       No Intelligence Modules Found
                     </h3>
                     <p className="text-on-surface-variant font-medium max-w-sm mx-auto">
@@ -450,7 +450,7 @@ export default function RuleRecommendationsPage() {
                   </div>
                   <Button
                     variant="outline"
-                    className="rounded-xl font-black uppercase tracking-widest text-[10px] h-12"
+                    className="rounded-xl text-xs font-medium uppercase tracking-wider h-12"
                     onClick={() => router.push("/rules")}
                   >
                     Manage Rule Registry
@@ -463,7 +463,7 @@ export default function RuleRecommendationsPage() {
           {/* Sidebar: Document Stats */}
           <div className="lg:col-span-4">
             <div className="sticky top-12 space-y-6">
-              <div className="bg-surface-container-low border border-outline-variant rounded-[2rem] p-8 space-y-6">
+              <div className="bg-surface-container-low border border-outline-variant rounded-lg p-8 space-y-6">
                 <h3 className="text-lg font-black uppercase tracking-tight text-on-surface flex items-center gap-2">
                   <FileText className="w-5 h-5 text-primary" /> Document
                   Fingerprint
@@ -471,7 +471,7 @@ export default function RuleRecommendationsPage() {
 
                 <div className="space-y-4">
                   <div className="p-4 rounded-2xl bg-background border border-outline-variant/50 space-y-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                    <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                       Detected Clauses
                     </span>
                     <p className="text-2xl font-black text-on-surface">
@@ -480,7 +480,7 @@ export default function RuleRecommendationsPage() {
                   </div>
 
                   <div className="p-4 rounded-2xl bg-background border border-outline-variant/50 space-y-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                    <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                       Document Quality
                     </span>
                     <div className="flex items-center gap-2">
@@ -505,7 +505,7 @@ export default function RuleRecommendationsPage() {
                 </div>
               </div>
 
-              <div className="p-6 bg-primary/5 border border-primary/10 rounded-[2rem] flex items-center gap-4">
+              <div className="p-6 bg-primary/5 border border-primary/10 rounded-lg flex items-center gap-4">
                 <div className="p-3 bg-primary/10 rounded-2xl">
                   <Zap className="w-5 h-5 text-primary" />
                 </div>

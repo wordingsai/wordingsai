@@ -128,7 +128,7 @@ export default function AnalyticsPage(props: {
         <Breadcrumb className="mb-6">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+              <BreadcrumbPage className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                 Intelligence Dashboard
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -137,7 +137,7 @@ export default function AnalyticsPage(props: {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
               Reports & KPIs
             </h1>
             <p className="text-on-surface-variant text-base lg:text-lg font-medium max-w-2xl">
@@ -148,7 +148,7 @@ export default function AnalyticsPage(props: {
             <button
               onClick={() => setActiveTab("trending")}
               className={cn(
-                "px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                "px-6 py-2 rounded-lg text-xs font-medium uppercase tracking-wider transition-all",
                 activeTab === "trending"
                   ? "bg-primary text-primary-foreground"
                   : "text-on-surface-variant hover:text-on-surface",
@@ -159,7 +159,7 @@ export default function AnalyticsPage(props: {
             <button
               onClick={() => setActiveTab("portfolio")}
               className={cn(
-                "px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                "px-6 py-2 rounded-lg text-xs font-medium uppercase tracking-wider transition-all",
                 activeTab === "portfolio"
                   ? "bg-primary text-primary-foreground"
                   : "text-on-surface-variant hover:text-on-surface",
@@ -231,7 +231,7 @@ export default function AnalyticsPage(props: {
       ) : (
         <div className="space-y-8 animate-in fade-in duration-500">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8 bg-surface-container-low border border-outline-variant p-10 rounded-[3rem] shadow-sm">
+            <div className="lg:col-span-8 bg-surface-container-low border border-outline-variant p-10 rounded-xl shadow-sm">
               <h3 className="text-2xl font-black text-on-surface mb-10 uppercase tracking-tight flex items-center gap-3">
                 <PieChart className="size-7 text-primary" /> Portfolio
                 Composition
@@ -240,7 +240,7 @@ export default function AnalyticsPage(props: {
                 <div className="space-y-6">
                   {data?.distributions.typeMix.map((m, i) => (
                     <div key={i} className="space-y-2">
-                      <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                      <div className="flex justify-between text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                         <span>{m.contractType}</span>
                         <span>
                           {Math.round(
@@ -267,7 +267,7 @@ export default function AnalyticsPage(props: {
                       <span className="text-4xl font-black text-on-surface">
                         {data?.summary.totalContracts}
                       </span>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                      <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                         Total Assets
                       </p>
                     </div>
@@ -276,7 +276,7 @@ export default function AnalyticsPage(props: {
               </div>
             </div>
 
-            <div className="lg:col-span-4 bg-primary p-10 rounded-[3rem] text-white shadow-2xl shadow-primary/20 flex flex-col justify-between">
+            <div className="lg:col-span-4 bg-primary p-10 rounded-xl text-white shadow-2xl shadow-primary/20 flex flex-col justify-between">
               <div>
                 <h3 className="text-2xl font-black mb-4 uppercase tracking-tight">
                   Portfolio Health
@@ -331,12 +331,12 @@ function KpiCard({
   return (
     <div
       className={cn(
-        "bg-surface-container-low border border-outline-variant p-8 rounded-[2.5rem] shadow-sm hover:border-primary/50 transition-all group",
+        "bg-surface-container-low border border-outline-variant p-8 rounded-xl shadow-sm hover:border-primary/50 transition-all group",
         isDestructive && "hover:border-destructive/50",
       )}
     >
       <div className="flex justify-between items-start mb-6">
-        <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant group-hover:text-primary transition-colors">
+        <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant group-hover:text-primary transition-colors">
           {title}
         </span>
         <div className="p-3 bg-surface-container-highest rounded-2xl">
@@ -368,7 +368,7 @@ function KpiCard({
 
 function ClauseTrendList({ title, items, status, color }: any) {
   return (
-    <div className="bg-surface-container-low border border-outline-variant rounded-[3rem] p-10 shadow-sm">
+    <div className="bg-surface-container-low border border-outline-variant rounded-xl p-10 shadow-sm">
       <h3 className="text-xl font-black text-on-surface mb-8 uppercase tracking-tight flex items-center gap-3">
         <Flame
           className={cn(
@@ -410,7 +410,7 @@ function ClauseTrendList({ title, items, status, color }: any) {
               >
                 {status}
               </Badge>
-              <span className="text-sm font-black text-on-surface">
+              <span className="text-sm font-semibold text-on-surface">
                 {item.count}{" "}
                 <span className="text-[9px] text-on-surface-variant">Hits</span>
               </span>
@@ -429,7 +429,7 @@ function ClauseTrendList({ title, items, status, color }: any) {
 
 function LatestClauseList({ title, items }: any) {
   return (
-    <div className="bg-surface-container-low border border-outline-variant rounded-[3rem] p-10 shadow-sm">
+    <div className="bg-surface-container-low border border-outline-variant rounded-xl p-10 shadow-sm">
       <h3 className="text-xl font-black text-on-surface mb-8 uppercase tracking-tight flex items-center gap-3">
         <Clock className="size-6 text-indigo-500" /> {title}
       </h3>

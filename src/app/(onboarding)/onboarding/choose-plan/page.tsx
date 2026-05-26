@@ -72,7 +72,7 @@ export default function OnboardingChoosePlanPage() {
               <div
                 key={plan.id}
                 className={cn(
-                  "rounded-[2rem] border-2 p-8 bg-surface-container-low",
+                  "rounded-lg border-2 p-8 bg-surface-container-low",
                   plan.highlight
                     ? "border-primary/30 shadow-xl shadow-primary/10"
                     : "border-outline-variant",
