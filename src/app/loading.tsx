@@ -9,11 +9,11 @@ export default function Loading() {
           <Loader2 className="h-12 w-12 animate-spin text-primary relative" />
         </div>
         <div className="space-y-1 text-center">
-          <h2 className="text-xl font-black uppercase tracking-widest text-on-surface">
-            Initializing Engine
+          <h2 className="text-sm font-semibold tracking-tight text-on-surface">
+            Loading
           </h2>
-          <p className="text-sm font-medium text-on-surface-variant animate-pulse tracking-tight uppercase">
-            Loading Cognitive Scope...
+          <p className="text-xs text-on-surface-variant animate-pulse">
+            Initializing engine…
           </p>
         </div>
       </div>
