@@ -56,7 +56,7 @@ export default function OnboardingChoosePlanPage() {
         </div>
 
         <div className="text-center space-y-3">
-          <h1 className="text-4xl font-black tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight">
             Choose your plan
           </h1>
           <p className="text-on-surface-variant">
@@ -100,7 +100,7 @@ export default function OnboardingChoosePlanPage() {
                 <p className="text-on-surface-variant mb-4">
                   {plan.description}
                 </p>
-                <div className="text-4xl font-black mb-6">
+                <div className="text-2xl font-semibold mb-6">
                   {plan.priceLabel}
                   <span className="text-sm text-on-surface-variant ml-2">
                     /{plan.intervalLabel}

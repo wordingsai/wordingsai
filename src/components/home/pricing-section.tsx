@@ -47,11 +47,11 @@ export const PricingSection = () => {
                   </h4>
                   <div className="flex items-baseline gap-1">
                     {isEnterprise ? (
-                      <span className="text-2xl font-black text-slate-900 dark:text-white">
+                      <span className="text-lg font-semibold text-slate-900 dark:text-white">
                         Custom
                       </span>
                     ) : (
-                      <span className="text-2xl font-black text-primary">
+                      <span className="text-lg font-semibold text-primary">
                         Trial
                       </span>
                     )}

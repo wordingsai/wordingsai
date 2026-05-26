@@ -27,7 +27,7 @@ export default function Error({
 
       <div className="max-w-md space-y-6">
         <div className="space-y-2">
-          <h2 className="text-4xl font-black uppercase tracking-tighter text-on-surface">
+          <h2 className="text-xl font-semibold tracking-tight text-on-surface">
             System Failure
           </h2>
           <p className="text-on-surface-variant text-lg font-medium">

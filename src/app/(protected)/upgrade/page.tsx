@@ -105,7 +105,7 @@ export default function PricingPage() {
           <Rocket className="w-3.5 h-3.5" />
           Soft Launch — All Plans Available as Trial
         </div>
-        <h1 className="text-5xl font-black uppercase tracking-tighter mt-6 mb-4 text-on-surface">
+        <h1 className="text-2xl font-semibold tracking-tight mt-6 mb-4 text-on-surface">
           Select Your Plan
         </h1>
         <p className="text-on-surface-variant font-medium max-w-2xl mx-auto">
@@ -198,7 +198,7 @@ export default function PricingPage() {
                     {/* Price */}
                     <div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-black tracking-tighter">
+                        <span className="text-2xl font-semibold tracking-tight">
                           {isEnterprise ? "Custom" : "Trial"}
                         </span>
                         {!isEnterprise && (

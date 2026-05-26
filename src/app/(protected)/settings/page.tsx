@@ -256,12 +256,12 @@ function OrganizationSettingsTab() {
                 src={activeOrg?.logo ?? undefined}
                 alt={activeOrg?.name}
               />
-              <AvatarFallback className="text-2xl font-black bg-primary/10 text-primary">
+              <AvatarFallback className="text-lg font-semibold bg-primary/10 text-primary">
                 {activeOrg?.name?.charAt(0).toUpperCase() || "O"}
               </AvatarFallback>
             </Avatar>
             <div>
-              <CardTitle className="text-3xl font-black uppercase text-on-surface tracking-tighter flex items-center gap-3">
+              <CardTitle className="text-xl font-semibold text-on-surface tracking-tight flex items-center gap-3">
                 <Building2 className="w-8 h-8 text-primary animate-pulse" />{" "}
                 {activeOrg?.name || "Corporate Workspace"}
               </CardTitle>
@@ -341,7 +341,7 @@ function OrganizationSettingsTab() {
           {/* Invitation Code Management */}
           <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left border-2 border-primary/20">
             <CardHeader className="p-8 border-b border-outline-variant bg-primary/5">
-              <CardTitle className="text-2xl font-black uppercase text-on-surface">
+              <CardTitle className="text-lg font-semibold uppercase text-on-surface">
                 Organization Invite Code
               </CardTitle>
               <CardDescription className="font-medium text-on-surface-variant">
@@ -353,7 +353,7 @@ function OrganizationSettingsTab() {
               <div className="flex-1 w-full min-w-0">
                 {inviteCode ? (
                   <div className="flex items-center gap-4 bg-surface-container-highest/20 p-6 rounded-3xl border-2 border-outline-variant">
-                    <span className="text-4xl font-black tracking-[0.2em] text-primary family-mono uppercase truncate">
+                    <span className="text-xl font-semibold tracking-wide text-primary family-mono uppercase truncate">
                       {inviteCode}
                     </span>
                     <Button
@@ -395,7 +395,7 @@ function OrganizationSettingsTab() {
           {/* Pending Join Requests */}
           <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
             <CardHeader className="p-8 border-b border-outline-variant bg-amber-50 dark:bg-amber-950/20">
-              <CardTitle className="text-2xl font-black uppercase text-on-surface flex items-center gap-3">
+              <CardTitle className="text-lg font-semibold uppercase text-on-surface flex items-center gap-3">
                 <Clock className="w-6 h-6 text-amber-500" /> Pending Join
                 Requests
               </CardTitle>
@@ -497,7 +497,7 @@ function OrganizationSettingsTab() {
 
       <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
         <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-          <CardTitle className="text-2xl font-black uppercase text-on-surface">
+          <CardTitle className="text-lg font-semibold uppercase text-on-surface">
             Organization Members
           </CardTitle>
           <CardDescription className="font-medium text-on-surface-variant">
@@ -679,7 +679,7 @@ function OrganizationSettingsTab() {
       <AlertDialog open={showLeaveDialog} onOpenChange={setShowLeaveDialog}>
         <AlertDialogContent className="rounded-xl p-10">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-3xl font-black uppercase tracking-tighter">
+            <AlertDialogTitle className="text-xl font-semibold tracking-tight">
               Are you absolutely sure?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-lg font-medium leading-relaxed">
@@ -711,7 +711,7 @@ function OrganizationSettingsTab() {
       >
         <AlertDialogContent className="rounded-xl p-10">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-3xl font-black uppercase tracking-tighter text-destructive flex items-center gap-3">
+            <AlertDialogTitle className="text-xl font-semibold tracking-tight text-destructive flex items-center gap-3">
               <Trash2 className="w-7 h-7" /> Remove Member
             </AlertDialogTitle>
             <AlertDialogDescription className="text-lg font-medium leading-relaxed">
@@ -763,7 +763,7 @@ function OrganizationSettingsTab() {
       >
         <AlertDialogContent className="rounded-xl p-10">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-3xl font-black uppercase tracking-tighter text-destructive flex items-center gap-3">
+            <AlertDialogTitle className="text-xl font-semibold tracking-tight text-destructive flex items-center gap-3">
               <TriangleAlert className="w-7 h-7" /> Delete Organization
             </AlertDialogTitle>
             <AlertDialogDescription className="space-y-0">
@@ -868,7 +868,7 @@ function SubscriptionSettingsTab() {
         <CardHeader className="p-8 border-b border-outline-variant bg-primary/5">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-2xl font-black uppercase text-on-surface flex items-center gap-3">
+              <CardTitle className="text-lg font-semibold uppercase text-on-surface flex items-center gap-3">
                 <CreditCard className="w-6 h-6 text-primary" /> Current Plan
               </CardTitle>
               <CardDescription className="font-medium text-on-surface-variant">
@@ -925,7 +925,7 @@ function SubscriptionSettingsTab() {
                       {p.description}
                     </p>
                     <div className="flex items-baseline gap-1 mb-6">
-                      <span className="text-2xl font-black text-on-surface">
+                      <span className="text-lg font-semibold text-on-surface">
                         {isEnterprise ? "Custom" : "Trial"}
                       </span>
                     </div>
@@ -1165,7 +1165,7 @@ export default function SettingsPage() {
             {activeTab === "profile" && (
               <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-                  <CardTitle className="text-2xl font-black uppercase text-on-surface">
+                  <CardTitle className="text-lg font-semibold uppercase text-on-surface">
                     Profile Identity
                   </CardTitle>
                   <CardDescription className="font-medium text-on-surface-variant">
@@ -1177,7 +1177,7 @@ export default function SettingsPage() {
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center p-6 bg-surface-container-highest/20 rounded-3xl border border-outline-variant/30">
                     <Avatar className="h-24 w-24 rounded-3xl border-4 border-background shadow-xl">
                       <AvatarImage src={image ?? undefined} />
-                      <AvatarFallback className="text-2xl font-black bg-primary/10 text-primary">
+                      <AvatarFallback className="text-lg font-semibold bg-primary/10 text-primary">
                         {name?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -1278,7 +1278,7 @@ export default function SettingsPage() {
             {activeTab === "appearance" && (
               <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-                  <CardTitle className="text-2xl font-black uppercase text-on-surface">
+                  <CardTitle className="text-lg font-semibold uppercase text-on-surface">
                     Visual Appearance
                   </CardTitle>
                   <CardDescription className="font-medium text-on-surface-variant">
@@ -1310,7 +1310,7 @@ export default function SettingsPage() {
             {activeTab === "security" && (
               <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
-                  <CardTitle className="text-2xl font-black uppercase text-on-surface">
+                  <CardTitle className="text-lg font-semibold uppercase text-on-surface">
                     Security & Privacy
                   </CardTitle>
                   <CardDescription className="font-medium text-on-surface-variant">

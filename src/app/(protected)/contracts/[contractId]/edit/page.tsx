@@ -172,7 +172,7 @@ export default function EditContractPage() {
       <main className="flex-1 p-6 lg:p-10 bg-background flex items-center justify-center min-h-[80vh]">
         <div className="flex flex-col items-center max-w-md text-center space-y-4">
           <Lock className="w-16 h-16 text-primary mb-4" />
-          <h1 className="text-3xl font-black uppercase text-on-surface tracking-tighter">
+          <h1 className="text-xl font-semibold text-on-surface tracking-tight">
             Access Denied
           </h1>
           <p className="text-on-surface-variant font-medium">
@@ -315,7 +315,7 @@ export default function EditContractPage() {
                 <Sparkles className="w-6 h-6 text-secondary" />
               </div>
               <div>
-                <h2 className="text-2xl font-black text-on-surface uppercase tracking-tight">
+                <h2 className="text-lg font-semibold text-on-surface uppercase tracking-tight">
                   Metadata Edit
                 </h2>
                 <p className="text-on-surface-variant text-sm font-medium">

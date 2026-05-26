@@ -338,7 +338,7 @@ export default function RuleRecommendationsPage() {
                 Neural Scan Complete
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase text-on-surface">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
               Brain Configuration
             </h1>
             <p className="text-on-surface-variant text-lg font-medium max-w-2xl">
@@ -474,7 +474,7 @@ export default function RuleRecommendationsPage() {
                     <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                       Detected Clauses
                     </span>
-                    <p className="text-2xl font-black text-on-surface">
+                    <p className="text-lg font-semibold text-on-surface">
                       {contract?.analysis?.mandatory_registry_count || 0}
                     </p>
                   </div>
@@ -484,7 +484,7 @@ export default function RuleRecommendationsPage() {
                       Document Quality
                     </span>
                     <div className="flex items-center gap-2">
-                      <p className="text-2xl font-black text-on-surface">
+                      <p className="text-lg font-semibold text-on-surface">
                         Optimal
                       </p>
                       <ShieldCheck className="w-5 h-5 text-emerald-500" />

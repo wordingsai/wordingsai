@@ -16,7 +16,7 @@ export default function Forbidden() {
 
       <div className="max-w-xl mx-auto space-y-6">
         <div className="space-y-2">
-          <h1 className="text-5xl font-black uppercase tracking-tighter text-on-surface">
+          <h1 className="text-2xl font-semibold tracking-tight text-on-surface">
             Forbidden Area
           </h1>
           <p className="text-on-surface-variant text-lg font-medium">

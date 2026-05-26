@@ -168,7 +168,7 @@ export default function EditClausePage() {
       <div className="flex-1 p-6 lg:p-10 bg-background flex flex-col items-center justify-center">
         <div className="bg-red-500/5 border border-red-500/10 rounded-xl p-12 text-center max-w-xl space-y-6">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto" />
-          <h2 className="text-2xl font-black uppercase tracking-tight text-on-surface">
+          <h2 className="text-lg font-semibold tracking-tight text-on-surface">
             Access Restriction
           </h2>
           <p className="text-on-surface-variant font-medium">{error}</p>

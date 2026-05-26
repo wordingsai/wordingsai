@@ -1207,7 +1207,7 @@ export default function ContractAnalysisPage() {
                   >
                     <div className="space-y-6">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <h2 className="text-xl sm:text-2xl font-black text-on-surface uppercase tracking-tight flex items-center gap-2 sm:gap-3 flex-wrap">
+                        <h2 className="text-xl sm:text-lg font-semibold text-on-surface uppercase tracking-tight flex items-center gap-2 sm:gap-3 flex-wrap">
                           <ShieldCheck className="size-6 sm:size-7 text-emerald-500 shrink-0" />
                           Foundational Checklist
                           {checklistEvents.length > 0 && (
@@ -1263,7 +1263,7 @@ export default function ContractAnalysisPage() {
                               <Sparkles className="size-8" />
                             </div>
                             <div>
-                              <h3 className="text-2xl font-black text-on-surface uppercase tracking-tight leading-tight">
+                              <h3 className="text-lg font-semibold text-on-surface uppercase tracking-tight leading-tight">
                                 {selectedEvent.metadata?.clauseName ||
                                   "Analysis Detail"}
                               </h3>
@@ -1432,7 +1432,7 @@ export default function ContractAnalysisPage() {
                     <div className="size-20 md:size-24 bg-primary/10 rounded-full flex items-center justify-center mb-6 md:mb-8">
                       <Zap className="size-10 md:size-12 text-primary" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-black text-on-surface uppercase tracking-tight mb-4">
+                    <h2 className="text-2xl md:text-lg font-semibold text-on-surface mb-4">
                       {showFastResults
                         ? "Rules evaluation ready"
                         : "Neural evaluation pending"}
@@ -1490,7 +1490,7 @@ export default function ContractAnalysisPage() {
                 ) : (
                   <div className="space-y-12">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-2xl font-black text-on-surface uppercase tracking-tight flex items-center gap-3">
+                      <h2 className="text-lg font-semibold text-on-surface uppercase tracking-tight flex items-center gap-3">
                         <Activity className="size-7 text-primary" />
                         Conflict Identification
                       </h2>
@@ -1656,7 +1656,7 @@ export default function ContractAnalysisPage() {
                     <div className="size-20 bg-primary rounded-lg flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-primary/20">
                       <Lock className="size-10 text-white" />
                     </div>
-                    <h2 className="text-3xl font-black text-on-surface uppercase tracking-tight mb-4">
+                    <h2 className="text-lg font-semibold text-on-surface mb-4">
                       Plus Layer Locked
                     </h2>
                     <p className="text-on-surface-variant text-lg font-medium max-w-sm mx-auto mb-12">
@@ -1677,7 +1677,7 @@ export default function ContractAnalysisPage() {
                     <div className="size-24 bg-secondary/10 rounded-full flex items-center justify-center mb-8 text-secondary">
                       <BrainCircuit className="size-12" />
                     </div>
-                    <h2 className="text-3xl font-black text-on-surface uppercase tracking-tight mb-4">
+                    <h2 className="text-lg font-semibold text-on-surface mb-4">
                       Deep Semantic Analysis Pending
                     </h2>
                     <p className="text-on-surface-variant text-lg font-medium max-w-md mb-10 text-center leading-relaxed">
@@ -1704,7 +1704,7 @@ export default function ContractAnalysisPage() {
                   <div className="space-y-12">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <h2 className="text-2xl font-black text-on-surface uppercase tracking-tight flex items-center gap-3">
+                        <h2 className="text-lg font-semibold text-on-surface uppercase tracking-tight flex items-center gap-3">
                           <BrainCircuit className="size-7 text-secondary" />
                           Semantic Intelligence
                         </h2>
@@ -1745,7 +1745,7 @@ export default function ContractAnalysisPage() {
                                 Clause Coverage
                               </h3>
                             </div>
-                            <div className="text-2xl font-black text-emerald-500">
+                            <div className="text-lg font-semibold text-emerald-500">
                               {
                                 contract.analysis.plus.clauseCoverage
                                   ?.coverageScore
@@ -1945,7 +1945,7 @@ export default function ContractAnalysisPage() {
                             <div className="flex flex-col lg:flex-row gap-12 relative z-10 text-left">
                               <div className="lg:w-1/2 space-y-8">
                                 <div className="space-y-2">
-                                  <h3 className="text-2xl font-black text-on-surface uppercase tracking-tight">
+                                  <h3 className="text-lg font-semibold text-on-surface uppercase tracking-tight">
                                     {result.rule.name}
                                   </h3>
                                   <Badge className="bg-emerald-500 text-white border-none rounded-lg font-black uppercase text-[10px] px-3">
@@ -2046,7 +2046,7 @@ export default function ContractAnalysisPage() {
               >
                 <div className="space-y-6">
                   <div className="flex items-center justify-between ml-2">
-                    <h3 className="text-2xl font-black text-on-surface uppercase tracking-tight flex items-center gap-3">
+                    <h3 className="text-lg font-semibold text-on-surface uppercase tracking-tight flex items-center gap-3">
                       <FileText className="size-7 text-primary" />
                       Document Map
                     </h3>

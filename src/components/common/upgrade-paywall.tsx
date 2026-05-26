@@ -45,14 +45,14 @@ export function UpgradePaywall({
         {/* Left Side: Illustration & Core Message */}
         <div className="lg:col-span-3 space-y-8">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest">
-              <Lock className="w-3.5 h-3.5" /> Premium Feature
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[11px] font-medium uppercase tracking-wider">
+              <Lock className="w-3 h-3" /> Premium feature
             </div>
-            <h1 className="text-4xl lg:text-6xl font-black text-on-surface tracking-tighter leading-[0.9]">
-              UNLEASH THE POWER OF{" "}
-              <span className="text-primary">INTELLIGENCE PLUS</span>
+            <h1 className="text-2xl lg:text-3xl font-semibold text-on-surface tracking-tight leading-tight">
+              Unleash the power of{" "}
+              <span className="text-primary">Intelligence Plus</span>
             </h1>
-            <p className="text-xl text-on-surface-variant font-medium max-w-lg leading-relaxed">
+            <p className="text-base text-on-surface-variant max-w-lg leading-relaxed">
               {description} Access to{" "}
               <span className="text-on-surface font-bold underline decoration-primary/30 decoration-4 underline-offset-4">
                 {featureName}
@@ -116,7 +116,7 @@ export function UpgradePaywall({
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-black text-on-surface uppercase tracking-tight leading-none">
+                  <h3 className="text-lg font-semibold text-on-surface uppercase tracking-tight leading-none">
                     {featureName}
                   </h3>
                   <p className="text-sm text-on-surface-variant font-medium leading-relaxed">

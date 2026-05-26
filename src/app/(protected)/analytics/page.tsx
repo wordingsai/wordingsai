@@ -232,7 +232,7 @@ export default function AnalyticsPage(props: {
         <div className="space-y-8 animate-in fade-in duration-500">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 bg-surface-container-low border border-outline-variant p-10 rounded-xl shadow-sm">
-              <h3 className="text-2xl font-black text-on-surface mb-10 uppercase tracking-tight flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-on-surface mb-10 uppercase tracking-tight flex items-center gap-3">
                 <PieChart className="size-7 text-primary" /> Portfolio
                 Composition
               </h3>
@@ -262,13 +262,13 @@ export default function AnalyticsPage(props: {
                   ))}
                 </div>
                 <div className="flex items-center justify-center">
-                  <div className="size-48 rounded-full border-[20px] border-primary/10 flex items-center justify-center relative">
+                  <div className="size-40 rounded-full border-[12px] border-primary/10 flex items-center justify-center relative">
                     <div className="text-center">
-                      <span className="text-4xl font-black text-on-surface">
+                      <span className="text-3xl font-semibold text-on-surface tracking-tight">
                         {data?.summary.totalContracts}
                       </span>
                       <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
-                        Total Assets
+                        Total assets
                       </p>
                     </div>
                   </div>
@@ -278,7 +278,7 @@ export default function AnalyticsPage(props: {
 
             <div className="lg:col-span-4 bg-primary p-10 rounded-xl text-white shadow-2xl shadow-primary/20 flex flex-col justify-between">
               <div>
-                <h3 className="text-2xl font-black mb-4 uppercase tracking-tight">
+                <h3 className="text-lg font-semibold mb-4 uppercase tracking-tight">
                   Portfolio Health
                 </h3>
                 <p className="text-white/80 text-sm font-medium leading-relaxed mb-10">
@@ -291,7 +291,7 @@ export default function AnalyticsPage(props: {
                   <span className="text-xs font-black uppercase tracking-widest">
                     Approved
                   </span>
-                  <span className="text-2xl font-black">
+                  <span className="text-lg font-semibold">
                     {data?.healthCheck.approvedCount}
                   </span>
                 </div>
@@ -307,7 +307,7 @@ export default function AnalyticsPage(props: {
                   <span className="text-xs font-black uppercase tracking-widest text-white/60">
                     Requires Review
                   </span>
-                  <span className="text-2xl font-black">
+                  <span className="text-lg font-semibold">
                     {data?.healthCheck.unapprovedCount}
                   </span>
                 </div>
@@ -346,7 +346,7 @@ function KpiCard({
       <div>
         <div
           className={cn(
-            "text-5xl font-black tracking-tighter",
+            "text-3xl font-semibold tracking-tight",
             isDestructive ? "text-destructive" : "text-on-surface",
           )}
         >

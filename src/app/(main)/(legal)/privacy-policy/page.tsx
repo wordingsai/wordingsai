@@ -3,7 +3,7 @@ const PrivacyPolicy = () => {
     <main className="max-w-6xl mx-auto px-6 pt-4">
       <div className="py-16 md:py-24">
         <header className="mb-16 border-b border-slate-200 dark:border-primary/10 pb-12">
-          <h1 className="mb-4 text-4xl font-black tracking-tight text-slate-900 dark:text-white md:text-5xl">
+          <h1 className="mb-4 text-2xl md:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
             Privacy Policy
           </h1>
           <div className="flex items-center gap-2 text-slate-500 dark:text-primary/60">

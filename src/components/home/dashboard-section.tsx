@@ -423,7 +423,7 @@ export const DashboardSection = () => {
                       />
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-3xl font-black text-slate-900 dark:text-white">
+                      <span className="text-2xl font-semibold text-slate-900 dark:text-white">
                         88%
                       </span>
                       <span className="text-[9px] font-black uppercase text-emerald-500 tracking-wider">

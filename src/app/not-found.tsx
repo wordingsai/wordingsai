@@ -17,7 +17,7 @@ export default function NotFound() {
 
       <div className="max-w-xl mx-auto space-y-6 mt-8">
         <div className="space-y-2">
-          <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tight text-on-surface">
+          <h2 className="text-xl lg:text-2xl font-semibold tracking-tight text-on-surface">
             Lost in the Wordings
           </h2>
           <p className="text-on-surface-variant text-lg font-medium">

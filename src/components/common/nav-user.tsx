@@ -329,7 +329,7 @@ export function NavUser({
             <div className="h-16 w-16 bg-destructive/10 rounded-3xl flex items-center justify-center mb-6">
               <LogOut className="h-8 w-8 text-destructive" />
             </div>
-            <AlertDialogTitle className="text-3xl font-black uppercase tracking-tighter">
+            <AlertDialogTitle className="text-xl font-semibold tracking-tight">
               Terminate Session?
             </AlertDialogTitle>
             <AlertDialogDescription className="text-base font-medium text-on-surface-variant pt-2">
