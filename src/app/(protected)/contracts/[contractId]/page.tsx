@@ -932,23 +932,21 @@ export default function ContractAnalysisPage() {
         </div>
       )}
 
-      {/* Auxiliary Tabs (Hidden when in 3-panel mode or handled separately) */}
-      <div className="mt-12">
-        <div className="flex flex-wrap items-center gap-2 p-2 bg-surface-container-low border border-outline-variant/30 rounded-[1.5rem] w-full max-w-fit shadow-sm mb-8">
-          {/* Summary — always accessible */}
+      {/* Tab nav */}
+      <div className="mt-8">
+        <div className="flex flex-wrap items-center gap-0.5 p-1 bg-surface-container-low border border-outline-variant/30 rounded-lg w-full max-w-fit mb-6">
           <button
             onClick={() => handleTabClick("summary")}
             className={cn(
-              "px-5 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-[0.15em] transition-all duration-300",
+              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
               activeTab === "summary"
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
-                : "text-on-surface-variant hover:text-primary hover:bg-primary/5",
+                ? "bg-primary text-primary-foreground"
+                : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container",
             )}
           >
-            <FileText className="size-3 mr-2 inline-block" /> Summary
+            <FileText className="size-3.5" /> Summary
           </button>
 
-          {/* Rules Evaluation — shown on fast (locked) and basic/plus (functional) */}
           <button
             onClick={() => handleTabClick("rules-evaluation")}
             title={
@@ -957,20 +955,19 @@ export default function ContractAnalysisPage() {
                 : undefined
             }
             className={cn(
-              "px-5 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 relative",
+              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
               isFast
                 ? "opacity-50 cursor-not-allowed text-on-surface-variant"
                 : activeTab === "rules-evaluation"
-                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
-                  : "text-on-surface-variant hover:text-primary hover:bg-primary/5",
+                  ? "bg-primary text-primary-foreground"
+                  : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container",
             )}
           >
-            <ShieldCheck className="size-3 mr-2 inline-block" />
-            Rules Evaluation
-            {isFast && <Lock className="size-2.5 ml-1.5 inline-block" />}
+            <ShieldCheck className="size-3.5" />
+            Rules evaluation
+            {isFast && <Lock className="size-3" />}
           </button>
 
-          {/* Plus Analysis — locked on fast & basic, functional on plus */}
           <button
             onClick={() => handleTabClick("plus-analysis")}
             title={
@@ -979,45 +976,41 @@ export default function ContractAnalysisPage() {
                 : undefined
             }
             className={cn(
-              "px-5 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 relative",
+              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
               !canAccessPlusAnalysis
                 ? "opacity-50 cursor-not-allowed text-on-surface-variant"
                 : activeTab === "plus-analysis"
-                  ? "bg-secondary text-secondary-foreground shadow-lg shadow-secondary/20 scale-[1.02]"
-                  : "text-on-surface-variant hover:text-secondary hover:bg-secondary/5",
+                  ? "bg-secondary text-secondary-foreground"
+                  : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container",
             )}
           >
-            <Sparkles className="size-3 mr-2 inline-block" />
-            Plus Analysis
-            {!canAccessPlusAnalysis && (
-              <Lock className="size-2.5 ml-1.5 inline-block" />
-            )}
+            <Sparkles className="size-3.5" />
+            Plus analysis
+            {!canAccessPlusAnalysis && <Lock className="size-3" />}
           </button>
 
-          {/* Document Map — always shown */}
           <button
             onClick={() => handleTabClick("document-map")}
             className={cn(
-              "px-5 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-[0.15em] transition-all duration-300",
+              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
               activeTab === "document-map"
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
-                : "text-on-surface-variant hover:text-primary hover:bg-primary/5",
+                ? "bg-primary text-primary-foreground"
+                : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container",
             )}
           >
-            <Target className="size-3 mr-2 inline-block" /> Document Map
+            <Target className="size-3.5" /> Document map
           </button>
 
-          {/* Document View — always shown */}
           <button
             onClick={() => handleTabClick("document-view")}
             className={cn(
-              "px-5 py-2.5 rounded-xl text-[10px] font-semibold uppercase tracking-[0.15em] transition-all duration-300",
+              "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors",
               activeTab === "document-view"
-                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
-                : "text-on-surface-variant hover:text-primary hover:bg-primary/5",
+                ? "bg-primary text-primary-foreground"
+                : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container",
             )}
           >
-            <FileText className="size-3 mr-2 inline-block" /> Document View
+            <FileText className="size-3.5" /> Document view
           </button>
         </div>
 
