@@ -239,8 +239,8 @@ export default function IndividualClausePage() {
           <Skeleton className="h-6 w-64 rounded-lg" />
           <Skeleton className="h-12 w-full max-w-lg rounded-2xl" />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <Skeleton className="lg:col-span-2 h-[600px] rounded-[3rem]" />
-            <Skeleton className="h-[600px] rounded-[3rem]" />
+            <Skeleton className="lg:col-span-2 h-[600px] rounded-xl" />
+            <Skeleton className="h-[600px] rounded-xl" />
           </div>
         </div>
       </main>
@@ -283,12 +283,12 @@ export default function IndividualClausePage() {
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+                <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
                   {clause.clauseName}
                 </h1>
                 <Badge
                   variant="outline"
-                  className="rounded-full font-black text-[10px] uppercase px-3 py-1 bg-surface-container text-on-surface-variant border-outline-variant"
+                  className="rounded-full text-xs font-medium uppercase px-3 py-1 bg-surface-container text-on-surface-variant border-outline-variant"
                 >
                   {clause.category}
                 </Badge>
@@ -296,7 +296,7 @@ export default function IndividualClausePage() {
                   <Badge
                     variant="outline"
                     className={cn(
-                      "rounded-full font-black text-[10px] uppercase px-3 py-1",
+                      "rounded-full text-xs font-medium uppercase px-3 py-1",
                       clause.status === "Approved"
                         ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                         : "bg-red-500/10 text-red-600 border-red-500/20",
@@ -335,7 +335,7 @@ export default function IndividualClausePage() {
               </Button>
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-8 py-7 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2 transition-all hover:scale-[1.02]"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-md flex items-center gap-2 transition-all "
                 onClick={exportClause}
               >
                 <Download className="w-5 h-5" /> EXPORT ASSET
@@ -347,11 +347,11 @@ export default function IndividualClausePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-12">
           {/* Main Content: Wording & AI Insight */}
           <div className="lg:col-span-8 space-y-8">
-            <Card className="bg-surface-container-low border border-outline-variant rounded-[3rem] overflow-hidden shadow-sm">
+            <Card className="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden shadow-sm">
               <CardHeader className="p-8 border-b border-outline-variant/30 flex flex-row items-center justify-between bg-surface-container-highest/10">
                 <div className="flex items-center gap-3">
                   <FileText className="w-5 h-5 text-primary" />
-                  <CardTitle className="text-sm font-black uppercase tracking-widest text-on-surface">
+                  <CardTitle className="text-sm font-semibold uppercase tracking-widest text-on-surface">
                     Semantic Wording
                   </CardTitle>
                 </div>
@@ -359,7 +359,7 @@ export default function IndividualClausePage() {
                   variant="ghost"
                   size="sm"
                   onClick={copyText}
-                  className="rounded-xl font-black uppercase tracking-widest text-[10px] h-10 px-4 group"
+                  className="rounded-xl text-xs font-medium uppercase tracking-wider h-10 px-4 group"
                 >
                   <Copy
                     className={cn(
@@ -381,7 +381,7 @@ export default function IndividualClausePage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-primary/5 border border-primary/20 rounded-[3rem] overflow-hidden">
+            <Card className="bg-primary/5 border border-primary/20 rounded-xl overflow-hidden">
               <CardHeader className="p-8 pb-4">
                 <div className="flex items-center gap-3">
                   <Sparkles className="w-6 h-6 text-primary" />
@@ -409,7 +409,7 @@ export default function IndividualClausePage() {
                         {clause.aiRecommendedUse.map((item, idx) => (
                           <div
                             key={idx}
-                            className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-xl text-primary font-black uppercase tracking-widest text-[10px]"
+                            className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-xl text-primary text-xs font-medium uppercase tracking-wider"
                           >
                             <CheckCircle2 className="w-3 h-3" /> {item}
                           </div>
@@ -423,24 +423,24 @@ export default function IndividualClausePage() {
 
           {/* Sidebar Metadata & History */}
           <div className="lg:col-span-4 space-y-8">
-            <Card className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-8 shadow-sm">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-8 flex items-center gap-2">
+            <Card className="bg-surface-container-low border border-outline-variant rounded-xl p-8 shadow-sm">
+              <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-8 flex items-center gap-2">
                 <BrainCircuit className="w-3 h-3 text-secondary" /> Clause
                 Meta-Data
               </h3>
               <div className="space-y-6">
                 {clause.code && (
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-violet-500">
+                    <span className="text-xs font-medium uppercase tracking-wider text-violet-500">
                       Professional Reference
                     </span>
-                    <span className="text-sm font-black text-violet-600 uppercase tracking-widest">
+                    <span className="text-sm font-semibold text-violet-600 uppercase tracking-widest">
                       {clause.code}
                     </span>
                   </div>
                 )}
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                     Heading Definition
                   </span>
                   <span className="text-sm font-bold text-on-surface uppercase tracking-tight">
@@ -448,7 +448,7 @@ export default function IndividualClausePage() {
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                     Source Archive
                   </span>
                   <span className="text-sm font-bold text-on-surface uppercase tracking-tight">
@@ -456,7 +456,7 @@ export default function IndividualClausePage() {
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                     Source Library
                   </span>
                   <span className="text-sm font-bold text-on-surface uppercase tracking-tight">
@@ -464,7 +464,7 @@ export default function IndividualClausePage() {
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                     Approval Status
                   </span>
                   <span
@@ -480,7 +480,7 @@ export default function IndividualClausePage() {
                 </div>
                 <div className="pt-4 grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                    <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                       Initialized
                     </span>
                     <span className="text-xs font-bold text-on-surface">
@@ -488,7 +488,7 @@ export default function IndividualClausePage() {
                     </span>
                   </div>
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                    <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                       Calibrated
                     </span>
                     <span className="text-xs font-bold text-on-surface">
@@ -500,13 +500,13 @@ export default function IndividualClausePage() {
 
               {clause.organizationId && (
                 <div className="mt-8 pt-8 border-t border-outline-variant/30">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-4">
+                  <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-4">
                     Verification Layer
                   </h4>
                   <div className="flex items-center gap-4 p-4 bg-surface-container rounded-2xl">
                     <UserCircle className="w-10 h-10 text-on-surface-variant" />
                     <div>
-                      <p className="text-sm font-black text-on-surface">
+                      <p className="text-sm font-semibold text-on-surface">
                         Organization Approved
                       </p>
                       <p className="text-[10px] font-bold text-on-surface-variant">
@@ -519,8 +519,8 @@ export default function IndividualClausePage() {
             </Card>
 
             {/* Keywords Section */}
-            <Card className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-8 shadow-sm">
-              <h3 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-6 flex items-center gap-2">
+            <Card className="bg-surface-container-low border border-outline-variant rounded-xl p-8 shadow-sm">
+              <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-6 flex items-center gap-2">
                 <Tag className="w-3 h-3 text-secondary" /> Semantic Keywords
               </h3>
               <div className="flex flex-wrap gap-2 mb-6">
@@ -575,9 +575,9 @@ export default function IndividualClausePage() {
               )}
             </Card>
 
-            <Card className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden">
+            <Card className="bg-surface-container-low border border-outline-variant rounded-xl shadow-sm overflow-hidden">
               <div className="p-8 border-b border-outline-variant/30 flex items-center justify-between">
-                <h3 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+                <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
                   <History className="w-3 h-3 text-secondary" /> Version Control
                 </h3>
                 <Badge className="bg-secondary/10 text-secondary border-none font-black text-[9px]">
@@ -608,13 +608,13 @@ export default function IndividualClausePage() {
                     <p className="text-xs font-medium text-on-surface-variant line-clamp-1 mb-2">
                       {v.changeSummary}
                     </p>
-                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+                    <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity text-primary">
                       VIEW SNAPSHOT <ChevronRight className="w-3 h-3" />
                     </div>
                   </div>
                 ))}
                 {versionHistory.length === 0 && (
-                  <div className="p-12 text-center text-[10px] font-black uppercase tracking-widest opacity-20">
+                  <div className="p-12 text-center text-xs font-medium uppercase tracking-wider opacity-20">
                     No revision history
                   </div>
                 )}
@@ -632,12 +632,12 @@ export default function IndividualClausePage() {
 
       {/* Copy Clause Confirmation Dialog */}
       <Dialog open={showCopyDialog} onOpenChange={setShowCopyDialog}>
-        <DialogContent className="rounded-[2rem] p-8 max-w-md border-outline-variant">
+        <DialogContent className="rounded-lg p-8 max-w-md border-outline-variant">
           <DialogHeader className="gap-2">
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-2">
               <BookCopy className="w-6 h-6 text-primary" />
             </div>
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
+            <DialogTitle className="text-xl font-semibold tracking-tight">
               Copy to Your Library
             </DialogTitle>
             <DialogDescription className="text-base font-medium leading-relaxed">

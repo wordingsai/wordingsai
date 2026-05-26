@@ -84,14 +84,14 @@ export const DashboardSection = () => {
           <div
             onClick={() => setSelectedKpi("treaties")}
             className={cn(
-              "p-8 rounded-[2.5rem] border transition-all cursor-pointer group relative overflow-hidden select-none",
+              "p-8 rounded-xl border transition-all cursor-pointer group relative overflow-hidden select-none",
               selectedKpi === "treaties"
                 ? "bg-white dark:bg-zinc-900 border-primary shadow-lg scale-[1.02] shadow-primary/5"
                 : "bg-white/80 dark:bg-zinc-900/50 border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10",
             )}
           >
             <div className="flex justify-between items-start mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-primary transition-colors">
+              <span className="text-xs font-medium uppercase tracking-wider text-slate-500 group-hover:text-primary transition-colors">
                 Treaties Audited
               </span>
               <div className="p-3 bg-primary/10 rounded-2xl">
@@ -109,14 +109,14 @@ export const DashboardSection = () => {
           <div
             onClick={() => setSelectedKpi("deviations")}
             className={cn(
-              "p-8 rounded-[2.5rem] border transition-all cursor-pointer group relative overflow-hidden select-none",
+              "p-8 rounded-xl border transition-all cursor-pointer group relative overflow-hidden select-none",
               selectedKpi === "deviations"
                 ? "bg-white dark:bg-zinc-900 border-rose-500 shadow-lg scale-[1.02] shadow-rose-500/5"
                 : "bg-white/80 dark:bg-zinc-900/50 border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10",
             )}
           >
             <div className="flex justify-between items-start mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-rose-500 transition-colors">
+              <span className="text-xs font-medium uppercase tracking-wider text-slate-500 group-hover:text-rose-500 transition-colors">
                 High Risk Exposure
               </span>
               <div className="p-3 bg-rose-500/10 rounded-2xl">
@@ -134,14 +134,14 @@ export const DashboardSection = () => {
           <div
             onClick={() => setSelectedKpi("clauses")}
             className={cn(
-              "p-8 rounded-[2.5rem] border transition-all cursor-pointer group relative overflow-hidden select-none",
+              "p-8 rounded-xl border transition-all cursor-pointer group relative overflow-hidden select-none",
               selectedKpi === "clauses"
                 ? "bg-white dark:bg-zinc-900 border-secondary shadow-lg scale-[1.02] shadow-secondary/5"
                 : "bg-white/80 dark:bg-zinc-900/50 border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10",
             )}
           >
             <div className="flex justify-between items-start mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-secondary transition-colors">
+              <span className="text-xs font-medium uppercase tracking-wider text-slate-500 group-hover:text-secondary transition-colors">
                 Approved Clauses
               </span>
               <div className="p-3 bg-secondary/10 rounded-2xl">
@@ -159,14 +159,14 @@ export const DashboardSection = () => {
           <div
             onClick={() => setSelectedKpi("compliance")}
             className={cn(
-              "p-8 rounded-[2.5rem] border transition-all cursor-pointer group relative overflow-hidden select-none",
+              "p-8 rounded-xl border transition-all cursor-pointer group relative overflow-hidden select-none",
               selectedKpi === "compliance"
                 ? "bg-white dark:bg-zinc-900 border-emerald-500 shadow-lg scale-[1.02] shadow-emerald-500/5"
                 : "bg-white/80 dark:bg-zinc-900/50 border-slate-200 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10",
             )}
           >
             <div className="flex justify-between items-start mb-6">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-emerald-500 transition-colors">
+              <span className="text-xs font-medium uppercase tracking-wider text-slate-500 group-hover:text-emerald-500 transition-colors">
                 Compliance Health
               </span>
               <div className="p-3 bg-emerald-500/10 rounded-2xl">
@@ -199,7 +199,7 @@ export const DashboardSection = () => {
               <button
                 onClick={() => setActiveTab("trending")}
                 className={cn(
-                  "px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                  "px-5 py-2.5 rounded-lg text-xs font-medium uppercase tracking-wider transition-all",
                   activeTab === "trending"
                     ? "bg-primary text-white"
                     : "text-slate-500 hover:text-slate-950 dark:hover:text-white",
@@ -210,7 +210,7 @@ export const DashboardSection = () => {
               <button
                 onClick={() => setActiveTab("portfolio")}
                 className={cn(
-                  "px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all",
+                  "px-5 py-2.5 rounded-lg text-xs font-medium uppercase tracking-wider transition-all",
                   activeTab === "portfolio"
                     ? "bg-primary text-white"
                     : "text-slate-500 hover:text-slate-950 dark:hover:text-white",
@@ -221,7 +221,7 @@ export const DashboardSection = () => {
               <button
                 onClick={() => setActiveTab("simulator")}
                 className={cn(
-                  "px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5",
+                  "px-5 py-2.5 rounded-lg text-xs font-medium uppercase tracking-wider transition-all flex items-center gap-1.5",
                   activeTab === "simulator"
                     ? "bg-primary text-white"
                     : "text-slate-500 hover:text-slate-950 dark:hover:text-white",
@@ -238,8 +238,8 @@ export const DashboardSection = () => {
             {activeTab === "trending" && (
               <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1 animate-in fade-in duration-300">
                 {/* Approved Trends */}
-                <div className="bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 lg:p-8 space-y-6">
-                  <h4 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <div className="bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-lg p-6 lg:p-8 space-y-6">
+                  <h4 className="text-sm font-semibold text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
                     <Flame className="text-emerald-500 size-5" /> Highly Aligned
                     Clauses
                   </h4>
@@ -289,8 +289,8 @@ export const DashboardSection = () => {
                 </div>
 
                 {/* Risk Deviations */}
-                <div className="bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 lg:p-8 space-y-6">
-                  <h4 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <div className="bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-lg p-6 lg:p-8 space-y-6">
+                  <h4 className="text-sm font-semibold text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
                     <AlertTriangle className="text-rose-500 size-5" /> Critical
                     Wording Deviations
                   </h4>
@@ -345,8 +345,8 @@ export const DashboardSection = () => {
             {activeTab === "portfolio" && (
               <div className="p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1 animate-in fade-in duration-300">
                 {/* Left Progress Bars */}
-                <div className="lg:col-span-7 bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 lg:p-8 space-y-6 flex flex-col justify-center">
-                  <h4 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
+                <div className="lg:col-span-7 bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-lg p-6 lg:p-8 space-y-6 flex flex-col justify-center">
+                  <h4 className="text-sm font-semibold text-slate-800 dark:text-white uppercase tracking-wider flex items-center gap-2">
                     <PieChart className="text-primary size-5" /> Treaty Segment
                     Distribution
                   </h4>
@@ -394,7 +394,7 @@ export const DashboardSection = () => {
                 </div>
 
                 {/* Right Circular Gauge */}
-                <div className="lg:col-span-5 bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-[2rem] p-6 lg:p-8 flex flex-col items-center justify-center text-center">
+                <div className="lg:col-span-5 bg-white dark:bg-zinc-900/30 border border-slate-200 dark:border-white/5 rounded-lg p-6 lg:p-8 flex flex-col items-center justify-center text-center">
                   <h4 className="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">
                     Audit Resolution Index
                   </h4>
@@ -463,7 +463,7 @@ export const DashboardSection = () => {
                     onClick={handleSimulate}
                     disabled={isSimulating}
                     className={cn(
-                      "px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 transition-all shadow-md select-none",
+                      "px-5 py-2.5 rounded-xl text-xs font-medium uppercase tracking-wider flex items-center gap-2 transition-all shadow-md select-none",
                       isSimulating
                         ? "bg-slate-200 text-slate-400 cursor-not-allowed shadow-none"
                         : "bg-primary text-white hover:bg-primary/95 hover:shadow-primary/10",

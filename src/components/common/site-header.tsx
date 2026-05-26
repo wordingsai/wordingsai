@@ -223,7 +223,7 @@ export function SiteHeader() {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[380px] p-0 rounded-[2rem] overflow-hidden border-outline-variant shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] bg-popover"
+              className="w-[380px] p-0 rounded-lg overflow-hidden border-outline-variant shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] bg-popover"
               align="end"
               sideOffset={12}
             >
@@ -233,7 +233,7 @@ export function SiteHeader() {
                     Neural Updates
                   </h3>
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-black text-on-surface uppercase tracking-tight">
+                    <p className="text-sm font-semibold text-on-surface uppercase tracking-tight">
                       System Feed
                     </p>
                     {totalNotifs > 0 && (
@@ -265,7 +265,7 @@ export function SiteHeader() {
                     <div className="size-16 bg-surface-container rounded-[1.5rem] flex items-center justify-center mx-auto mb-4 opacity-20">
                       <Bell className="w-8 h-8 text-on-surface-variant" />
                     </div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/50">
+                    <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/50">
                       No new transmissions detected.
                     </p>
                   </div>
@@ -344,7 +344,7 @@ export function SiteHeader() {
                               <div className="flex gap-2">
                                 <Button
                                   size="sm"
-                                  className="h-9 px-4 rounded-xl bg-primary text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/10"
+                                  className="h-9 px-4 rounded-xl bg-primary text-xs font-medium uppercase tracking-wider shadow-lg shadow-primary/10"
                                   onClick={() =>
                                     handleRequestAction(notif.id, "accepted")
                                   }
@@ -354,7 +354,7 @@ export function SiteHeader() {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="h-9 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest border-outline-variant hover:bg-destructive hover:text-white hover:border-destructive transition-all"
+                                  className="h-9 px-4 rounded-xl text-xs font-medium uppercase tracking-wider border-outline-variant hover:bg-destructive hover:text-white hover:border-destructive transition-all"
                                   onClick={() =>
                                     handleRequestAction(notif.id, "rejected")
                                   }
@@ -484,7 +484,7 @@ export function SiteHeader() {
                           {session.user.email}
                         </p>
                         {activeOrg?.name && (
-                          <p className="text-[9px] font-black uppercase tracking-widest text-primary truncate mt-1">
+                          <p className="text-[10px] font-medium uppercase tracking-wider text-primary truncate mt-1">
                             {activeOrg.name}
                           </p>
                         )}
@@ -500,7 +500,7 @@ export function SiteHeader() {
                     {sessions.map((s) => (
                       <DropdownMenuItem
                         key={s.session.id}
-                        className="cursor-pointer rounded-xl h-12 text-[11px] font-black uppercase tracking-widest flex items-center gap-3"
+                        className="cursor-pointer rounded-xl h-12 text-xs font-medium uppercase tracking-wider flex items-center gap-3"
                         onClick={() =>
                           handleSwitchSession(
                             s.session.token || s.session.sessionToken,
@@ -527,7 +527,7 @@ export function SiteHeader() {
                 )}
                 <DropdownMenuSeparator className="my-2 opacity-30" />
                 <DropdownMenuItem
-                  className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10 rounded-xl h-12 text-[11px] font-black uppercase tracking-widest"
+                  className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10 rounded-xl h-12 text-xs font-medium uppercase tracking-wider"
                   onClick={handleLogout}
                 >
                   <LogOut className="mr-3 h-4 w-4" />
@@ -540,7 +540,7 @@ export function SiteHeader() {
               variant="default"
               size="sm"
               onClick={() => (window.location.href = "/login")}
-              className="rounded-xl font-black uppercase tracking-widest text-[10px]"
+              className="rounded-xl text-xs font-medium uppercase tracking-wider"
             >
               Sign In
             </Button>

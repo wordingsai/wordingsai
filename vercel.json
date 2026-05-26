@@ -2,6 +2,11 @@
   "functions": {
     "src/app/api/**/*": {
       "maxDuration": 60
+    },
+    "api/extract-pdf.py": {
+      "runtime": "@vercel/python@5.0.0",
+      "maxDuration": 60,
+      "memory": 1024
     }
   },
   "regions": ["cle1"]

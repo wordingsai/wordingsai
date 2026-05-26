@@ -69,7 +69,7 @@ export default function AllUsers({ users, organizationId }: AllUsersProps) {
                   <h4 className="font-black text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors">
                     {user.name}
                   </h4>
-                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                     <Mail className="size-3" />
                     {user.email}
                   </div>
@@ -80,7 +80,7 @@ export default function AllUsers({ users, organizationId }: AllUsersProps) {
                 disabled={isLoading !== null}
                 onClick={() => handleInviteMember(user)}
                 className={cn(
-                  "rounded-2xl font-black uppercase tracking-widest text-[10px] h-12 px-6 transition-all",
+                  "rounded-2xl text-xs font-medium uppercase tracking-wider h-12 px-6 transition-all",
                   isLoading === user.id
                     ? "bg-primary/20"
                     : "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20",

@@ -35,7 +35,7 @@ export const PricingSection = () => {
                 )}
               >
                 {plan.highlight && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-white text-xs font-medium uppercase tracking-wider rounded-full">
                     Most Popular
                   </div>
                 )}

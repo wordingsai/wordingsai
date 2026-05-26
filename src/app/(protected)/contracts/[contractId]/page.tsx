@@ -96,7 +96,7 @@ function CommentBox({
       <Button
         variant="ghost"
         size="sm"
-        className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant hover:text-primary mt-6"
+        className="text-xs font-medium uppercase tracking-wider text-on-surface-variant hover:text-primary mt-6"
         onClick={() => setIsEditing(true)}
       >
         <Plus className="w-3 h-3 mr-1" /> Add Internal Note
@@ -106,9 +106,9 @@ function CommentBox({
 
   if (!isEditing) {
     return (
-      <div className="mt-8 p-6 bg-surface-container border border-outline-variant/30 rounded-[2rem] group relative text-left">
+      <div className="mt-8 p-6 bg-surface-container border border-outline-variant/30 rounded-lg group relative text-left">
         <div className="flex justify-between items-start mb-3">
-          <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+          <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
             <MessageSquare className="w-3 h-3 text-primary" /> Internal Review
             Discussion
           </h4>
@@ -130,7 +130,7 @@ function CommentBox({
 
   return (
     <div className="mt-8 space-y-4 animate-in fade-in slide-in-from-top-2 duration-300 text-left">
-      <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+      <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
         <MessageSquare className="w-3 h-3 text-primary" /> Edit Review
         Discussion
       </h4>
@@ -143,7 +143,7 @@ function CommentBox({
       <div className="flex gap-3">
         <Button
           size="sm"
-          className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[10px] rounded-xl px-6 h-10 shadow-lg shadow-primary/20"
+          className="bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider rounded-xl px-6 h-10 shadow-lg shadow-primary/20"
           onClick={() => {
             onSave(value);
             setIsEditing(false);
@@ -156,7 +156,7 @@ function CommentBox({
         <Button
           variant="outline"
           size="sm"
-          className="font-black uppercase tracking-widest text-[10px] rounded-xl px-6 h-10 border-outline-variant"
+          className="text-xs font-medium uppercase tracking-wider rounded-xl px-6 h-10 border-outline-variant"
           onClick={() => {
             setValue(initialValue);
             setIsEditing(false);
@@ -218,7 +218,7 @@ function EditableKeywords({
         onClick={() => setIsEditing(true)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant block">
+          <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant block">
             {title}
           </span>
           <Button
@@ -256,7 +256,7 @@ function EditableKeywords({
 
   return (
     <div className="space-y-3 bg-surface-container/50 p-4 rounded-xl border border-outline-variant/30 animate-in fade-in duration-300">
-      <span className="text-[10px] font-black uppercase tracking-widest text-primary block">
+      <span className="text-xs font-medium uppercase tracking-wider text-primary block">
         Editing {title}
       </span>
       <div className="flex flex-wrap gap-2 mb-3">
@@ -478,7 +478,7 @@ function FormattedEvidence({
           {evidence.similarity > 0 && (
             <div className="flex items-center gap-1.5 px-3 py-1 bg-primary/5 rounded-full border border-primary/10">
               <Sparkles className="size-3 text-primary" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-primary">
+              <span className="text-xs font-medium uppercase tracking-wider text-primary">
                 {Math.round(evidence.similarity * 100)}% Similarity
               </span>
             </div>
@@ -486,7 +486,7 @@ function FormattedEvidence({
           {onLookup && (
             <button
               onClick={() => onLookup(content)}
-              className="p-2 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all"
+              className="p-2 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 flex items-center gap-2 text-xs font-medium uppercase tracking-wider transition-all"
               title="Lookup in Document Map"
             >
               <Target className="size-3" /> Map to Document
@@ -698,7 +698,7 @@ export default function ContractAnalysisPage() {
   if (error || !contract) {
     return (
       <main className="flex-1 flex items-center justify-center bg-background p-8 min-h-[80vh]">
-        <div className="max-w-md w-full bg-surface-container border border-outline-variant/30 rounded-[2rem] p-10 text-center space-y-6">
+        <div className="max-w-md w-full bg-surface-container border border-outline-variant/30 rounded-lg p-10 text-center space-y-6">
           <div className="size-16 bg-destructive/10 rounded-2xl flex items-center justify-center mx-auto">
             <AlertTriangle className="w-8 h-8 text-destructive" />
           </div>
@@ -712,7 +712,7 @@ export default function ContractAnalysisPage() {
           </div>
           <div className="pt-4 flex flex-col gap-3">
             <Button
-              className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[10px] rounded-xl h-12 w-full"
+              className="bg-primary text-primary-foreground text-xs font-medium uppercase tracking-wider rounded-xl h-12 w-full"
               onClick={() => window.location.reload()}
             >
               Retry Connection
@@ -720,7 +720,7 @@ export default function ContractAnalysisPage() {
             <Link href="/contracts" className="block w-full">
               <Button
                 variant="outline"
-                className="font-black uppercase tracking-widest text-[10px] rounded-xl h-12 w-full border-outline-variant"
+                className="text-xs font-medium uppercase tracking-wider rounded-xl h-12 w-full border-outline-variant"
               >
                 Back to Dashboard
               </Button>
@@ -802,13 +802,13 @@ export default function ContractAnalysisPage() {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface leading-none">
+              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-on-surface leading-none">
                 {contract.contractName}
               </h1>
               <Badge
                 variant="outline"
                 className={cn(
-                  "rounded-full font-black text-[10px] uppercase px-3 py-1 shrink-0",
+                  "rounded-full text-xs font-medium uppercase px-3 py-1 shrink-0",
                   auditStatus === "completed"
                     ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                     : "bg-primary/10 text-primary border-primary/20 animate-pulse",
@@ -825,7 +825,7 @@ export default function ContractAnalysisPage() {
               <div className="flex items-center gap-2 text-on-surface-variant/60 font-bold text-[10px] uppercase tracking-widest">
                 <LayoutGrid className="size-3" /> {contract.contractType}
               </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-outline-variant/30 text-[9px] font-black uppercase tracking-widest text-on-surface-variant">
+              <div className="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-outline-variant/30 text-[10px] font-medium uppercase tracking-wider text-on-surface-variant">
                 Plan:{" "}
                 <span
                   className={cn(
@@ -843,7 +843,7 @@ export default function ContractAnalysisPage() {
             <Link href={`/contracts/${contractId}/edit`}>
               <Button
                 variant="outline"
-                className="flex-1 lg:flex-none rounded-xl border-outline-variant font-black uppercase tracking-widest text-[10px] h-12 px-6 hover:bg-secondary/10 hover:text-secondary hover:border-secondary/30 transition-all"
+                className="flex-1 lg:flex-none rounded-xl border-outline-variant text-xs font-medium uppercase tracking-wider h-12 px-6 hover:bg-secondary/10 hover:text-secondary hover:border-secondary/30 transition-all"
               >
                 <Settings2 className="size-4 mr-2" /> Re-calibrate
               </Button>
@@ -851,7 +851,7 @@ export default function ContractAnalysisPage() {
             {hasAnalysis && (
               <Button
                 variant="outline"
-                className="flex-1 lg:flex-none rounded-xl border-outline-variant font-black uppercase tracking-widest text-[10px] h-12 px-6"
+                className="flex-1 lg:flex-none rounded-xl border-outline-variant text-xs font-medium uppercase tracking-wider h-12 px-6"
                 onClick={handleExport}
               >
                 <Download className="size-4 mr-2" /> Export
@@ -864,7 +864,7 @@ export default function ContractAnalysisPage() {
                 runAnalysis(true);
               }}
               disabled={analysisLoading || isProcessing}
-              className="flex-1 lg:flex-none bg-primary text-primary-foreground font-black px-8 h-12 rounded-xl shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] text-[10px]"
+              className="flex-1 lg:flex-none bg-primary text-primary-foreground font-black px-8 h-12 rounded-xl shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transition-all  text-[10px]"
             >
               {analysisLoading || isProcessing ? (
                 <Loader2 className="size-4 animate-spin" />
@@ -885,14 +885,14 @@ export default function ContractAnalysisPage() {
 
       {/* Progress & Real-time State */}
       {isProcessing && (
-        <div className="mb-10 bg-surface-container-low border border-primary/20 rounded-[2rem] p-6 lg:p-8 shadow-xl animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="mb-10 bg-surface-container-low border border-primary/20 rounded-lg p-6 lg:p-8 shadow-xl animate-in fade-in slide-in-from-top-4 duration-500">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-5 w-full md:w-auto">
               <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 shadow-inner">
                 <Loader2 className="size-7 text-primary animate-spin" />
               </div>
               <div>
-                <h3 className="text-sm font-black text-on-surface uppercase tracking-tight flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-on-surface uppercase tracking-tight flex items-center gap-2">
                   {analysisStatusLabel}
                   <Sparkles className="size-3 text-primary animate-pulse" />
                 </h3>
@@ -911,7 +911,7 @@ export default function ContractAnalysisPage() {
               </div>
             </div>
             <div className="w-full md:w-80 space-y-3">
-              <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+              <div className="flex justify-between items-center text-xs font-medium uppercase tracking-wider">
                 <span className="text-on-surface-variant">Progress</span>
                 <span className="text-primary">
                   {progress || 0}%
@@ -1035,7 +1035,7 @@ export default function ContractAnalysisPage() {
               >
                 {/* Summary Widget */}
                 {contract.analysis?.summary && (
-                  <div className="w-full bg-background border border-outline-variant/50 rounded-[2.5rem] p-8 lg:p-10 shadow-sm relative overflow-hidden">
+                  <div className="w-full bg-background border border-outline-variant/50 rounded-xl p-8 lg:p-10 shadow-sm relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-8 opacity-[0.06] pointer-events-none">
                       <BookOpen className="size-32 rotate-12 text-primary" />
                     </div>
@@ -1063,7 +1063,7 @@ export default function ContractAnalysisPage() {
                               (highlight: string, i: number) => (
                                 <div
                                   key={i}
-                                  className="flex items-center gap-2 px-4 py-2 bg-surface-container-low border border-outline-variant/30 rounded-full text-[10px] font-black uppercase tracking-widest text-on-surface"
+                                  className="flex items-center gap-2 px-4 py-2 bg-surface-container-low border border-outline-variant/30 rounded-full text-xs font-medium uppercase tracking-wider text-on-surface"
                                 >
                                   <Sparkles className="size-3 text-primary" />{" "}
                                   {highlight}
@@ -1090,7 +1090,7 @@ export default function ContractAnalysisPage() {
                               <div className="size-6 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
                                 <Info className="size-3.5" />
                               </div>
-                              <span className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/70">
+                              <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant/70">
                                 {key}
                               </span>
                             </div>
@@ -1112,7 +1112,7 @@ export default function ContractAnalysisPage() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="w-full xl:w-[min(100%,320px)] xl:shrink-0 max-h-[280px] xl:max-h-[min(70vh,640px)] bg-surface-container-low border border-outline-variant/30 rounded-2xl xl:rounded-[2rem] overflow-y-auto"
+                        className="w-full xl:w-[min(100%,320px)] xl:shrink-0 max-h-[280px] xl:max-h-[min(70vh,640px)] bg-surface-container-low border border-outline-variant/30 rounded-2xl xl:rounded-lg overflow-y-auto"
                       >
                         <div className="p-8 space-y-10">
                           {/* Global Rules Toggle */}
@@ -1211,7 +1211,7 @@ export default function ContractAnalysisPage() {
                           <ShieldCheck className="size-6 sm:size-7 text-emerald-500 shrink-0" />
                           Foundational Checklist
                           {checklistEvents.length > 0 && (
-                            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/70">
+                            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/70">
                               {checklistEvents.length}
                               {expectedChecklistHeadings != null
                                 ? ` / ${expectedChecklistHeadings} map headings`
@@ -1222,7 +1222,7 @@ export default function ContractAnalysisPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-[9px] font-black uppercase tracking-widest"
+                          className="text-[10px] font-medium uppercase tracking-wider"
                           onClick={() => setIsPanel1Open(!isPanel1Open)}
                         >
                           {isPanel1Open ? "Hide brief" : "Show brief"}
@@ -1255,7 +1255,7 @@ export default function ContractAnalysisPage() {
                           damping: 25,
                           stiffness: 200,
                         }}
-                        className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border-2 border-primary/20 rounded-2xl xl:rounded-[2.5rem] overflow-hidden flex flex-col shadow-xl z-20"
+                        className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border-2 border-primary/20 rounded-2xl xl:rounded-xl overflow-hidden flex flex-col shadow-xl z-20"
                       >
                         <div className="bg-primary/5 p-8 border-b border-outline-variant/50 flex items-center justify-between shrink-0">
                           <div className="flex items-center gap-4">
@@ -1371,7 +1371,7 @@ export default function ContractAnalysisPage() {
                           </div>
 
                           {/* Cognitive Reasoning */}
-                          <div className="bg-primary/10 p-10 rounded-[2.5rem] border border-primary/20 space-y-6 shadow-sm">
+                          <div className="bg-primary/10 p-10 rounded-xl border border-primary/20 space-y-6 shadow-sm">
                             <div className="flex items-center gap-4">
                               <div className="size-10 rounded-xl bg-primary/20 flex items-center justify-center">
                                 <Zap className="size-6 text-primary animate-pulse" />
@@ -1392,10 +1392,10 @@ export default function ContractAnalysisPage() {
                               undefined && (
                               <div className="pt-6 space-y-3">
                                 <div className="flex justify-between items-center px-1">
-                                  <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                                     Vector Matching Precision
                                   </span>
-                                  <span className="text-sm font-black text-primary">
+                                  <span className="text-sm font-semibold text-primary">
                                     {Math.round(
                                       selectedEvent.metadata.confidence * 100,
                                     )}
@@ -1428,7 +1428,7 @@ export default function ContractAnalysisPage() {
                 className="space-y-8"
               >
                 {!hasRuleResults ? (
-                  <div className="bg-surface-container-low border border-outline-variant rounded-2xl md:rounded-[3rem] p-10 md:p-20 text-center flex flex-col items-center">
+                  <div className="bg-surface-container-low border border-outline-variant rounded-2xl md:rounded-xl p-10 md:p-20 text-center flex flex-col items-center">
                     <div className="size-20 md:size-24 bg-primary/10 rounded-full flex items-center justify-center mb-6 md:mb-8">
                       <Zap className="size-10 md:size-12 text-primary" />
                     </div>
@@ -1500,7 +1500,7 @@ export default function ContractAnalysisPage() {
                           size="sm"
                           onClick={() => runRulesEvaluation()}
                           disabled={isProcessing}
-                          className="text-[10px] font-black uppercase tracking-widest text-primary hover:bg-primary/5 flex items-center gap-2"
+                          className="text-xs font-medium uppercase tracking-wider text-primary hover:bg-primary/5 flex items-center gap-2"
                         >
                           <Sparkles className="size-3" /> Re-evaluate rules
                         </Button>
@@ -1540,7 +1540,7 @@ export default function ContractAnalysisPage() {
                         .map((result) => (
                           <div
                             key={result.id}
-                            className="bg-surface-container-low border border-outline-variant/50 rounded-[2rem] overflow-hidden hover:border-primary/40 transition-all"
+                            className="bg-surface-container-low border border-outline-variant/50 rounded-lg overflow-hidden hover:border-primary/40 transition-all"
                           >
                             <Accordion {...({ type: "single" } as any)}>
                               <AccordionItem
@@ -1567,7 +1567,7 @@ export default function ContractAnalysisPage() {
                                     </div>
                                     <div className="min-w-0">
                                       <div className="flex items-center gap-3 mb-1">
-                                        <span className="font-black text-xl text-on-surface uppercase tracking-tight">
+                                        <span className="text-sm font-medium text-on-surface">
                                           {result.rule.name}
                                         </span>
                                         <Badge
@@ -1593,7 +1593,7 @@ export default function ContractAnalysisPage() {
                                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                                     <div className="space-y-6">
                                       <div className="text-left">
-                                        <h4 className="text-[10px] font-black uppercase tracking-widest text-primary mb-3">
+                                        <h4 className="text-xs font-medium uppercase tracking-wider text-primary mb-3">
                                           Assessment Reasoning
                                         </h4>
                                         <SimpleMarkdown
@@ -1608,7 +1608,7 @@ export default function ContractAnalysisPage() {
                                       />
                                     </div>
                                     <div className="space-y-6 text-left">
-                                      <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-3">
+                                      <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-3">
                                         Evidence Source
                                       </h4>
                                       <div className="space-y-4">
@@ -1652,8 +1652,8 @@ export default function ContractAnalysisPage() {
                 className="space-y-8"
               >
                 {!isPlus ? (
-                  <div className="bg-primary/5 border-2 border-dashed border-primary/20 rounded-[3rem] p-24 text-center">
-                    <div className="size-20 bg-primary rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-primary/20">
+                  <div className="bg-primary/5 border-2 border-dashed border-primary/20 rounded-xl p-24 text-center">
+                    <div className="size-20 bg-primary rounded-lg flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-primary/20">
                       <Lock className="size-10 text-white" />
                     </div>
                     <h2 className="text-3xl font-black text-on-surface uppercase tracking-tight mb-4">
@@ -1673,7 +1673,7 @@ export default function ContractAnalysisPage() {
                     </Link>
                   </div>
                 ) : !hasAnalysis && !isProcessing ? (
-                  <div className="bg-surface-container-low border border-outline-variant rounded-[3rem] p-20 text-center flex flex-col items-center animate-in fade-in zoom-in duration-500">
+                  <div className="bg-surface-container-low border border-outline-variant rounded-xl p-20 text-center flex flex-col items-center animate-in fade-in zoom-in duration-500">
                     <div className="size-24 bg-secondary/10 rounded-full flex items-center justify-center mb-8 text-secondary">
                       <BrainCircuit className="size-12" />
                     </div>
@@ -1711,7 +1711,7 @@ export default function ContractAnalysisPage() {
                         {isProcessing && (
                           <div className="flex items-center gap-2 px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-lg">
                             <Loader2 className="size-3 text-secondary animate-spin" />
-                            <span className="text-[9px] font-black uppercase tracking-widest text-secondary">
+                            <span className="text-[10px] font-medium uppercase tracking-wider text-secondary">
                               Evaluating Deep Rules...
                             </span>
                           </div>
@@ -1723,7 +1723,7 @@ export default function ContractAnalysisPage() {
                     </div>
 
                     {!hasAnalysis && isProcessing && (
-                      <div className="bg-surface-container-low border border-dashed border-outline-variant/30 rounded-[3rem] p-32 flex flex-col items-center justify-center gap-6 animate-pulse">
+                      <div className="bg-surface-container-low border border-dashed border-outline-variant/30 rounded-xl p-32 flex flex-col items-center justify-center gap-6 animate-pulse">
                         <Sparkles className="size-12 text-secondary/40" />
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-on-surface-variant/40">
                           Synthesizing Neural Insights...
@@ -1735,13 +1735,13 @@ export default function ContractAnalysisPage() {
                     {contract.analysis?.plus && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                         {/* Coverage Card */}
-                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-[2.5rem] p-8 shadow-sm">
+                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-xl p-8 shadow-sm">
                           <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center gap-3">
                               <div className="size-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
                                 <Target className="size-5" />
                               </div>
-                              <h3 className="text-sm font-black uppercase tracking-widest text-on-surface">
+                              <h3 className="text-sm font-semibold uppercase tracking-widest text-on-surface">
                                 Clause Coverage
                               </h3>
                             </div>
@@ -1755,7 +1755,7 @@ export default function ContractAnalysisPage() {
                           </div>
                           <div className="space-y-4">
                             <div>
-                              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-2">
+                              <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60 mb-2">
                                 Missing Clauses
                               </p>
                               <div className="flex flex-wrap gap-2">
@@ -1773,7 +1773,7 @@ export default function ContractAnalysisPage() {
                               </div>
                             </div>
                             <div>
-                              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-2">
+                              <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60 mb-2">
                                 Unusual Provisions
                               </p>
                               <div className="flex flex-wrap gap-2">
@@ -1794,12 +1794,12 @@ export default function ContractAnalysisPage() {
                         </div>
 
                         {/* Risk Card */}
-                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-[2.5rem] p-8 shadow-sm">
+                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-xl p-8 shadow-sm">
                           <div className="flex items-center gap-3 mb-6">
                             <div className="size-10 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500">
                               <Shield className="size-5" />
                             </div>
-                            <h3 className="text-sm font-black uppercase tracking-widest text-on-surface">
+                            <h3 className="text-sm font-semibold uppercase tracking-widest text-on-surface">
                               Risk Drivers
                             </h3>
                           </div>
@@ -1839,7 +1839,7 @@ export default function ContractAnalysisPage() {
                                 ),
                               )
                             ) : (
-                              <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40 text-center py-4">
+                              <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/40 text-center py-4">
                                 No risk drivers identified.
                               </p>
                             )}
@@ -1847,12 +1847,12 @@ export default function ContractAnalysisPage() {
                         </div>
 
                         {/* Obligations Card */}
-                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-[2.5rem] p-8 shadow-sm">
+                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-xl p-8 shadow-sm">
                           <div className="flex items-center gap-3 mb-6">
                             <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                               <ListTodo className="size-5" />
                             </div>
-                            <h3 className="text-sm font-black uppercase tracking-widest text-on-surface">
+                            <h3 className="text-sm font-semibold uppercase tracking-widest text-on-surface">
                               Key Obligations
                             </h3>
                           </div>
@@ -1889,12 +1889,12 @@ export default function ContractAnalysisPage() {
                         </div>
 
                         {/* Timeline Card */}
-                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-[2.5rem] p-8 shadow-sm">
+                        <div className="bg-surface-container-low border border-outline-variant/30 rounded-xl p-8 shadow-sm">
                           <div className="flex items-center gap-3 mb-6">
                             <div className="size-10 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
                               <Calendar className="size-5" />
                             </div>
-                            <h3 className="text-sm font-black uppercase tracking-widest text-on-surface">
+                            <h3 className="text-sm font-semibold uppercase tracking-widest text-on-surface">
                               Event Timeline
                             </h3>
                           </div>
@@ -1939,7 +1939,7 @@ export default function ContractAnalysisPage() {
                         .map((result) => (
                           <div
                             key={result.id}
-                            className="bg-surface-container-low border border-secondary/20 rounded-[3rem] p-10 shadow-sm relative overflow-hidden group"
+                            className="bg-surface-container-low border border-secondary/20 rounded-xl p-10 shadow-sm relative overflow-hidden group"
                           >
                             <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700" />
                             <div className="flex flex-col lg:flex-row gap-12 relative z-10 text-left">
@@ -1955,7 +1955,7 @@ export default function ContractAnalysisPage() {
                                 </div>
 
                                 <div className="space-y-4">
-                                  <h4 className="text-[10px] font-black uppercase tracking-widest text-secondary">
+                                  <h4 className="text-xs font-medium uppercase tracking-wider text-secondary">
                                     Expert Reasoning
                                   </h4>
                                   <p className="text-sm font-medium leading-relaxed text-on-surface-variant italic">
@@ -1988,7 +1988,7 @@ export default function ContractAnalysisPage() {
 
                               <div className="lg:w-1/2 space-y-8">
                                 <div className="space-y-4">
-                                  <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center justify-between">
+                                  <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center justify-between">
                                     <span>Wording Comparison</span>
                                     <Badge
                                       variant="outline"
@@ -2052,7 +2052,7 @@ export default function ContractAnalysisPage() {
                     </h3>
                     <div className="flex items-center gap-2">
                       <div className="size-2 bg-emerald-500 rounded-full animate-pulse" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                      <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                         Verified Mapping
                       </span>
                     </div>

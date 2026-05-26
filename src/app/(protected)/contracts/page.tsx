@@ -304,7 +304,7 @@ export default function ContractsPage() {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
               {viewMode === "active"
                 ? "Contract Portfolio"
                 : viewMode === "archive"
@@ -327,7 +327,7 @@ export default function ContractsPage() {
                 size="sm"
                 onClick={() => setViewMode("active")}
                 className={cn(
-                  "h-10 px-6 rounded-xl font-black uppercase tracking-widest text-[10px]",
+                  "h-10 px-6 rounded-xl text-xs font-medium uppercase tracking-wider",
                   viewMode === "active" ? "shadow-lg shadow-primary/20" : "",
                 )}
               >
@@ -338,7 +338,7 @@ export default function ContractsPage() {
                 size="sm"
                 onClick={() => setViewMode("archive")}
                 className={cn(
-                  "h-10 px-6 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2",
+                  "h-10 px-6 rounded-xl text-xs font-medium uppercase tracking-wider flex items-center gap-2",
                   viewMode === "archive"
                     ? "bg-amber-500 text-white shadow-lg shadow-amber-500/20"
                     : "",
@@ -352,7 +352,7 @@ export default function ContractsPage() {
                 size="sm"
                 onClick={() => setViewMode("bin")}
                 className={cn(
-                  "h-10 px-6 rounded-xl font-black uppercase tracking-widest text-[10px] flex items-center gap-2",
+                  "h-10 px-6 rounded-xl text-xs font-medium uppercase tracking-wider flex items-center gap-2",
                   viewMode === "bin"
                     ? "bg-destructive text-destructive-foreground shadow-lg shadow-destructive/20"
                     : "",
@@ -367,7 +367,7 @@ export default function ContractsPage() {
               <Link href="/contracts/upload" className="w-full lg:w-auto">
                 <Button
                   size="lg"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black px-8 py-7 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-md flex items-center justify-center gap-2 transition-all "
                 >
                   <Plus className="w-5 h-5" />
                   ADD NEW WORDING
@@ -396,7 +396,7 @@ export default function ContractsPage() {
               value={typeFilter}
               onValueChange={(v) => setTypeFilter(v as string)}
             >
-              <SelectTrigger className="flex-1 lg:w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[10px]">
+              <SelectTrigger className="flex-1 lg:w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider">
                 <div className="flex items-center gap-2">
                   <LayoutGrid className="w-4 h-4 text-primary" />
                   <SelectValue placeholder="Type" />
@@ -416,7 +416,7 @@ export default function ContractsPage() {
               value={brokerFilter}
               onValueChange={(v) => setBrokerFilter(v as string)}
             >
-              <SelectTrigger className="flex-1 lg:w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[10px]">
+              <SelectTrigger className="flex-1 lg:w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider">
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-primary" />
                   <SelectValue placeholder="Broker" />
@@ -437,7 +437,7 @@ export default function ContractsPage() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "flex-1 lg:w-[200px] h-14 bg-surface-container-low border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[10px] justify-start gap-2",
+                    "flex-1 lg:w-[200px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider justify-start gap-2",
                     !dateFrom && !dateTo && "text-on-surface-variant",
                   )}
                 >
@@ -461,7 +461,7 @@ export default function ContractsPage() {
                 align="end"
               >
                 <div className="p-4 bg-surface-container-highest/10 border-b border-outline-variant/30 flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-widest">
+                  <span className="text-xs font-medium uppercase tracking-wider">
                     Select Range
                   </span>
                   {(dateFrom || dateTo) && (
@@ -480,7 +480,7 @@ export default function ContractsPage() {
                 </div>
                 <div className="flex flex-col sm:flex-row">
                   <div className="p-2">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-2 px-2">
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant mb-2 px-2">
                       From
                     </p>
                     <Calendar
@@ -490,7 +490,7 @@ export default function ContractsPage() {
                     />
                   </div>
                   <div className="p-2 border-l border-outline-variant/30">
-                    <p className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant mb-2 px-2">
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant mb-2 px-2">
                       To
                     </p>
                     <Calendar
@@ -528,28 +528,28 @@ export default function ContractsPage() {
       </div>
 
       {/* Content Area */}
-      <div className="bg-surface-container-low border border-outline-variant rounded-[2rem] lg:rounded-[3rem] overflow-hidden shadow-sm">
+      <div className="bg-surface-container-low border border-outline-variant rounded-lg lg:rounded-xl overflow-hidden shadow-sm">
         {/* Header (Desktop) */}
         <div className="hidden lg:grid grid-cols-[2.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_1fr] gap-4 px-10 py-7 bg-surface-container-highest/30 border-b border-outline-variant/50">
-          <div className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             Reference
           </div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             Reinsured
           </div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-center">
+          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center">
             Type
           </div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             From
           </div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
             Execution
           </div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-center">
+          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center">
             Status
           </div>
-          <div className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-right">
+          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant text-right">
             Actions
           </div>
         </div>
@@ -633,10 +633,10 @@ export default function ContractsPage() {
                             <FileText className="w-6 h-6 text-on-surface-variant group-hover:text-primary transition-colors" />
                           </div>
                           <div className="flex flex-col min-w-0">
-                            <span className="font-black text-xl text-on-surface uppercase tracking-tight group-hover:text-primary transition-colors truncate">
+                            <span className="text-sm font-medium text-on-surface group-hover:text-primary transition-colors truncate">
                               {contract.contractName}
                             </span>
-                            <span className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mt-1">
+                            <span className="text-xs font-medium text-on-surface-variant uppercase tracking-wider mt-1">
                               ID: PL-{contract.id.slice(0, 8).toUpperCase()}
                             </span>
                           </div>
@@ -649,7 +649,7 @@ export default function ContractsPage() {
                         <div className="flex justify-center">
                           <Badge
                             variant="outline"
-                            className="font-black tracking-widest text-[10px] uppercase bg-surface-container p-2.5 border-outline-variant text-on-surface-variant rounded-full whitespace-nowrap"
+                            className="text-xs font-medium uppercase tracking-wider bg-surface-container p-2.5 border-outline-variant text-on-surface-variant rounded-full whitespace-nowrap"
                           >
                             {contract.contractType}
                           </Badge>
@@ -678,7 +678,7 @@ export default function ContractsPage() {
                           <Badge
                             variant="outline"
                             className={cn(
-                              "rounded-full font-black text-[10px] uppercase tracking-tighter p-2.5 whitespace-nowrap",
+                              "rounded-full text-xs font-medium uppercase tracking-tighter p-2.5 whitespace-nowrap",
                               getStatusStyle(contract.auditStatus || "pending"),
                             )}
                           >
@@ -790,10 +790,10 @@ export default function ContractsPage() {
                               <FileText className="w-5 h-5 text-primary" />
                             </div>
                             <div className="flex flex-col min-w-0">
-                              <span className="font-black text-lg text-on-surface uppercase tracking-tight truncate">
+                              <span className="text-sm font-medium text-on-surface truncate">
                                 {contract.contractName}
                               </span>
-                              <span className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">
+                              <span className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">
                                 {contract.reinsured}
                               </span>
                             </div>
@@ -811,7 +811,7 @@ export default function ContractsPage() {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div className="bg-surface-container px-3 py-2 rounded-xl">
-                            <span className="text-[8px] font-black text-on-surface-variant uppercase tracking-widest block mb-1">
+                            <span className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider block mb-1">
                               Type
                             </span>
                             <span className="text-[10px] font-bold text-on-surface uppercase truncate block">
@@ -819,7 +819,7 @@ export default function ContractsPage() {
                             </span>
                           </div>
                           <div className="bg-surface-container px-3 py-2 rounded-xl">
-                            <span className="text-[8px] font-black text-on-surface-variant uppercase tracking-widest block mb-1">
+                            <span className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider block mb-1">
                               Execution
                             </span>
                             <span className="text-[10px] font-bold text-on-surface uppercase block">
@@ -910,7 +910,7 @@ export default function ContractsPage() {
 
         {/* Pagination Footer */}
         <div className="p-6 lg:p-10 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface-container-highest/20">
-          <div className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest text-on-surface-variant text-center sm:text-left">
+          <div className="text-[10px] lg:text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center sm:text-left">
             Capacity: <span className="text-on-surface">{filtered.length}</span>{" "}
             {viewMode === "active"
               ? "Active Wordings"
@@ -931,7 +931,7 @@ export default function ContractsPage() {
                     key={i}
                     variant={page === i + 1 ? "default" : "outline"}
                     className={cn(
-                      "h-10 w-10 rounded-xl font-black text-sm",
+                      "h-10 w-10 rounded-xl font-semibold text-sm",
                       page === i + 1
                         ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                         : "bg-transparent border-outline-variant hover:bg-background",
@@ -955,9 +955,9 @@ export default function ContractsPage() {
         open={!!deleteId}
         onOpenChange={(open) => !open && setDeleteId(null)}
       >
-        <AlertDialogContent className="rounded-[2.5rem] p-10 max-w-[90vw] md:max-w-lg">
+        <AlertDialogContent className="rounded-xl p-10 max-w-[90vw] md:max-w-lg">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-2xl lg:text-3xl font-black uppercase tracking-tighter">
+            <AlertDialogTitle className="text-xl lg:text-2xl font-semibold tracking-tight">
               {viewMode === "active" || viewMode === "archive"
                 ? "Move to Bin"
                 : "Confirm Permanent Deletion"}
@@ -969,12 +969,12 @@ export default function ContractsPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="mt-8 lg:mt-10 gap-3">
-            <AlertDialogCancel className="h-12 lg:h-14 px-6 rounded-2xl font-black uppercase tracking-widest text-[11px] border-outline-variant">
+            <AlertDialogCancel className="rounded-md border-outline-variant">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteId && handleDelete(deleteId)}
-              className="h-12 lg:h-14 px-6 rounded-2xl font-black uppercase tracking-widest text-[11px] bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20"
+              className="rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-xl shadow-destructive/20"
             >
               {isDeleting
                 ? "Deleting..."

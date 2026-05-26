@@ -1,36 +1,23 @@
 "use client";
 
-import { createClient } from "@supabase/supabase-js";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { format, parse, isValid } from "date-fns";
 import {
   CalendarIcon,
   Upload,
-  ShieldCheck,
   FileText,
   Users,
   Building2,
   LayoutGrid,
   Zap,
-  ArrowRight,
   CheckCircle2,
   Loader2,
-  X,
-  FileSearch,
-  ChevronRight,
   ArrowLeft,
   Settings2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
@@ -41,7 +28,6 @@ import { cn } from "@/lib/utils";
 import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { PDFDocument } from "pdf-lib";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -54,7 +40,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export default function UploadPage() {
   const router = useRouter();
-  const [step, setStep] = useState(1); // 1: Upload, 2: Review Metadata
+  const [step, setStep] = useState(1);
   const [files, setFiles] = useState<File[]>([]);
   const [isExtracting, setIsExtracting] = useState(false);
   const [workspaceType, setWorkspaceType] = useState<string>("reinsurance");
@@ -68,7 +54,6 @@ export default function UploadPage() {
       .catch((err) => console.error("Failed to fetch active workspace:", err));
   }, []);
 
-  // Metadata fields
   const [contractName, setContractName] = useState("");
   const [reinsured, setReinsured] = useState("");
   const [broker, setBroker] = useState("");
@@ -76,7 +61,6 @@ export default function UploadPage() {
   const [periodFrom, setPeriodFrom] = useState<Date>();
   const [periodTo, setPeriodTo] = useState<Date>();
 
-  // Input fields for date (Task 1)
   const [periodFromInput, setPeriodFromInput] = useState("");
   const [periodToInput, setPeriodToInput] = useState("");
 
@@ -86,7 +70,6 @@ export default function UploadPage() {
     new Set(),
   );
 
-  // Task 3: Configuration for visible fields
   const [visibleFields, setVisibleFields] = useState<Set<string>>(
     new Set(["name", "reinsured", "broker", "type", "periodFrom", "periodTo"]),
   );
@@ -118,7 +101,6 @@ export default function UploadPage() {
     setIsExtracting(true);
     setStep(2);
     try {
-      // 1. Calculate Hash
       const arrayBuffer = await file.arrayBuffer();
       const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -129,7 +111,6 @@ export default function UploadPage() {
       setUploadedFileHash(fileHash);
       setUploadedFileSize(file.size);
 
-      // 2. Get Upload URL
       const getUrlRes = await fetch("/api/contracts/get-upload-url", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -150,7 +131,6 @@ export default function UploadPage() {
         return;
       }
 
-      // 3. Upload to Supabase
       const uploadRes = await fetch(signedUrl, {
         method: "PUT",
         body: file,
@@ -162,7 +142,6 @@ export default function UploadPage() {
       setUploadedUrl(publicUrl);
       setUploadedFilePath(filePath);
 
-      // 4. Call Metadata API with URL (Proxy to Python)
       const res = await fetch("/api/contracts/extract-metadata", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -174,7 +153,6 @@ export default function UploadPage() {
       const metadata = await res.json();
       console.log("[Extraction] Received Metadata:", metadata);
 
-      // Robust mapping for fields
       if (metadata.contractName && metadata.contractName !== "null") {
         setContractName(metadata.contractName);
       }
@@ -207,7 +185,7 @@ export default function UploadPage() {
         }
       }
 
-      toast.success("Intelligence successfully extracted from document brief!");
+      toast.success("Metadata extracted from document");
     } catch (error) {
       console.error(error);
       toast.error("AI failed to extract metadata. Please fill manually.");
@@ -241,7 +219,7 @@ export default function UploadPage() {
       !periodTo ||
       !files[0]
     ) {
-      toast.error("All mandatory fields are required!");
+      toast.error("All mandatory fields are required.");
       return;
     }
 
@@ -255,7 +233,6 @@ export default function UploadPage() {
       let fileHash = uploadedFileHash;
 
       if (!fileURL) {
-        // Fallback upload if handleExtraction skipped or failed upload
         const arrayBuffer = await file.arrayBuffer();
         const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -279,9 +256,7 @@ export default function UploadPage() {
           await getUrlRes.json();
 
         if (duplicateContractId) {
-          toast.success(
-            "Document previously analyzed! Loading existing intelligence...",
-          );
+          toast.success("Document previously analyzed. Loading existing record.");
           router.push(`/contracts/${duplicateContractId}`);
           return;
         }
@@ -306,7 +281,6 @@ export default function UploadPage() {
         });
         fileURL = publicUrl;
       } else {
-        // If already uploaded during extraction, we just set progress to 100
         setUploadProgress(100);
       }
 
@@ -331,7 +305,7 @@ export default function UploadPage() {
       if (!saveRes.ok) throw new Error("Failed to save contract metadata");
       const saveResData = await saveRes.json();
 
-      toast.success("Digital intake complete!");
+      toast.success("Upload complete");
       router.push(`/contracts/${saveResData.id}`);
     } catch (err: any) {
       toast.error(err?.message || "Error uploading contract");
@@ -341,101 +315,98 @@ export default function UploadPage() {
   };
 
   return (
-    <main className="flex-1 p-4 md:p-6 lg:p-10 bg-background transition-colors duration-300">
-      <div className="mb-10">
-        <Breadcrumb className="mb-6">
+    <main className="flex-1 p-6 lg:p-8 bg-background transition-colors duration-300">
+      <div className="mb-6 max-w-4xl">
+        <Breadcrumb className="mb-4">
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink
                 href="/contracts"
-                className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant"
+                className="text-xs text-on-surface-variant"
               >
-                Portfolio Archive
+                Portfolio
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-[10px] font-black uppercase tracking-widest text-on-surface">
-                Digital Intake
+              <BreadcrumbPage className="text-xs text-on-surface">
+                Upload
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
-        <h1 className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-on-surface">
-          {step === 1 ? "Upload Wording" : "Review Intelligence"}
+        <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
+          {step === 1 ? "Upload wording" : "Review extracted metadata"}
         </h1>
-        <p className="text-on-surface-variant text-base md:text-lg font-medium max-w-2xl mt-2">
+        <p className="text-sm text-on-surface-variant mt-1.5 max-w-2xl">
           {step === 1
-            ? "Step 1: Upload the document to initiate neural extraction."
-            : "Step 2: Verify the extracted metadata before initializing full vetting."}
+            ? "Step 1 · Upload the document to begin extraction."
+            : "Step 2 · Verify the extracted metadata before starting analysis."}
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="w-full max-w-4xl">
         {step === 1 ? (
           <div
             {...getRootProps()}
             className={cn(
-              "relative group cursor-pointer p-20 border-2 border-dashed rounded-[3rem] transition-all duration-500",
+              "relative group cursor-pointer p-14 border-2 border-dashed rounded-xl transition-all duration-300",
               isDragActive
-                ? "bg-primary/5 border-primary shadow-2xl scale-[1.02]"
+                ? "bg-primary/5 border-primary"
                 : "bg-surface-container-low border-outline-variant hover:border-primary/50 hover:bg-surface-container",
             )}
           >
             <input {...getInputProps()} />
-            <div className="flex flex-col items-center text-center gap-6">
-              <div className="size-24 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                <Upload className="size-10 text-primary" />
+            <div className="flex flex-col items-center text-center gap-4">
+              <div className="size-14 bg-primary/10 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                <Upload className="size-6 text-primary" />
               </div>
               <div>
-                <h3 className="text-2xl font-black uppercase tracking-tight text-on-surface">
-                  Drop Document Here
+                <h3 className="text-base font-semibold text-on-surface">
+                  Drop document here
                 </h3>
-                <p className="text-on-surface-variant font-medium mt-2">
-                  PDF or DOCX (Max 50MB)
+                <p className="text-sm text-on-surface-variant mt-1">
+                  PDF or DOCX, up to 50 MB
                 </p>
               </div>
-              <Button
-                size="lg"
-                className="h-14 px-10 rounded-2xl font-black uppercase tracking-widest text-xs"
-              >
-                Select File
-              </Button>
+              <Button size="default">Select file</Button>
             </div>
           </div>
         ) : (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex items-center justify-between">
               <Button
                 variant="ghost"
-                className="rounded-xl gap-2 font-black uppercase tracking-widest text-[10px]"
+                size="sm"
+                className="gap-2"
                 onClick={() => setStep(1)}
               >
-                <ArrowLeft className="size-4" /> Back to Upload
+                <ArrowLeft className="size-4" /> Back to upload
               </Button>
               <Button
                 variant="outline"
-                className="rounded-xl gap-2 font-black uppercase tracking-widest text-[10px]"
+                size="sm"
+                className="gap-2"
                 onClick={() => setShowConfig(!showConfig)}
               >
-                <Settings2 className="size-4" /> Configure Fields
+                <Settings2 className="size-4" /> Configure fields
               </Button>
             </div>
 
             {showConfig && (
-              <div className="bg-surface-container p-6 rounded-[2rem] border border-outline-variant space-y-4">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
-                  Configure Metadata View
+              <div className="bg-surface-container p-5 rounded-xl border border-outline-variant space-y-3">
+                <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+                  Configure metadata view
                 </h4>
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-x-5 gap-y-2.5">
                   {[
                     {
                       id: "name",
                       label:
                         workspaceType === "property"
-                          ? "Policy Number"
-                          : "Unique Market Reference",
+                          ? "Policy number"
+                          : "Unique market reference",
                     },
                     {
                       id: "reinsured",
@@ -448,10 +419,10 @@ export default function UploadPage() {
                     {
                       id: "type",
                       label:
-                        workspaceType === "property" ? "Type" : "Contract Type",
+                        workspaceType === "property" ? "Type" : "Contract type",
                     },
-                    { id: "periodFrom", label: "Period From" },
-                    { id: "periodTo", label: "Period To" },
+                    { id: "periodFrom", label: "Period from" },
+                    { id: "periodTo", label: "Period to" },
                   ].map((f) => (
                     <label
                       key={f.id}
@@ -466,9 +437,7 @@ export default function UploadPage() {
                           setVisibleFields(next);
                         }}
                       />
-                      <span className="text-xs font-bold text-on-surface">
-                        {f.label}
-                      </span>
+                      <span className="text-sm text-on-surface">{f.label}</span>
                     </label>
                   ))}
                 </div>
@@ -477,44 +446,44 @@ export default function UploadPage() {
 
             <form
               onSubmit={handleSubmit}
-              className="bg-surface-container-low border border-outline-variant rounded-[3rem] p-10 shadow-xl space-y-8 relative overflow-hidden"
+              className="bg-surface-container-low border border-outline-variant rounded-xl p-6 space-y-6 relative overflow-hidden"
             >
               {isExtracting && (
-                <div className="absolute inset-0 bg-background/60 backdrop-blur-sm z-20 flex flex-col items-center justify-center gap-4">
+                <div className="absolute inset-0 bg-background/70 backdrop-blur-sm z-20 flex flex-col items-center justify-center gap-3">
                   <div className="relative">
                     <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 animate-pulse" />
-                    <Loader2 className="size-12 text-primary animate-spin relative" />
+                    <Loader2 className="size-8 text-primary animate-spin relative" />
                   </div>
-                  <h3 className="text-xl font-black uppercase tracking-tight text-primary">
-                    Neural Extraction...
+                  <h3 className="text-base font-semibold text-primary">
+                    Extracting metadata...
                   </h3>
-                  <p className="text-on-surface-variant text-sm font-medium">
-                    Scanning document for metadata brief
+                  <p className="text-sm text-on-surface-variant">
+                    Scanning document brief
                   </p>
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {visibleFields.has("name") && (
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
-                      <FileText className="size-3 text-primary" />{" "}
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5">
+                      <FileText className="size-3 text-primary" />
                       {workspaceType === "property"
-                        ? "Policy Number"
-                        : "Unique Market Reference"}
+                        ? "Policy number"
+                        : "Unique market reference"}
                     </Label>
                     <Input
                       value={contractName}
                       onChange={(e) => setContractName(e.target.value)}
                       maxLength={100}
-                      className="h-14 bg-background border-outline-variant rounded-2xl font-bold"
+                      className="bg-background"
                     />
                   </div>
                 )}
                 {visibleFields.has("reinsured") && (
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
-                      <Building2 className="size-3 text-secondary" />{" "}
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5">
+                      <Building2 className="size-3 text-secondary" />
                       {workspaceType === "property"
                         ? "Policyholder"
                         : "Reinsured"}
@@ -523,65 +492,64 @@ export default function UploadPage() {
                       value={reinsured}
                       onChange={(e) => setReinsured(e.target.value)}
                       maxLength={255}
-                      className="h-14 bg-background border-outline-variant rounded-2xl font-bold"
+                      className="bg-background"
                     />
                   </div>
                 )}
                 {visibleFields.has("broker") && (
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
-                      <Users className="size-3 text-indigo-500" /> Broker
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5">
+                      <Users className="size-3 text-indigo-500" />
+                      Broker
                     </Label>
                     <Input
                       value={broker}
                       onChange={(e) => setBroker(e.target.value)}
                       maxLength={255}
-                      className="h-14 bg-background border-outline-variant rounded-2xl font-bold"
+                      className="bg-background"
                     />
                   </div>
                 )}
                 {visibleFields.has("type") && (
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
-                      <LayoutGrid className="size-3 text-amber-500" />{" "}
-                      {workspaceType === "property" ? "Type" : "Contract Type"}
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5">
+                      <LayoutGrid className="size-3 text-amber-500" />
+                      {workspaceType === "property" ? "Type" : "Contract type"}
                     </Label>
                     <Input
                       value={contractType}
                       onChange={(e) => setContractType(e.target.value)}
-                      placeholder="e.g. Excess Aviation of Loss"
+                      placeholder="e.g. Excess of Loss"
                       maxLength={255}
-                      className="h-14 bg-background border-outline-variant rounded-2xl font-bold"
+                      className="bg-background"
                     />
                   </div>
                 )}
                 {visibleFields.has("periodFrom") && (
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
-                      <CalendarIcon className="size-3 text-violet-500" /> Period
-                      From
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5">
+                      <CalendarIcon className="size-3 text-violet-500" />
+                      Period from
                     </Label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5">
                       <Input
                         value={periodFromInput}
                         onChange={handlePeriodFromChange}
                         placeholder="DD MMM YYYY"
                         maxLength={20}
-                        className="h-14 bg-background border-outline-variant rounded-2xl font-bold flex-1"
+                        className="bg-background flex-1"
                       />
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            className="h-14 w-14 rounded-2xl border-outline-variant p-0"
+                            size="icon"
+                            className="border-outline-variant"
                           >
-                            <CalendarIcon className="size-5" />
+                            <CalendarIcon className="size-4" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent
-                          className="w-auto p-0 rounded-2xl"
-                          align="end"
-                        >
+                        <PopoverContent className="w-auto p-0" align="end">
                           <Calendar
                             key={periodFrom?.toISOString()}
                             mode="single"
@@ -600,32 +568,30 @@ export default function UploadPage() {
                   </div>
                 )}
                 {visibleFields.has("periodTo") && (
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1 flex items-center gap-2">
-                      <CalendarIcon className="size-3 text-rose-500" /> Period
-                      To
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5">
+                      <CalendarIcon className="size-3 text-rose-500" />
+                      Period to
                     </Label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1.5">
                       <Input
                         value={periodToInput}
                         onChange={handlePeriodToChange}
                         placeholder="DD MMM YYYY"
                         maxLength={20}
-                        className="h-14 bg-background border-outline-variant rounded-2xl font-bold flex-1"
+                        className="bg-background flex-1"
                       />
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            className="h-14 w-14 rounded-2xl border-outline-variant p-0"
+                            size="icon"
+                            className="border-outline-variant"
                           >
-                            <CalendarIcon className="size-5" />
+                            <CalendarIcon className="size-4" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent
-                          className="w-auto p-0 rounded-2xl"
-                          align="end"
-                        >
+                        <PopoverContent className="w-auto p-0" align="end">
                           <Calendar
                             key={periodTo?.toISOString()}
                             mode="single"
@@ -645,17 +611,17 @@ export default function UploadPage() {
                 )}
               </div>
 
-              <div className="pt-8 border-t border-outline-variant flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-center gap-4">
-                  <div className="size-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center">
-                    <CheckCircle2 className="size-6 text-emerald-500" />
+              <div className="pt-5 border-t border-outline-variant flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="size-9 bg-emerald-500/10 rounded-md flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="size-4 text-emerald-500" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-black uppercase tracking-tight text-on-surface">
+                    <h4 className="text-sm font-medium text-on-surface">
                       {files[0]?.name}
                     </h4>
-                    <p className="text-[10px] font-bold text-on-surface-variant/60 uppercase">
-                      Ready for neural analysis
+                    <p className="text-xs text-on-surface-variant">
+                      Ready for analysis
                     </p>
                   </div>
                 </div>
@@ -664,16 +630,17 @@ export default function UploadPage() {
                   type="submit"
                   size="lg"
                   disabled={submitting || isExtracting}
-                  className="h-16 px-10 rounded-2xl font-black uppercase tracking-widest text-xs shadow-2xl flex items-center gap-3 w-full md:w-auto"
+                  className="gap-2 w-full md:w-auto"
                 >
                   {submitting ? (
                     <>
-                      <Loader2 className="size-5 animate-spin" /> UPLOADING{" "}
-                      {uploadProgress}%
+                      <Loader2 className="size-4 animate-spin" />
+                      Uploading {uploadProgress}%
                     </>
                   ) : (
                     <>
-                      <Zap className="size-5" /> INITIALIZE VETTING
+                      <Zap className="size-4" />
+                      Start analysis
                     </>
                   )}
                 </Button>

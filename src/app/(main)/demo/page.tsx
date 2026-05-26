@@ -191,7 +191,7 @@ export default function DemoPage() {
   return (
     <main className="flex-1 pt-20 md:pt-24 pb-20 px-4 md:px-6 lg:px-10 min-h-screen bg-background text-on-surface transition-colors duration-300">
       {/* Sandbox Notice Banner */}
-      <div className="mb-6 p-5 rounded-[2rem] bg-primary/10 border border-primary/20 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-6xl mx-auto shadow-sm shadow-primary/5 dark:shadow-none">
+      <div className="mb-6 p-5 rounded-lg bg-primary/10 border border-primary/20 flex flex-col sm:flex-row items-center justify-between gap-4 max-w-6xl mx-auto shadow-sm shadow-primary/5 dark:shadow-none">
         <div className="flex items-center gap-4 text-primary text-left">
           <div className="size-11 bg-primary/25 rounded-2xl flex items-center justify-center shrink-0">
             <Activity className="size-5 animate-pulse" />
@@ -208,7 +208,7 @@ export default function DemoPage() {
         </div>
 
         <Link href="/login">
-          <Button className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[9px] h-10 px-5 rounded-xl flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform shrink-0">
+          <Button className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[9px] h-10 px-5 rounded-xl flex items-center gap-2 shadow-lg shadow-primary/20  transition-transform shrink-0">
             Try Full Platform <ArrowRight className="size-3.5" />
           </Button>
         </Link>
@@ -220,12 +220,12 @@ export default function DemoPage() {
         <div className="space-y-6 text-left border-b border-outline-variant/30 pb-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface leading-tight break-words flex-1 min-w-0">
+              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-on-surface leading-tight break-words flex-1 min-w-0">
                 Property_Quota_Share_Treaty.pdf
               </h1>
               <Badge
                 variant="outline"
-                className="rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 border-emerald-500/20 font-black text-[10px] uppercase px-3 py-1 shrink-0 animate-pulse"
+                className="rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-500 border-emerald-500/20 text-xs font-medium uppercase px-3 py-1 shrink-0 animate-pulse"
               >
                 Audited Wording
               </Badge>
@@ -235,7 +235,7 @@ export default function DemoPage() {
                 <Building2 className="size-4 text-primary" />
                 Global Reinsurance Corp
               </div>
-              <div className="flex items-center gap-2 text-on-surface-variant/60 font-black text-[10px] uppercase tracking-widest">
+              <div className="flex items-center gap-2 text-on-surface-variant/60 text-xs font-medium uppercase tracking-wider">
                 <LayoutGrid className="size-3" /> Property Quota Share
               </div>
             </div>
@@ -278,10 +278,10 @@ export default function DemoPage() {
           <div className="lg:col-span-8 space-y-8">
             {/* TAB 1: SUMMARY / CHECKLIST */}
             {activeTab === "summary" && (
-              <Card className="rounded-[2rem] border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-6 animate-in fade-in duration-300">
+              <Card className="rounded-lg border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-6 animate-in fade-in duration-300">
                 <CardHeader className="p-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1">
-                    <CardTitle className="text-xl font-black uppercase tracking-tight">
+                    <CardTitle className="text-base font-semibold tracking-tight">
                       Wording Compliance Checklist
                     </CardTitle>
                     <p className="text-xs text-on-surface-variant font-medium">
@@ -305,7 +305,7 @@ export default function DemoPage() {
                 <CardContent className="p-0 space-y-6">
                   <div className="p-5 bg-surface-container-low border border-outline-variant/30 rounded-2xl shadow-inner">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                      <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                         Cognitive Scan Completion
                       </span>
                       <span className="text-xs font-black text-primary">
@@ -341,7 +341,7 @@ export default function DemoPage() {
                         <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto shrink-0 border-t border-outline-variant/10 sm:border-none pt-2 sm:pt-0">
                           <span
                             className={cn(
-                              "px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-lg border",
+                              "px-3 py-1 text-[10px] font-medium uppercase tracking-wider rounded-lg border",
                               r.status === "Red"
                                 ? "bg-rose-500/10 text-rose-500 border-rose-500/20"
                                 : r.status === "Amber"
@@ -392,7 +392,7 @@ export default function DemoPage() {
                       )}
                     >
                       <div className="flex items-center justify-between mb-2 gap-2">
-                        <span className="text-[9px] font-black uppercase tracking-widest text-on-surface-variant/60 truncate flex-1">
+                        <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant/60 truncate flex-1">
                           {r.category}
                         </span>
                         <span
@@ -415,11 +415,11 @@ export default function DemoPage() {
 
                 {/* Focus Area Details */}
                 <div className="md:col-span-7">
-                  <Card className="rounded-[2rem] border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 space-y-6">
+                  <Card className="rounded-lg border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 space-y-6">
                     <div className="border-b border-outline-variant/30 pb-4">
                       <span
                         className={cn(
-                          "px-3 py-1 text-[9px] font-black uppercase tracking-widest rounded-lg w-fit block mb-3 border",
+                          "px-3 py-1 text-[10px] font-medium uppercase tracking-wider rounded-lg w-fit block mb-3 border",
                           activeResult.status === "Red"
                             ? "bg-rose-500/10 text-rose-500 border-rose-500/20"
                             : activeResult.status === "Amber"
@@ -479,9 +479,9 @@ export default function DemoPage() {
 
             {/* TAB 3: PLUS ANALYSIS */}
             {activeTab === "plus" && (
-              <Card className="rounded-[2rem] border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-8 animate-in fade-in duration-300">
+              <Card className="rounded-lg border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-8 animate-in fade-in duration-300">
                 <div className="border-b border-outline-variant/30 pb-4">
-                  <CardTitle className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
+                  <CardTitle className="text-base font-semibold tracking-tight flex items-center gap-3">
                     <Cpu className="text-primary size-6 animate-pulse animate-duration-1000" />{" "}
                     Cognitive Plus Assessment
                   </CardTitle>
@@ -543,9 +543,9 @@ export default function DemoPage() {
 
             {/* TAB 4: DOCUMENT MAP */}
             {activeTab === "map" && (
-              <Card className="rounded-[2rem] border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-6 animate-in fade-in duration-300">
+              <Card className="rounded-lg border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-6 animate-in fade-in duration-300">
                 <div className="border-b border-outline-variant/30 pb-4">
-                  <CardTitle className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
+                  <CardTitle className="text-base font-semibold tracking-tight flex items-center gap-3">
                     <BookOpen className="text-primary size-6" /> Document Map
                     Structure
                   </CardTitle>
@@ -609,9 +609,9 @@ export default function DemoPage() {
 
             {/* TAB 5: DOCUMENT VIEW */}
             {activeTab === "view" && (
-              <Card className="rounded-[2rem] border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-6 animate-in fade-in duration-300">
+              <Card className="rounded-lg border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 text-left space-y-6 animate-in fade-in duration-300">
                 <div className="border-b border-outline-variant/30 pb-4">
-                  <CardTitle className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
+                  <CardTitle className="text-base font-semibold tracking-tight flex items-center gap-3">
                     <FileText className="text-primary size-6" /> Digital Treaty
                     Viewer
                   </CardTitle>
@@ -674,7 +674,7 @@ export default function DemoPage() {
 
           {/* Right Panel (4 Columns) */}
           <div className="lg:col-span-4 space-y-8 text-left">
-            <Card className="rounded-[2rem] border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 space-y-6">
+            <Card className="rounded-lg border border-outline-variant/30 bg-surface-container shadow-md shadow-black/[0.03] dark:shadow-none p-6 lg:p-8 space-y-6">
               <h4 className="text-[10px] font-black uppercase text-on-surface-variant tracking-[0.2em] border-b border-outline-variant/30 pb-3">
                 Selected Clause Context
               </h4>
@@ -731,7 +731,7 @@ export default function DemoPage() {
 
               {/* Interactive Note Taking */}
               <div className="space-y-4">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+                <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
                   <MessageSquare className="size-4 text-primary" /> Review
                   Discussion Notes
                 </h4>

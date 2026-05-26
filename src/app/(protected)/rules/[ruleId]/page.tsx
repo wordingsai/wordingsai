@@ -114,8 +114,8 @@ export default function IndividualRulePage(props: {
           <Skeleton className="h-6 w-64 rounded-lg" />
           <Skeleton className="h-12 w-full max-w-lg rounded-2xl" />
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <Skeleton className="lg:col-span-7 h-[600px] rounded-[3rem]" />
-            <Skeleton className="lg:col-span-5 h-[600px] rounded-[3rem]" />
+            <Skeleton className="lg:col-span-7 h-[600px] rounded-xl" />
+            <Skeleton className="lg:col-span-5 h-[600px] rounded-xl" />
           </div>
         </div>
       </main>
@@ -162,17 +162,17 @@ export default function IndividualRulePage(props: {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+              <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
                 {rule.name}
               </h1>
               <Badge
                 variant="outline"
-                className="rounded-full font-black text-[10px] uppercase px-3 py-1 bg-surface-container text-on-surface-variant border-outline-variant"
+                className="rounded-full text-xs font-medium uppercase px-3 py-1 bg-surface-container text-on-surface-variant border-outline-variant"
               >
                 {rule.category}
               </Badge>
               {rule.isGlobal && (
-                <Badge className="rounded-full font-black text-[10px] uppercase px-3 py-1 bg-primary/10 text-primary border-primary/20">
+                <Badge className="rounded-full text-xs font-medium uppercase px-3 py-1 bg-primary/10 text-primary border-primary/20">
                   GLOBAL
                 </Badge>
               )}
@@ -196,7 +196,7 @@ export default function IndividualRulePage(props: {
             <Button
               size="lg"
               disabled={!isPSA && (rule.isGlobal || rule.isEditable === false)}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-6 h-12 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2 transition-all hover:scale-[1.02]"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-6 h-12 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2 transition-all "
               onClick={() => (window.location.href = `/rules/${rule.id}/edit`)}
             >
               <Plus className="w-5 h-5" /> NEW VERSION
@@ -210,18 +210,18 @@ export default function IndividualRulePage(props: {
         {/* LEFT — Description + Scoring benchmarks */}
         <div className="lg:col-span-7 space-y-8">
           {/* Functional Summary */}
-          <Card className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] overflow-hidden shadow-sm">
+          <Card className="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden shadow-sm">
             <CardHeader className="p-7 border-b border-outline-variant/30 bg-surface-container-highest/10">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <FileText className="w-4 h-4 text-primary" />
-                  <CardTitle className="text-sm font-black uppercase tracking-widest text-on-surface">
+                  <CardTitle className="text-sm font-semibold uppercase tracking-widest text-on-surface">
                     Functional Summary
                   </CardTitle>
                 </div>
                 <Badge
                   variant="outline"
-                  className="rounded-full text-[9px] font-black uppercase tracking-widest px-3 border-outline-variant"
+                  className="rounded-full text-[10px] font-medium uppercase tracking-wider px-3 border-outline-variant"
                 >
                   v{currentVersion?.versionNumber || 1}
                 </Badge>
@@ -234,7 +234,7 @@ export default function IndividualRulePage(props: {
               </p>
               {definition.appliesTo && (
                 <div className="p-5 bg-surface-container-low border border-outline-variant rounded-2xl flex items-start gap-4">
-                  <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-on-surface-variant shrink-0 mt-0.5">
+                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-on-surface-variant shrink-0 mt-0.5">
                     <Fingerprint className="w-4 h-4" /> Scope:
                   </div>
                   <p className="text-sm font-bold text-on-surface tracking-tight">
@@ -249,18 +249,18 @@ export default function IndividualRulePage(props: {
           <div className="space-y-5">
             <div className="flex items-center gap-3">
               <TrendingDown className="w-5 h-5 text-primary" />
-              <h3 className="text-xl font-black uppercase tracking-tighter">
+              <h3 className="text-base font-semibold tracking-tighter">
                 Vetting Benchmarks
               </h3>
             </div>
 
             {/* Green */}
-            <Card className="bg-emerald-500/5 border border-emerald-500/20 rounded-[2.5rem] p-7">
+            <Card className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-7">
               <div className="flex items-center gap-4 mb-5">
                 <div className="p-3 bg-emerald-500/10 rounded-2xl shrink-0">
                   <ShieldCheck className="w-5 h-5 text-emerald-500" />
                 </div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500">
+                <p className="text-xs font-medium uppercase tracking-wider text-emerald-500">
                   Tier 1 — Optimal
                 </p>
               </div>
@@ -285,12 +285,12 @@ export default function IndividualRulePage(props: {
             </Card>
 
             {/* Amber */}
-            <Card className="bg-amber-500/5 border border-amber-500/20 rounded-[2.5rem] p-7">
+            <Card className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-7">
               <div className="flex items-center gap-4 mb-5">
                 <div className="p-3 bg-amber-500/10 rounded-2xl shrink-0">
                   <Zap className="w-5 h-5 text-amber-500" />
                 </div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-amber-500">
+                <p className="text-xs font-medium uppercase tracking-wider text-amber-500">
                   Tier 2 — Warning
                 </p>
               </div>
@@ -315,12 +315,12 @@ export default function IndividualRulePage(props: {
             </Card>
 
             {/* Red */}
-            <Card className="bg-destructive/5 border border-destructive/20 rounded-[2.5rem] p-7">
+            <Card className="bg-destructive/5 border border-destructive/20 rounded-xl p-7">
               <div className="flex items-center gap-4 mb-5">
                 <div className="p-3 bg-destructive/10 rounded-2xl shrink-0">
                   <AlertTriangle className="w-5 h-5 text-destructive" />
                 </div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-destructive">
+                <p className="text-xs font-medium uppercase tracking-wider text-destructive">
                   Tier 3 — Critical
                 </p>
               </div>
@@ -348,7 +348,7 @@ export default function IndividualRulePage(props: {
               <div className="space-y-5">
                 <div className="flex items-center gap-3">
                   <Target className="w-4 h-4 text-primary" />
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface">
+                  <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface">
                     Semantic Keyword Packs
                   </h4>
                 </div>
@@ -356,7 +356,7 @@ export default function IndividualRulePage(props: {
                   {definition.keywordPacks.map((pack, i) => (
                     <Card
                       key={i}
-                      className="bg-surface-container-low border border-outline-variant rounded-[2rem] p-5 space-y-3 overflow-hidden relative"
+                      className="bg-surface-container-low border border-outline-variant rounded-lg p-5 space-y-3 overflow-hidden relative"
                     >
                       <div
                         className={cn(
@@ -371,7 +371,7 @@ export default function IndividualRulePage(props: {
                       <div className="flex items-center justify-between">
                         <Badge
                           className={cn(
-                            "rounded-full text-[8px] font-black uppercase tracking-widest px-2.5",
+                            "rounded-full text-[10px] font-medium uppercase tracking-wider px-2.5",
                             pack.bias === "Cedant"
                               ? "bg-emerald-500/10 text-emerald-500"
                               : pack.bias === "Reinsurer"
@@ -408,13 +408,13 @@ export default function IndividualRulePage(props: {
         {/* RIGHT — Metadata + Checklist + Clause Refs + Keyword Packs */}
         <div className="lg:col-span-5 space-y-8">
           {/* Logic Attributes */}
-          <Card className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-7 shadow-sm">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant mb-6 flex items-center gap-2">
+          <Card className="bg-surface-container-low border border-outline-variant rounded-xl p-7 shadow-sm">
+            <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-6 flex items-center gap-2">
               <Globe className="w-3 h-3 text-primary" /> Logic Attributes
             </h3>
             <div className="grid grid-cols-2 gap-x-4 gap-y-5">
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                   Status
                 </span>
                 <div className="flex items-center gap-2 mt-0.5">
@@ -425,7 +425,7 @@ export default function IndividualRulePage(props: {
                 </div>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                   Version
                 </span>
                 <span className="text-sm font-bold text-on-surface uppercase tracking-tight flex items-center gap-1.5">
@@ -434,7 +434,7 @@ export default function IndividualRulePage(props: {
                 </span>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                   Scope
                 </span>
                 <span className="text-xs font-bold text-on-surface uppercase tracking-tight">
@@ -442,7 +442,7 @@ export default function IndividualRulePage(props: {
                 </span>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                   Created
                 </span>
                 <span className="text-xs font-bold text-on-surface">
@@ -450,7 +450,7 @@ export default function IndividualRulePage(props: {
                 </span>
               </div>
               <div className="col-span-2 flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60">
+                <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
                   Category
                 </span>
                 <span className="text-xs font-bold text-on-surface uppercase tracking-tight">
@@ -461,11 +461,11 @@ export default function IndividualRulePage(props: {
           </Card>
 
           {/* Structural Checklist */}
-          <Card className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-7 space-y-5">
+          <Card className="bg-surface-container-low border border-outline-variant rounded-xl p-7 space-y-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ListChecks className="w-4 h-4 text-primary" />
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface">
+                <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface">
                   Structural Checklist
                 </h4>
               </div>
@@ -495,11 +495,11 @@ export default function IndividualRulePage(props: {
           </Card>
 
           {/* Clause References */}
-          <Card className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-7 space-y-5">
+          <Card className="bg-surface-container-low border border-outline-variant rounded-xl p-7 space-y-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <BookOpen className="w-4 h-4 text-secondary" />
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface">
+                <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface">
                   Clause References
                 </h4>
               </div>

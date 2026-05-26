@@ -96,7 +96,7 @@ export function CreateWorkspaceDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] sm:max-w-3xl lg:max-w-4xl bg-popover/95 backdrop-blur-xl border-outline-variant/50 rounded-[2rem] sm:rounded-[3rem] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] p-0 overflow-hidden">
+      <DialogContent className="w-[95vw] sm:max-w-3xl lg:max-w-4xl bg-popover/95 backdrop-blur-xl border-outline-variant/50 rounded-lg sm:rounded-xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] p-0 overflow-hidden">
         <div className="bg-surface-container-low/50 p-6 sm:p-8 border-b border-outline-variant/30 flex items-center gap-4 sm:gap-6">
           <div className="size-12 sm:size-16 shrink-0 bg-surface-container-highest border border-outline-variant/50 rounded-xl sm:rounded-[1.5rem] flex items-center justify-center shadow-sm text-primary group-hover:scale-105 transition-transform duration-500">
             <BrainCircuit className="size-6 sm:size-8" />
@@ -118,7 +118,7 @@ export function CreateWorkspaceDialog({
             <div className="space-y-8">
               {/* Workspace Name */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
                   <Fingerprint className="size-3 text-primary" /> Scope
                   Identifier
                 </Label>
@@ -126,13 +126,13 @@ export function CreateWorkspaceDialog({
                   placeholder="e.g., Q2 Renewal Strategy"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-14 bg-surface-container-low border-outline-variant rounded-2xl px-5 text-sm font-black uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all shadow-inner"
+                  className="h-14 bg-surface-container-low border-outline-variant rounded-2xl px-5 text-sm font-semibold uppercase tracking-widest focus:ring-2 focus:ring-primary/20 transition-all shadow-inner"
                 />
               </div>
 
               {/* Type Selection */}
               <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
                   <Cpu className="size-3 text-primary" /> Engine Configuration
                 </Label>
                 <Select
@@ -165,7 +165,7 @@ export function CreateWorkspaceDialog({
             <div className="space-y-8">
               {/* Mode Selection */}
               <div className="space-y-4">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
                   <Sparkles className="size-3 text-primary" /> Initialization
                   Protocol
                 </Label>
@@ -174,7 +174,7 @@ export function CreateWorkspaceDialog({
                     type="button"
                     onClick={() => setMode("scratch")}
                     className={cn(
-                      "flex flex-col items-center gap-4 p-6 rounded-[2rem] border transition-all duration-300 group",
+                      "flex flex-col items-center gap-4 p-6 rounded-lg border transition-all duration-300 group",
                       mode === "scratch"
                         ? "bg-primary/10 border-primary text-primary shadow-lg shadow-primary/5"
                         : "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary/40",
@@ -190,7 +190,7 @@ export function CreateWorkspaceDialog({
                     >
                       <Trash2 className="size-5" />
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest">
+                    <span className="text-xs font-medium uppercase tracking-wider">
                       Scratch
                     </span>
                   </button>
@@ -198,7 +198,7 @@ export function CreateWorkspaceDialog({
                     type="button"
                     onClick={() => setMode("duplicate")}
                     className={cn(
-                      "flex flex-col items-center gap-4 p-6 rounded-[2rem] border transition-all duration-300 group",
+                      "flex flex-col items-center gap-4 p-6 rounded-lg border transition-all duration-300 group",
                       mode === "duplicate"
                         ? "bg-primary/10 border-primary text-primary shadow-lg shadow-primary/5"
                         : "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary/40",
@@ -214,7 +214,7 @@ export function CreateWorkspaceDialog({
                     >
                       <Copy className="size-5" />
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest">
+                    <span className="text-xs font-medium uppercase tracking-wider">
                       Duplicate
                     </span>
                   </button>
@@ -224,7 +224,7 @@ export function CreateWorkspaceDialog({
               {/* Source Workspace Selection (only if Duplicate) */}
               {mode === "duplicate" && (
                 <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                  <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                     Source Intelligence Model
                   </Label>
                   <Select
@@ -256,14 +256,14 @@ export function CreateWorkspaceDialog({
           <Button
             variant="ghost"
             onClick={() => onOpenChange(false)}
-            className="rounded-2xl font-black uppercase tracking-widest text-[10px] h-12 sm:h-14 px-8 w-full sm:w-auto"
+            className="rounded-2xl text-xs font-medium uppercase tracking-wider h-12 sm:h-14 px-8 w-full sm:w-auto"
           >
             Cancel
           </Button>
           <Button
             onClick={handleCreate}
             disabled={loading}
-            className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[11px] rounded-2xl h-12 sm:h-14 px-8 sm:px-12 shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all w-full sm:w-auto"
+            className="bg-primary text-primary-foreground font-black uppercase tracking-widest text-[11px] rounded-2xl h-12 sm:h-14 px-8 sm:px-12 shadow-lg shadow-primary/20  transition-all w-full sm:w-auto"
           >
             {loading ? (
               <Loader2 className="size-4 animate-spin mr-2" />

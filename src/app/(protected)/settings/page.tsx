@@ -248,10 +248,10 @@ function OrganizationSettingsTab() {
   return (
     <div className="space-y-8">
       {/* Organization Identity Card */}
-      <Card className="bg-gradient-to-br from-surface-container-low to-surface-container-highest border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left border-2 border-primary/10">
+      <Card className="bg-gradient-to-br from-surface-container-low to-surface-container-highest border-outline-variant rounded-xl shadow-sm overflow-hidden text-left border-2 border-primary/10">
         <CardHeader className="p-8 border-b border-outline-variant bg-primary/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-6">
-            <Avatar className="h-20 w-20 rounded-[2rem] border-4 border-background shadow-xl shrink-0">
+            <Avatar className="h-20 w-20 rounded-lg border-4 border-background shadow-xl shrink-0">
               <AvatarImage
                 src={activeOrg?.logo ?? undefined}
                 alt={activeOrg?.name}
@@ -271,7 +271,7 @@ function OrganizationSettingsTab() {
             </div>
           </div>
           <div className="flex flex-col items-end gap-1.5 shrink-0 bg-surface-container-high/50 px-5 py-3 rounded-2xl border border-outline-variant/30">
-            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
               Intelligence Scope
             </span>
             <span className="text-xs font-black uppercase text-primary tracking-widest flex items-center gap-1.5">
@@ -286,7 +286,7 @@ function OrganizationSettingsTab() {
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/60 block">
                 Workspace Name
               </span>
-              <span className="text-sm font-black text-on-surface truncate block uppercase">
+              <span className="text-sm font-semibold text-on-surface truncate block uppercase">
                 {activeOrg?.name || "Corporate Workspace"}
               </span>
             </div>
@@ -294,7 +294,7 @@ function OrganizationSettingsTab() {
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant/60 block">
                 Active Member Seats
               </span>
-              <span className="text-sm font-black text-primary block uppercase">
+              <span className="text-sm font-semibold text-primary block uppercase">
                 {members.length}{" "}
                 {members.length === 1 ? "Active User" : "Active Users"}
               </span>
@@ -339,7 +339,7 @@ function OrganizationSettingsTab() {
       {isSuperUser && (
         <>
           {/* Invitation Code Management */}
-          <Card className="bg-surface-container-low border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left border-2 border-primary/20">
+          <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left border-2 border-primary/20">
             <CardHeader className="p-8 border-b border-outline-variant bg-primary/5">
               <CardTitle className="text-2xl font-black uppercase text-on-surface">
                 Organization Invite Code
@@ -393,7 +393,7 @@ function OrganizationSettingsTab() {
           </Card>
 
           {/* Pending Join Requests */}
-          <Card className="bg-surface-container-low border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left">
+          <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
             <CardHeader className="p-8 border-b border-outline-variant bg-amber-50 dark:bg-amber-950/20">
               <CardTitle className="text-2xl font-black uppercase text-on-surface flex items-center gap-3">
                 <Clock className="w-6 h-6 text-amber-500" /> Pending Join
@@ -495,7 +495,7 @@ function OrganizationSettingsTab() {
         </>
       )}
 
-      <Card className="bg-surface-container-low border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left">
+      <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
         <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
           <CardTitle className="text-2xl font-black uppercase text-on-surface">
             Organization Members
@@ -532,7 +532,7 @@ function OrganizationSettingsTab() {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-surface-container border border-outline-variant">
+                      <div className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-surface-container border border-outline-variant">
                         {m.role === "su"
                           ? "Super User (SU)"
                           : m.role === "u"
@@ -617,7 +617,7 @@ function OrganizationSettingsTab() {
       </Card>
 
       {/* Danger Zone */}
-      <Card className="bg-destructive/5 border-destructive/20 rounded-[2.5rem] shadow-sm overflow-hidden text-left border-2">
+      <Card className="bg-destructive/5 border-destructive/20 rounded-xl shadow-sm overflow-hidden text-left border-2">
         <CardHeader className="p-8 border-b border-destructive/20 bg-destructive/5">
           <CardTitle className="text-xl font-black uppercase text-destructive flex items-center gap-2">
             <TriangleAlert className="w-5 h-5" /> Danger Zone
@@ -677,7 +677,7 @@ function OrganizationSettingsTab() {
 
       {/* Leave Dialog */}
       <AlertDialog open={showLeaveDialog} onOpenChange={setShowLeaveDialog}>
-        <AlertDialogContent className="rounded-[2.5rem] p-10">
+        <AlertDialogContent className="rounded-xl p-10">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-3xl font-black uppercase tracking-tighter">
               Are you absolutely sure?
@@ -709,7 +709,7 @@ function OrganizationSettingsTab() {
           if (!open) setMemberToDelete(null);
         }}
       >
-        <AlertDialogContent className="rounded-[2.5rem] p-10">
+        <AlertDialogContent className="rounded-xl p-10">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-3xl font-black uppercase tracking-tighter text-destructive flex items-center gap-3">
               <Trash2 className="w-7 h-7" /> Remove Member
@@ -761,7 +761,7 @@ function OrganizationSettingsTab() {
           if (!open) setConfirmOrgName("");
         }}
       >
-        <AlertDialogContent className="rounded-[2.5rem] p-10">
+        <AlertDialogContent className="rounded-xl p-10">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-3xl font-black uppercase tracking-tighter text-destructive flex items-center gap-3">
               <TriangleAlert className="w-7 h-7" /> Delete Organization
@@ -864,7 +864,7 @@ function SubscriptionSettingsTab() {
 
   return (
     <div className="space-y-8">
-      <Card className="bg-surface-container-low border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left">
+      <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
         <CardHeader className="p-8 border-b border-outline-variant bg-primary/5">
           <div className="flex items-center justify-between">
             <div>
@@ -878,7 +878,7 @@ function SubscriptionSettingsTab() {
             </div>
             <div
               className={cn(
-                "px-4 py-2 rounded-full font-black uppercase tracking-widest text-[10px] border-2",
+                "px-4 py-2 rounded-full text-xs font-medium uppercase tracking-wider border-2",
                 isPlus
                   ? "bg-primary/10 border-primary text-primary shadow-lg shadow-primary/10"
                   : "bg-surface-container border-outline-variant text-on-surface-variant",
@@ -905,7 +905,7 @@ function SubscriptionSettingsTab() {
                 <div
                   key={p.id}
                   className={cn(
-                    "p-6 rounded-[2rem] border-2 transition-all relative flex flex-col justify-between overflow-hidden",
+                    "p-6 rounded-lg border-2 transition-all relative flex flex-col justify-between overflow-hidden",
                     isCurrent
                       ? "border-primary bg-primary/5 shadow-xl"
                       : "border-outline-variant bg-surface-container-lowest hover:border-primary/40",
@@ -944,7 +944,7 @@ function SubscriptionSettingsTab() {
                   {isCurrent ? (
                     <Button
                       variant="outline"
-                      className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[10px] border-primary/20 cursor-default"
+                      className="w-full h-12 rounded-xl text-xs font-medium uppercase tracking-wider border-primary/20 cursor-default"
                       disabled
                     >
                       ✓ CURRENT PLAN
@@ -954,7 +954,7 @@ function SubscriptionSettingsTab() {
                       href="mailto:wordings.ai.uk@gmail.com?subject=Enterprise%20Plan%20Inquiry"
                       className="w-full"
                     >
-                      <Button className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[10px] bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                      <Button className="w-full h-12 rounded-xl text-xs font-medium uppercase tracking-wider bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                         CONTACT US
                       </Button>
                     </Link>
@@ -962,7 +962,7 @@ function SubscriptionSettingsTab() {
                     <Button
                       onClick={() => handleSelectPlan(p.id)}
                       disabled={loadingPlan !== null}
-                      className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[10px] bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                      className="w-full h-12 rounded-xl text-xs font-medium uppercase tracking-wider bg-primary text-primary-foreground shadow-lg shadow-primary/20"
                     >
                       {loadingPlan === p.id ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -979,7 +979,7 @@ function SubscriptionSettingsTab() {
       </Card>
 
       {!isPlus && (
-        <Card className="bg-primary/5 border-primary/20 rounded-[2.5rem] shadow-sm overflow-hidden text-left border-2">
+        <Card className="bg-primary/5 border-primary/20 rounded-xl shadow-sm overflow-hidden text-left border-2">
           <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="p-4 bg-primary/10 rounded-2xl">
@@ -1123,7 +1123,7 @@ export default function SettingsPage() {
       <div className="max-w-7xl mx-auto w-full">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+          <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
             Account Settings
           </h1>
           <p className="text-on-surface-variant text-lg font-medium mt-2">
@@ -1163,7 +1163,7 @@ export default function SettingsPage() {
           {/* Content Area */}
           <div className="col-span-12 lg:col-span-9">
             {activeTab === "profile" && (
-              <Card className="bg-surface-container-low border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left">
+              <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
                   <CardTitle className="text-2xl font-black uppercase text-on-surface">
                     Profile Identity
@@ -1221,7 +1221,7 @@ export default function SettingsPage() {
                     <div className="space-y-3">
                       <Label
                         htmlFor="name"
-                        className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-1"
+                        className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1"
                       >
                         Full Name
                       </Label>
@@ -1238,7 +1238,7 @@ export default function SettingsPage() {
                     <div className="space-y-3 opacity-60">
                       <Label
                         htmlFor="email"
-                        className="text-[11px] font-black uppercase tracking-widest text-on-surface-variant ml-1"
+                        className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1"
                       >
                         Email Address
                       </Label>
@@ -1261,7 +1261,7 @@ export default function SettingsPage() {
                     <Button
                       onClick={handleSaveChanges}
                       disabled={saving}
-                      className="bg-primary text-primary-foreground font-black px-8 py-6 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2 hover:scale-[1.02] transition-all"
+                      className="bg-primary text-primary-foreground font-black px-8 py-6 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2  transition-all"
                     >
                       {saving ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -1276,7 +1276,7 @@ export default function SettingsPage() {
             )}
 
             {activeTab === "appearance" && (
-              <Card className="bg-surface-container-low border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left">
+              <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
                   <CardTitle className="text-2xl font-black uppercase text-on-surface">
                     Visual Appearance
@@ -1308,7 +1308,7 @@ export default function SettingsPage() {
             {activeTab === "subscription" && <SubscriptionSettingsTab />}
 
             {activeTab === "security" && (
-              <Card className="bg-surface-container-low border-outline-variant rounded-[2.5rem] shadow-sm overflow-hidden text-left">
+              <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
                 <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
                   <CardTitle className="text-2xl font-black uppercase text-on-surface">
                     Security & Privacy

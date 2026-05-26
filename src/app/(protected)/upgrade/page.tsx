@@ -136,7 +136,7 @@ export default function PricingPage() {
               >
                 <Card
                   className={cn(
-                    "relative h-full flex flex-col justify-between overflow-hidden rounded-[2.5rem] border-2 transition-all duration-500",
+                    "relative h-full flex flex-col justify-between overflow-hidden rounded-xl border-2 transition-all duration-500",
                     plan.highlight
                       ? "bg-gradient-to-br from-primary via-primary/90 to-primary/80 text-primary-foreground border-primary/20 shadow-2xl"
                       : "bg-surface-container-low border-outline-variant hover:border-primary/40 shadow-xl",
@@ -153,7 +153,7 @@ export default function PricingPage() {
                         <div className="flex flex-col gap-2">
                           <Badge
                             className={cn(
-                              "w-fit px-4 py-1.5 rounded-full font-black text-[10px] uppercase tracking-widest border-0",
+                              "w-fit px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider border-0",
                               plan.highlight
                                 ? "bg-white text-primary"
                                 : "bg-primary/10 text-primary",
@@ -246,7 +246,7 @@ export default function PricingPage() {
                       onClick={() => handleSelectPlan(plan.id)}
                       disabled={isCurrent || loading !== null}
                       className={cn(
-                        "w-full h-16 px-8 rounded-[2rem] font-black uppercase tracking-[0.15em] text-sm transition-all duration-500 shadow-xl",
+                        "w-full h-16 px-8 rounded-lg font-black uppercase tracking-[0.15em] text-sm transition-all duration-500 shadow-xl",
                         plan.highlight
                           ? "bg-white text-primary hover:bg-white/95 shadow-white/40 disabled:shadow-none"
                           : "bg-primary text-primary-foreground hover:bg-primary/95 shadow-primary/30",

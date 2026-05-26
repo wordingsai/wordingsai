@@ -142,7 +142,7 @@ export function WorkspaceSwitcher() {
           </button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-[300px] p-2 rounded-[2rem] border-outline-variant shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] bg-popover"
+          className="w-[300px] p-2 rounded-lg border-outline-variant shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] bg-popover"
           align="start"
           sideOffset={12}
         >
@@ -162,12 +162,12 @@ export function WorkspaceSwitcher() {
           <Command className="bg-transparent">
             <CommandInput
               placeholder="Filter environments..."
-              className="h-11 text-[11px] font-black uppercase tracking-widest border-none focus:ring-0"
+              className="h-11 text-xs font-medium uppercase tracking-wider border-none focus:ring-0"
             />
             <CommandList className="max-h-[350px] mt-2 no-scrollbar">
               <CommandEmpty className="py-12 text-center">
                 <Search className="size-8 mx-auto mb-3 opacity-10" />
-                <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/40">
+                <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/40">
                   No matching scope found.
                 </p>
               </CommandEmpty>
@@ -195,7 +195,7 @@ export function WorkspaceSwitcher() {
                         <LayoutGrid className="h-5 w-5" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[11px] font-black uppercase tracking-widest">
+                        <span className="text-xs font-medium uppercase tracking-wider">
                           {workspace.name}
                         </span>
                         <span
@@ -229,7 +229,7 @@ export function WorkspaceSwitcher() {
                   <Plus className="h-5 w-5" />
                 </div>
                 <div className="flex flex-col text-left">
-                  <span className="text-[11px] font-black uppercase tracking-widest">
+                  <span className="text-xs font-medium uppercase tracking-wider">
                     New Intelligence Scope
                   </span>
                   <span className="text-[9px] font-bold uppercase text-primary/40">

@@ -8,7 +8,7 @@ export default function Unauthorized() {
     <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-background text-center">
       <div className="relative group mb-8">
         <div className="absolute -inset-4 bg-primary/10 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition duration-1000"></div>
-        <div className="relative flex h-32 w-32 items-center justify-center rounded-[2.5rem] bg-surface-container-high border-4 border-primary/20 shadow-2xl overflow-hidden">
+        <div className="relative flex h-32 w-32 items-center justify-center rounded-xl bg-surface-container-high border-4 border-primary/20 shadow-2xl overflow-hidden">
           <UserX className="h-16 w-16 text-primary animate-pulse" />
         </div>
       </div>

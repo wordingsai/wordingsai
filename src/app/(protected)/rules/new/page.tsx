@@ -229,7 +229,7 @@ export default function NewRulePage() {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
               Design New Rule
             </h1>
             <p className="text-on-surface-variant text-lg font-medium max-w-2xl">
@@ -240,7 +240,7 @@ export default function NewRulePage() {
 
           <Button
             variant="ghost"
-            className="rounded-2xl font-black uppercase tracking-widest text-[10px] py-6 px-8 hover:bg-surface-container-highest"
+            className="rounded-2xl text-xs font-medium uppercase tracking-wider py-6 px-8 hover:bg-surface-container-highest"
             onClick={() => router.back()}
           >
             <ArrowLeft className="w-4 h-4 mr-2" /> DISCARD CHANGES
@@ -254,19 +254,19 @@ export default function NewRulePage() {
             <TabsList className="bg-surface-container-low p-1 rounded-2xl h-14 border border-outline-variant grid grid-cols-3 mb-8">
               <TabsTrigger
                 value="base"
-                className="rounded-xl font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="rounded-xl text-xs font-medium uppercase tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
                 1. Core Configuration
               </TabsTrigger>
               <TabsTrigger
                 value="logic"
-                className="rounded-xl font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="rounded-xl text-xs font-medium uppercase tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
                 2. Semantic Logic
               </TabsTrigger>
               <TabsTrigger
                 value="criteria"
-                className="rounded-xl font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="rounded-xl text-xs font-medium uppercase tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
                 3. Scoring Benchmarks
               </TabsTrigger>
@@ -276,22 +276,22 @@ export default function NewRulePage() {
               value="base"
               className="space-y-8 focus-visible:outline-none"
             >
-              <div className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-8 lg:p-12 shadow-sm space-y-10">
+              <div className="bg-surface-container-low border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm space-y-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">
+                    <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
                       Rule Name
                     </Label>
                     <Input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Accounts & Bordereaux"
-                      className="h-14 bg-background border-outline-variant rounded-2xl font-bold transition-all focus:ring-4 focus:ring-primary/10"
+                      className="bg-background transition-all focus:ring-4 focus:ring-primary/10"
                       required
                     />
                   </div>
                   <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">
+                    <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
                       Logic Domain (Category)
                     </Label>
                     <Select
@@ -314,7 +314,7 @@ export default function NewRulePage() {
                 </div>
 
                 <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">
+                  <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
                     Functional Description
                   </Label>
                   <Textarea
@@ -326,7 +326,7 @@ export default function NewRulePage() {
                 </div>
 
                 <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ml-1">
+                  <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
                     Applies To (Target Mechanism)
                   </Label>
                   <Input
@@ -343,14 +343,14 @@ export default function NewRulePage() {
               value="logic"
               className="space-y-8 focus-visible:outline-none"
             >
-              <div className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-8 lg:p-12 shadow-sm space-y-12">
+              <div className="bg-surface-container-low border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm space-y-12">
                 {/* Checklists */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <ListChecks className="w-4 h-4 text-primary" />
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                        <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                           What to Check
                         </Label>
                       </div>
@@ -390,7 +390,7 @@ export default function NewRulePage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <BookOpen className="w-4 h-4 text-primary" />
-                        <Label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                        <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                           Clause References
                         </Label>
                       </div>
@@ -440,7 +440,7 @@ export default function NewRulePage() {
                       type="button"
                       variant="secondary"
                       onClick={addKeywordPack}
-                      className="rounded-xl font-black text-[10px] uppercase tracking-widest"
+                      className="rounded-xl text-xs font-medium uppercase tracking-wider"
                     >
                       <Plus className="w-3 h-3 mr-2" /> Add Package
                     </Button>
@@ -450,7 +450,7 @@ export default function NewRulePage() {
                     {keywordPacks.map((pack, i) => (
                       <div
                         key={i}
-                        className="p-6 bg-background/50 border border-outline-variant rounded-[2rem] space-y-4 relative group"
+                        className="p-6 bg-background/50 border border-outline-variant rounded-lg space-y-4 relative group"
                       >
                         <Button
                           type="button"
@@ -463,7 +463,7 @@ export default function NewRulePage() {
                         </Button>
                         <div className="flex flex-col md:flex-row gap-4">
                           <div className="w-full md:w-1/4">
-                            <Label className="text-[9px] font-black uppercase tracking-widest mb-1 block ml-1">
+                            <Label className="text-[10px] font-medium uppercase tracking-wider mb-1 block ml-1">
                               Perspective Bias
                             </Label>
                             <Select
@@ -472,7 +472,7 @@ export default function NewRulePage() {
                                 updateKeywordPack(i, { bias: val })
                               }
                             >
-                              <SelectTrigger className="h-10 rounded-xl bg-background border-outline-variant font-black text-[10px] uppercase">
+                              <SelectTrigger className="h-10 rounded-xl bg-background border-outline-variant text-xs font-medium uppercase">
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
@@ -489,7 +489,7 @@ export default function NewRulePage() {
                             </Select>
                           </div>
                           <div className="w-full md:w-3/4">
-                            <Label className="text-[9px] font-black uppercase tracking-widest mb-1 block ml-1">
+                            <Label className="text-[10px] font-medium uppercase tracking-wider mb-1 block ml-1">
                               Package Theme / Context
                             </Label>
                             <Input
@@ -503,7 +503,7 @@ export default function NewRulePage() {
                           </div>
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-[9px] font-black uppercase tracking-widest mb-1 block ml-1">
+                          <Label className="text-[10px] font-medium uppercase tracking-wider mb-1 block ml-1">
                             Keywords (Comma separated)
                           </Label>
                           <Input
@@ -530,11 +530,11 @@ export default function NewRulePage() {
               value="criteria"
               className="space-y-8 focus-visible:outline-none"
             >
-              <div className="bg-surface-container-low border border-outline-variant rounded-[2.5rem] p-8 lg:p-12 shadow-sm space-y-12">
+              <div className="bg-surface-container-low border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm space-y-12">
                 <div className="space-y-6">
                   <div className="flex items-center gap-3">
                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-emerald-500">
+                    <Label className="text-xs font-medium uppercase tracking-wider text-emerald-500">
                       Green Criteria (One per line)
                     </Label>
                   </div>
@@ -550,7 +550,7 @@ export default function NewRulePage() {
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <Zap className="w-5 h-5 text-amber-500" />
-                      <Label className="text-[10px] font-black uppercase tracking-widest text-amber-500">
+                      <Label className="text-xs font-medium uppercase tracking-wider text-amber-500">
                         Amber Criteria (One per line)
                       </Label>
                     </div>
@@ -564,7 +564,7 @@ export default function NewRulePage() {
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <AlertTriangle className="w-5 h-5 text-destructive" />
-                      <Label className="text-[10px] font-black uppercase tracking-widest text-destructive">
+                      <Label className="text-xs font-medium uppercase tracking-wider text-destructive">
                         Red Criteria (One per line)
                       </Label>
                     </div>
@@ -591,7 +591,7 @@ export default function NewRulePage() {
               type="submit"
               size="lg"
               disabled={loading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-12 py-8 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-3 text-lg transition-all hover:scale-[1.02]"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-5 py-2 rounded-md flex items-center gap-3 text-lg transition-all "
             >
               {loading ? (
                 <>
