@@ -1127,34 +1127,34 @@ export default function SettingsPage() {
           <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
             Account Settings
           </h1>
-          <p className="text-on-surface-variant text-lg font-medium mt-2">
+          <p className="text-sm text-on-surface-variant mt-1.5">
             Manage your personal identity, organization preferences, and
             security.
           </p>
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
+        <div className="grid grid-cols-12 gap-6 lg:gap-8">
           {/* Navigation Sidebar */}
-          <div className="col-span-12 lg:col-span-3 space-y-1">
+          <div className="col-span-12 lg:col-span-3 space-y-0.5">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-xl transition-all font-semibold uppercase tracking-widest text-[11px]",
+                  "w-full flex items-center justify-between px-3 py-2 rounded-md transition-colors text-sm font-medium",
                   activeTab === tab.id
-                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                    : "text-on-surface-variant hover:bg-surface-container-high",
+                    ? "bg-primary text-primary-foreground"
+                    : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface",
                 )}
               >
-                <div className="flex items-center gap-3">
-                  <tab.icon className="w-4 h-4" />
+                <div className="flex items-center gap-2.5">
+                  <tab.icon className="size-4" />
                   {tab.label}
                 </div>
                 <ChevronRight
                   className={cn(
-                    "w-4 h-4 transition-transform",
-                    activeTab === tab.id ? "rotate-90" : "",
+                    "size-3.5 opacity-60",
+                    activeTab === tab.id ? "opacity-100" : "",
                   )}
                 />
               </button>
@@ -1164,27 +1164,27 @@ export default function SettingsPage() {
           {/* Content Area */}
           <div className="col-span-12 lg:col-span-9">
             {activeTab === "profile" && (
-              <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left">
-                <CardHeader className="p-8 border-b border-outline-variant bg-surface-container-highest/10">
+              <Card className="bg-surface-container-low border-outline-variant rounded-xl overflow-hidden text-left">
+                <CardHeader className="p-5 border-b border-outline-variant bg-surface-container-highest/10">
                   <CardTitle className="text-base font-semibold text-on-surface">
-                    Profile Identity
+                    Profile
                   </CardTitle>
-                  <CardDescription className="font-medium text-on-surface-variant">
+                  <CardDescription className="text-sm text-on-surface-variant">
                     Update your public profile and how wordings appear under
                     your name.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="p-10 space-y-10">
-                  <div className="flex flex-col md:flex-row gap-8 items-start md:items-center p-6 bg-surface-container-highest/20 rounded-3xl border border-outline-variant/30">
-                    <Avatar className="h-24 w-24 rounded-3xl border-4 border-background shadow-xl">
+                <CardContent className="p-5 space-y-6">
+                  <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center p-4 bg-surface-container-highest/20 rounded-lg border border-outline-variant/30">
+                    <Avatar className="h-16 w-16 rounded-lg border border-outline-variant/40">
                       <AvatarImage src={image ?? undefined} />
-                      <AvatarFallback className="text-lg font-semibold bg-primary/10 text-primary">
+                      <AvatarFallback className="text-base font-medium bg-primary/10 text-primary">
                         {name?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold text-on-surface">
-                        Profile Picture
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-semibold text-on-surface">
+                        Profile picture
                       </h3>
                       <div className="flex gap-2">
                         <input
@@ -1196,21 +1196,22 @@ export default function SettingsPage() {
                         />
                         <Button
                           variant="outline"
+                          size="sm"
                           disabled={uploading}
                           onClick={() => fileInputRef.current?.click()}
-                          className="rounded-xl font-bold uppercase tracking-widest text-[10px]"
                         >
                           {uploading ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <Loader2 className="size-4 animate-spin" />
                           ) : (
-                            "Change Image"
+                            "Change image"
                           )}
                         </Button>
                         <Button
                           variant="ghost"
+                          size="sm"
                           disabled={uploading}
                           onClick={handleDeleteAvatar}
-                          className="rounded-xl font-bold uppercase tracking-widest text-[10px] text-destructive hover:bg-destructive/10"
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                         >
                           Delete
                         </Button>
