@@ -258,7 +258,7 @@ export default function RulesClient() {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-3xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
               Compliance Rules
             </h1>
             <p className="text-on-surface-variant text-base lg:text-lg font-medium max-w-2xl leading-relaxed">
@@ -290,7 +290,7 @@ export default function RulesClient() {
               className={cn(
                 "h-14 lg:h-16 bg-primary hover:bg-primary/90 text-primary-foreground font-black px-8 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-3 transition-all",
                 canMutate
-                  ? "hover:scale-[1.02]"
+                  ? ""
                   : "opacity-50 cursor-not-allowed grayscale",
               )}
             >
@@ -319,7 +319,7 @@ export default function RulesClient() {
           <Button
             variant={showHidden ? "default" : "outline"}
             onClick={() => setShowHidden(!showHidden)}
-            className="h-14 px-6 rounded-2xl font-black uppercase tracking-widest text-[10px] gap-2 transition-all"
+            className="h-14 px-6 rounded-2xl text-xs font-medium uppercase tracking-wider gap-2 transition-all"
           >
             {showHidden ? (
               <Eye className="size-4" />
@@ -333,7 +333,7 @@ export default function RulesClient() {
             value={scopeFilter}
             onValueChange={(v) => setScopeFilter(v ?? "scope")}
           >
-            <SelectTrigger className="w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[10px]">
+            <SelectTrigger className="w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-primary" />
                 <SelectValue placeholder="Scope" />
@@ -350,7 +350,7 @@ export default function RulesClient() {
             value={categoryFilter}
             onValueChange={(v) => setCategoryFilter(v ?? "category")}
           >
-            <SelectTrigger className="w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[10px]">
+            <SelectTrigger className="w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider">
               <div className="flex items-center gap-2">
                 <Scale className="w-4 h-4 text-primary" />
                 <SelectValue placeholder="Category" />
@@ -370,7 +370,7 @@ export default function RulesClient() {
             value={statusFilter}
             onValueChange={(v) => setStatusFilter(v ?? "status")}
           >
-            <SelectTrigger className="w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl font-black uppercase tracking-widest text-[10px]">
+            <SelectTrigger className="w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider">
               <div className="flex items-center gap-2 text-on-surface-variant">
                 <ShieldCheck className="w-4 h-4" />
                 <SelectValue placeholder="Status" />
@@ -390,14 +390,14 @@ export default function RulesClient() {
         <AnimatePresence mode="popLayout">
           {loading ? (
             Array.from({ length: 9 }).map((_, i) => (
-              <Skeleton key={i} className="h-64 lg:h-72 rounded-[2rem]" />
+              <Skeleton key={i} className="h-64 lg:h-72 rounded-lg" />
             ))
           ) : paginated.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="col-span-full py-24 text-center bg-surface-container-low border border-dashed border-outline-variant rounded-[3rem]"
+              className="col-span-full py-24 text-center bg-surface-container-low border border-dashed border-outline-variant rounded-xl"
             >
               <div className="flex flex-col items-center gap-4 opacity-40">
                 <HardHat className="w-16 h-16" />
@@ -418,7 +418,7 @@ export default function RulesClient() {
                   <ContextMenuTrigger asChild>
                     <div
                       className={cn(
-                        "bg-surface-container-low border border-outline-variant h-full p-6 lg:p-8 rounded-[2rem] lg:rounded-[2.5rem] hover:border-primary/50 transition-all hover:shadow-xl group relative overflow-hidden cursor-pointer",
+                        "bg-surface-container-low border border-outline-variant h-full p-6 lg:p-8 rounded-lg lg:rounded-xl hover:border-primary/50 transition-all hover:shadow-xl group relative overflow-hidden cursor-pointer",
                         rule.status === "inactive" &&
                           "opacity-60 grayscale-[0.5]",
                       )}
@@ -524,11 +524,11 @@ export default function RulesClient() {
                       <div className="space-y-4">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                               {rule.category}
                             </span>
                             <div className="w-1 h-1 rounded-full bg-outline-variant" />
-                            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+                            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                               {rule.isGlobal ? "Global" : "Organization"}
                             </span>
                           </div>
@@ -685,8 +685,8 @@ export default function RulesClient() {
       </div>
 
       {/* Pagination Footer */}
-      <div className="mt-8 lg:mt-12 p-6 lg:p-8 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface-container-highest/20 rounded-[2rem]">
-        <div className="text-[10px] lg:text-[11px] font-black uppercase tracking-widest text-on-surface-variant text-center sm:text-left">
+      <div className="mt-8 lg:mt-12 p-6 lg:p-8 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface-container-highest/20 rounded-lg">
+        <div className="text-[10px] lg:text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center sm:text-left">
           ENGINE: <span className="text-emerald-500">OPTIMIZED</span> —{" "}
           <span className="text-on-surface">{filtered.length}</span> ACTIVE
           RULES

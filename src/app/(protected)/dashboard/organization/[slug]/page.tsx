@@ -48,7 +48,7 @@ export default async function OrganizationPage({ params }: { params: Params }) {
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="space-y-2">
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tighter uppercase text-on-surface">
+            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
               {organization?.name || "Corporate Unit"}
             </h1>
             <p className="text-on-surface-variant text-lg font-medium max-w-2xl flex items-center gap-2">
@@ -60,7 +60,7 @@ export default async function OrganizationPage({ params }: { params: Params }) {
           <div className="flex gap-2">
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black px-8 py-7 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-2 transition-all hover:scale-[1.02]"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-black rounded-md flex items-center gap-2 transition-all "
             >
               <Settings className="w-5 h-5" /> UNIT CONFIGURATION
             </Button>
@@ -78,7 +78,7 @@ export default async function OrganizationPage({ params }: { params: Params }) {
             </h2>
           </div>
 
-          <div className="bg-surface-container-low border border-outline-variant rounded-[3rem] p-8 lg:p-12 shadow-sm">
+          <div className="bg-surface-container-low border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm">
             <div className="overflow-hidden">
               <MembersTable members={organization?.members || []} />
             </div>
@@ -94,7 +94,7 @@ export default async function OrganizationPage({ params }: { params: Params }) {
             </h2>
           </div>
 
-          <div className="bg-surface-container-low border border-outline-variant rounded-[3rem] p-8 lg:p-12 shadow-sm">
+          <div className="bg-surface-container-low border border-outline-variant rounded-xl p-8 lg:p-12 shadow-sm">
             <div className="overflow-hidden">
               <AllUsers organizationId={organization?.id || ""} users={users} />
             </div>

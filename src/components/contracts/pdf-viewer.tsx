@@ -62,9 +62,9 @@ export const PdfViewer = memo(function PdfViewer({
 
   if (!fileUrl || !proxyUrl) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-black border border-dashed border-outline-variant rounded-[2.5rem] text-on-surface-variant gap-4">
+      <div className="flex flex-col items-center justify-center py-24 bg-white dark:bg-black border border-dashed border-outline-variant rounded-xl text-on-surface-variant gap-4">
         <AlertTriangle className="size-12 opacity-20" />
-        <p className="text-sm font-black uppercase tracking-widest">
+        <p className="text-sm font-semibold uppercase tracking-widest">
           {!fileUrl ? "No PDF Source Available" : "Initializing..."}
         </p>
       </div>
@@ -80,10 +80,10 @@ export const PdfViewer = memo(function PdfViewer({
             <FileText className="size-5 text-primary" />
           </div>
           <div>
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-primary">
+            <h3 className="text-xs font-medium uppercase tracking-wider text-primary">
               Original Document
             </h3>
-            <p className="text-sm font-black text-on-surface uppercase tracking-tight">
+            <p className="text-sm font-semibold text-on-surface uppercase tracking-tight">
               PDF Source View
             </p>
           </div>
@@ -91,7 +91,7 @@ export const PdfViewer = memo(function PdfViewer({
         <Button
           variant="outline"
           size="sm"
-          className="rounded-xl border-outline-variant font-black uppercase tracking-widest text-[10px] h-10 px-4"
+          className="rounded-xl border-outline-variant text-xs font-medium uppercase tracking-wider h-10 px-4"
           onClick={() => window.open(fileUrl, "_blank")}
         >
           <Download className="size-3 mr-2" /> Open
@@ -112,7 +112,7 @@ export const PdfViewer = memo(function PdfViewer({
             >
               <ChevronLeft className="size-4" />
             </Button>
-            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant px-2">
+            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant px-2">
               {currentPage} / {numPages}
             </span>
             <Button
@@ -138,7 +138,7 @@ export const PdfViewer = memo(function PdfViewer({
             >
               <ZoomOut className="size-3.5" />
             </Button>
-            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant w-12 text-center">
+            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant w-12 text-center">
               {Math.round(scale * 100)}%
             </span>
             <Button
@@ -168,7 +168,7 @@ export const PdfViewer = memo(function PdfViewer({
       <div
         className={cn(
           "relative min-h-[700px] lg:min-h-[900px] bg-white dark:bg-black",
-          "border border-outline-variant/30 rounded-[2.5rem] overflow-hidden shadow-sm",
+          "border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm",
         )}
       >
         {/* Loading overlay */}
@@ -193,7 +193,7 @@ export const PdfViewer = memo(function PdfViewer({
         {error && (
           <div className="absolute inset-0 flex flex-col items-center justify-center z-20 bg-white dark:bg-black gap-4 text-on-surface-variant">
             <AlertTriangle className="size-12 opacity-30 text-destructive" />
-            <p className="text-sm font-black uppercase tracking-widest">
+            <p className="text-sm font-semibold uppercase tracking-widest">
               Failed to Load PDF
             </p>
             <p className="text-[10px] text-on-surface-variant opacity-60 max-w-xs text-center">

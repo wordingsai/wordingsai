@@ -106,7 +106,7 @@ export function AnalysisChecklist({
     return (
       <div className="flex flex-col items-center justify-center p-12 md:p-20 bg-surface-container-low border border-dashed border-outline-variant/30 rounded-2xl">
         <Loader2 className="size-10 text-primary animate-spin mb-4" />
-        <p className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant text-center max-w-sm">
+        <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center max-w-sm">
           Scanning document layers and matching provisions against your clause
           library...
         </p>
@@ -276,7 +276,7 @@ export function AnalysisChecklist({
                         <div className="space-y-2 min-w-0">
                           <div className="flex items-center gap-2 text-primary">
                             <FileText className="size-3 shrink-0" />
-                            <span className="text-[9px] font-black uppercase tracking-widest">
+                            <span className="text-[10px] font-medium uppercase tracking-wider">
                               Contract provision
                             </span>
                           </div>
@@ -290,7 +290,7 @@ export function AnalysisChecklist({
                         <div className="space-y-2 min-w-0">
                           <div className="flex items-center gap-2 text-emerald-600">
                             <BookOpen className="size-3 shrink-0" />
-                            <span className="text-[9px] font-black uppercase tracking-widest">
+                            <span className="text-[10px] font-medium uppercase tracking-wider">
                               Library standard
                             </span>
                           </div>
@@ -314,7 +314,7 @@ export function AnalysisChecklist({
       </div>
 
       {filteredEvents.length === 0 && events.length > 0 && (
-        <p className="text-center text-[10px] font-black uppercase tracking-widest text-on-surface-variant/50 py-8">
+        <p className="text-center text-xs font-medium uppercase tracking-wider text-on-surface-variant/50 py-8">
           No items match the selected filters.
         </p>
       )}
@@ -366,7 +366,7 @@ function FilterStat({
     >
       <span
         className={cn(
-          "text-[8px] sm:text-[9px] font-black uppercase tracking-widest block mb-0.5 truncate",
+          "text-[8px] sm:text-[10px] font-medium uppercase tracking-wider block mb-0.5 truncate",
           styles.text,
           "opacity-70",
         )}

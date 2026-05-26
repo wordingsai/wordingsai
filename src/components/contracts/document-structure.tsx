@@ -110,7 +110,7 @@ export function DocumentStructure({
     return (
       <div className="flex flex-col items-center justify-center p-16 md:p-20 text-on-surface-variant/40">
         <FileText className="w-12 h-12 mb-4 opacity-20" />
-        <p className="font-black uppercase tracking-widest text-[10px]">
+        <p className="text-xs font-medium uppercase tracking-wider">
           No structural map available yet.
         </p>
       </div>
@@ -121,7 +121,7 @@ export function DocumentStructure({
     return (
       <div className="flex flex-col items-center justify-center p-16 md:p-20 text-on-surface-variant/40">
         <FileText className="w-12 h-12 mb-4 opacity-20" />
-        <p className="font-black uppercase tracking-widest text-[10px] text-center max-w-xs">
+        <p className="text-xs font-medium uppercase tracking-wider text-center max-w-xs">
           Document map is incomplete. Re-run analysis to rebuild structure.
         </p>
       </div>
@@ -157,14 +157,14 @@ export function DocumentStructure({
           <div className="flex flex-wrap gap-2 shrink-0">
             <Badge
               variant="outline"
-              className="text-[9px] font-black uppercase tracking-widest"
+              className="text-[10px] font-medium uppercase tracking-wider"
             >
               {stats.sections} sections
             </Badge>
             {stats.subsections > 0 && (
               <Badge
                 variant="outline"
-                className="text-[9px] font-black uppercase tracking-widest"
+                className="text-[10px] font-medium uppercase tracking-wider"
               >
                 {stats.subsections} subsections
               </Badge>
@@ -224,11 +224,11 @@ export function DocumentStructure({
                     >
                       <div className="flex items-start gap-2 min-w-0">
                         {section.number && (
-                          <span className="text-[9px] font-black uppercase tracking-widest text-primary/50 shrink-0 pt-0.5">
+                          <span className="text-[10px] font-medium uppercase tracking-wider text-primary/50 shrink-0 pt-0.5">
                             {section.number}
                           </span>
                         )}
-                        <span className="text-xs md:text-sm font-black text-on-surface uppercase tracking-tight leading-snug break-words">
+                        <span className="text-xs md:text-sm font-semibold text-on-surface uppercase tracking-tight leading-snug break-words">
                           {section.heading}
                         </span>
                       </div>
@@ -290,17 +290,17 @@ export function DocumentStructure({
         <div className="border border-outline-variant/30 rounded-2xl bg-surface-container-low/50 p-4 md:p-5 flex flex-col min-h-[200px] xl:min-h-0 xl:max-h-[min(70vh,720px)]">
           <div className="flex items-center gap-2 mb-3 shrink-0">
             <Layers className="size-4 text-primary" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant">
+            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
               Provision preview
             </span>
           </div>
           {preview ? (
             <div className="flex-1 min-h-0 overflow-y-auto space-y-4">
               <div>
-                <p className="text-[9px] font-black uppercase tracking-widest text-primary/70 mb-1">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-primary/70 mb-1">
                   {preview.breadcrumb}
                 </p>
-                <h3 className="text-sm font-black uppercase tracking-tight text-on-surface leading-snug">
+                <h3 className="text-sm font-semibold uppercase tracking-tight text-on-surface leading-snug">
                   {preview.heading}
                 </h3>
               </div>
@@ -314,7 +314,7 @@ export function DocumentStructure({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full sm:w-auto text-[9px] font-black uppercase tracking-widest"
+                  className="w-full sm:w-auto text-[10px] font-medium uppercase tracking-wider"
                   onClick={() =>
                     setMatchingClause({
                       text: preview.combinedText.slice(0, 4000),
