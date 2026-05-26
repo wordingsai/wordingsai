@@ -7,6 +7,7 @@ const CACHE_TTL = 60 * 60 * 24; // 24 hours in seconds
 const GLOBAL_CACHE_PREFIX = "wordings:global:";
 
 export async function getGlobalCache<T>(key: string): Promise<T | null> {
+  if (!redis) return null;
   try {
     const data = await redis.get<T>(`${GLOBAL_CACHE_PREFIX}${key}`);
     if (data) {
@@ -24,6 +25,7 @@ export async function setGlobalCache<T>(
   value: T,
   ttl = CACHE_TTL,
 ): Promise<void> {
+  if (!redis) return;
   try {
     await redis.set(`${GLOBAL_CACHE_PREFIX}${key}`, value, { ex: ttl });
     console.log(`[Cache] SET for key: ${key} (ttl: ${ttl}s)`);
