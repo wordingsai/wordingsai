@@ -839,45 +839,44 @@ export default function ContractAnalysisPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 lg:gap-3">
+          <div className="flex flex-wrap gap-2">
             <Link href={`/contracts/${contractId}/edit`}>
-              <Button
-                variant="outline"
-                className="flex-1 lg:flex-none rounded-xl border-outline-variant text-xs font-medium uppercase tracking-wider h-12 px-6 hover:bg-secondary/10 hover:text-secondary hover:border-secondary/30 transition-all"
-              >
-                <Settings2 className="size-4 mr-2" /> Re-calibrate
+              <Button variant="outline" size="sm" className="gap-2">
+                <Settings2 className="size-3.5" /> Edit
               </Button>
             </Link>
             {hasAnalysis && (
               <Button
                 variant="outline"
-                className="flex-1 lg:flex-none rounded-xl border-outline-variant text-xs font-medium uppercase tracking-wider h-12 px-6"
+                size="sm"
+                className="gap-2"
                 onClick={handleExport}
               >
-                <Download className="size-4 mr-2" /> Export
+                <Download className="size-3.5" /> Export
               </Button>
             )}
 
             <Button
+              size="sm"
               onClick={() => {
                 // If we already have analysis or it stalled, we want to FORCE a reset
                 runAnalysis(true);
               }}
               disabled={analysisLoading || isProcessing}
-              className="flex-1 lg:flex-none bg-primary text-primary-foreground rounded-md flex items-center justify-center gap-2 transition-all  text-[10px]"
+              className="gap-2"
             >
               {analysisLoading || isProcessing ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Loader2 className="size-3.5 animate-spin" />
               ) : (
-                <Sparkles className="size-4" />
+                <Sparkles className="size-3.5" />
               )}
               {isProcessing
-                ? "VETTING IN PROGRESS..."
+                ? "Analysis in progress…"
                 : hasAnalysis
-                  ? "RUN RE-ANALYSIS"
+                  ? "Re-run analysis"
                   : hasFastAnalysis
-                    ? "RERUN ANALYSIS"
-                    : "INITIALIZE AI ANALYSIS"}
+                    ? "Re-run analysis"
+                    : "Run analysis"}
             </Button>
           </div>
         </div>
