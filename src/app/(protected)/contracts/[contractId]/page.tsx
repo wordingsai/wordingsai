@@ -35,6 +35,7 @@ import {
   XCircle,
   Copy,
   Info,
+  BookmarkPlus,
 } from "lucide-react";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -65,6 +66,7 @@ import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { AnalysisChecklist } from "@/components/contracts/analysis-checklist";
+import { SaveClauseToLibraryDialog } from "@/components/contracts/save-clause-to-library-dialog";
 import { useCurrentPlan } from "@/hooks/use-current-plan";
 import { authClient } from "@/lib/auth-client";
 import { useAnalysisSync } from "@/hooks/use-analysis-sync";
@@ -540,6 +542,10 @@ export default function ContractAnalysisPage() {
   const [selectedResultId, setSelectedResultId] = useState<string | null>(null);
   /** When false, hide unidentified / not-matched rows (compact corporate view). Default: show all. */
   const [showUnidentifiedClauses, setShowUnidentifiedClauses] = useState(true);
+
+  // "Save detected clause to my library" dialog — opened from the bookmark
+  // button next to the Extracted-from-Contract panel header.
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
 
   const filteredEvents = useMemo(() => {
     if (showUnidentifiedClauses) return checklistEvents;
@@ -1307,20 +1313,35 @@ export default function ContractAnalysisPage() {
                                   </div>{" "}
                                   Extracted from Contract
                                 </h4>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  className="size-8 rounded-lg"
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(
-                                      selectedEvent.metadata?.documentText ||
-                                        "",
-                                    );
-                                    toast.success("Copied to clipboard");
-                                  }}
-                                >
-                                  <Copy className="size-4" />
-                                </Button>
+                                <div className="flex items-center gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="h-8 rounded-lg font-semibold uppercase text-[9px] tracking-widest text-on-surface-variant hover:text-primary"
+                                    disabled={
+                                      !selectedEvent.metadata?.documentText
+                                    }
+                                    onClick={() => setSaveDialogOpen(true)}
+                                    title="Save this clause to your library so you can reuse it later"
+                                  >
+                                    <BookmarkPlus className="size-3.5 mr-1" />
+                                    Save to library
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-8 rounded-lg"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(
+                                        selectedEvent.metadata?.documentText ||
+                                          "",
+                                      );
+                                      toast.success("Copied to clipboard");
+                                    }}
+                                  >
+                                    <Copy className="size-4" />
+                                  </Button>
+                                </div>
                               </div>
                               <div className="bg-surface-container-low p-4 sm:p-6 rounded-2xl border border-outline-variant/30 shadow-inner min-h-[120px] max-h-[40vh] overflow-y-auto">
                                 <TruncatedText
@@ -2077,6 +2098,20 @@ export default function ContractAnalysisPage() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Save-to-library prompt for the currently selected detected clause. */}
+      {selectedEvent ? (
+        <SaveClauseToLibraryDialog
+          open={saveDialogOpen}
+          onOpenChange={setSaveDialogOpen}
+          contractId={contractId}
+          defaultClauseName={
+            selectedEvent.metadata?.clauseName?.trim() || "Untitled clause"
+          }
+          defaultClauseText={selectedEvent.metadata?.documentText || ""}
+          defaultCategory={selectedEvent.metadata?.category}
+        />
+      ) : null}
     </main>
   );
 }
