@@ -539,7 +539,12 @@ export default function ContractAnalysisPage() {
   >("summary");
 
   const [highlightText, setHighlightText] = useState<string | null>(null);
-  const [isPanel1Open, setIsPanel1Open] = useState(true);
+  // Risk Drivers / Key Milestones brief panel. Default to HIDDEN -- most
+  // contracts have nothing critical to surface here ("No critical risks
+  // identified") and the empty 260px rail wasted screen real estate.
+  // The user can still toggle it on with the "Show brief" button when
+  // they want the timeline + risk breakdown.
+  const [isPanel1Open, setIsPanel1Open] = useState(false);
   const [selectedResultId, setSelectedResultId] = useState<string | null>(null);
   /** When false, hide unidentified / not-matched rows (compact corporate view). Default: show all. */
   const [showUnidentifiedClauses, setShowUnidentifiedClauses] = useState(true);
@@ -562,6 +567,13 @@ export default function ContractAnalysisPage() {
   const selectedEvent = useMemo(() => {
     return checklistEvents.find((e) => e.id === selectedResultId);
   }, [checklistEvents, selectedResultId]);
+
+  // When the user opens a clause detail, auto-collapse the Risk Drivers
+  // brief so the analysis pane has full width to breathe. The user can
+  // still reopen it manually from the "Show brief" button.
+  useEffect(() => {
+    if (selectedResultId) setIsPanel1Open(false);
+  }, [selectedResultId]);
 
   const showFastResults =
     hasFastAnalysis ||
@@ -1183,14 +1195,19 @@ export default function ContractAnalysisPage() {
                     )}
                   </AnimatePresence>
 
-                  {/* PANEL 2: Clause Navigation */}
+                  {/* PANEL 2: Clause Navigation.
+                      When no clause is selected, the list takes the whole row
+                      (flex-1). When a clause IS selected, it becomes a fixed-
+                      width rail (~360px) so titles stay readable, instead of
+                      a fluid 42% that crushed the cards. The detail panel on
+                      the right then gets the rest of the screen. */}
                   <motion.div
                     layout
                     transition={{ type: "spring", bounce: 0, duration: 0.5 }}
                     className={cn(
                       "flex-1 min-w-0 overflow-y-auto transition-all duration-500",
                       selectedResultId
-                        ? "xl:flex-[0.4] xl:max-w-[42%]"
+                        ? "xl:flex-none xl:w-[360px] xl:max-w-[360px] xl:max-h-[min(70vh,640px)]"
                         : "xl:flex-1",
                     )}
                   >
