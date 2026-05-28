@@ -123,15 +123,27 @@ export async function POST(
         changeNote: `Updated from contract analysis (${contractId})`,
       });
     } else {
+      // When the caller marks isPrivate (or scope === "user"), the new
+      // clause is stored as a user-private "Custom" clause: only the
+      // saving user sees it. This is the path the "Save detected clause to
+      // my library" prompt on the contract page uses.
+      const isPrivate =
+        body.isPrivate === true ||
+        body.scope === "user" ||
+        body.scope === "private";
+      const ownerUserId =
+        !isGlobalClause && isPrivate ? sessionData.user.id : null;
+
       const [newClause] = await db
         .insert(clauses)
         .values({
           organizationId: isGlobalClause ? null : context.organizationId,
           workspaceId: isGlobalClause ? null : context.workspaceId,
+          ownerUserId,
           clauseName,
           clauseText,
           category: category || "Other",
-          library: library || "Custom",
+          library: library || (isPrivate ? "My custom library" : "Custom"),
           status: "Approved",
           approvalStatus: "Approved",
           isGlobal: isGlobalClause,

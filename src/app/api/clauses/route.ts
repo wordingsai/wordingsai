@@ -49,9 +49,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Pass the active userId so user-private "Custom" clauses are scoped
+    // correctly: caller sees global + org-shared + their own private clauses,
+    // and is blocked from seeing other users' private clauses in the same org.
     const uniqueClauses = await fetchVisibleClausesForWorkspace(
       context.organizationId,
       targetWorkspaceId,
+      context.userId,
     );
 
     return NextResponse.json(uniqueClauses);
@@ -112,6 +116,13 @@ export async function POST(req: NextRequest) {
 
     const isPSA = (sessionData.session as any).role === "psa";
     const isGlobal = isPSA && body.isGlobal === true;
+    // When body.isPrivate === true (or scope === "user"), the new clause is
+    // stored as a user-private "Custom" clause: only the creating user sees
+    // it, even other members of the same org can't. NULL ownerUserId keeps
+    // the original org-shared behavior.
+    const isPrivate =
+      body.isPrivate === true || body.scope === "user" || body.scope === "private";
+    const ownerUserId = !isGlobal && isPrivate ? sessionData.user.id : null;
 
     const targetWorkspaceId = context.workspaceId;
     const workspaceType = body.workspaceType || "general";
@@ -134,6 +145,7 @@ export async function POST(req: NextRequest) {
       .values({
         organizationId: isGlobal ? null : context.organizationId,
         workspaceId: isGlobal ? null : targetWorkspaceId,
+        ownerUserId,
         isGlobal,
         clauseName,
         category: category as any,
