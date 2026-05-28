@@ -48,6 +48,10 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { useActiveWorkspace } from "@/hooks/use-active-workspace";
+import {
+  AmendmentDiffDialog,
+  type VersionRow,
+} from "@/components/clause-library/amendment-diff-dialog";
 
 type Clause = {
   id: string;
@@ -73,10 +77,13 @@ type Clause = {
 
 type VersionHistoryEntry = {
   version: string;
+  versionNumber: number;
   isActive?: boolean;
   updatedAt: string;
   changeSummary: string;
   modifiedBy: string;
+  /** Present when fetched from /api/clauses/[id]/versions; used for diffing. */
+  clauseText?: string;
 };
 
 const formatDate = (dateStr: string) => {
@@ -101,6 +108,10 @@ export default function IndividualClausePage() {
   const [updatingKeywords, setUpdatingKeywords] = useState(false);
   const [showCopyDialog, setShowCopyDialog] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
+  const [diffDialogOpen, setDiffDialogOpen] = useState(false);
+  const [initialDiffVersion, setInitialDiffVersion] = useState<
+    number | undefined
+  >(undefined);
   const { data: activeWorkspace } = useActiveWorkspace();
 
   useEffect(() => {
@@ -586,9 +597,15 @@ export default function IndividualClausePage() {
               </div>
               <div className="divide-y divide-outline-variant/20">
                 {versionHistory.slice(0, 3).map((v, i) => (
-                  <div
+                  <button
                     key={i}
-                    className="p-6 hover:bg-surface-container-high transition-colors cursor-pointer group"
+                    type="button"
+                    onClick={() => {
+                      setInitialDiffVersion(v.versionNumber);
+                      setDiffDialogOpen(true);
+                    }}
+                    disabled={versionHistory.length < 2}
+                    className="w-full text-left p-6 hover:bg-surface-container-high transition-colors cursor-pointer group disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <div className="flex justify-between items-start mb-2">
                       <span
@@ -599,7 +616,7 @@ export default function IndividualClausePage() {
                             : "text-on-surface-variant",
                         )}
                       >
-                        V{v.version} {v.isActive ? "• CURRENT" : ""}
+                        {v.version} {v.isActive ? "• CURRENT" : ""}
                       </span>
                       <span className="text-[10px] font-bold text-on-surface-variant">
                         {formatDate(v.updatedAt)}
@@ -611,7 +628,7 @@ export default function IndividualClausePage() {
                     <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity text-primary">
                       VIEW SNAPSHOT <ChevronRight className="w-3 h-3" />
                     </div>
-                  </div>
+                  </button>
                 ))}
                 {versionHistory.length === 0 && (
                   <div className="p-12 text-center text-xs font-medium uppercase tracking-wider opacity-20">
@@ -621,7 +638,12 @@ export default function IndividualClausePage() {
               </div>
               <Button
                 variant="ghost"
-                className="w-full h-14 rounded-none font-semibold uppercase tracking-widest text-[11px] border-t border-outline-variant/30 hover:bg-surface-container-high"
+                disabled={versionHistory.length < 2}
+                onClick={() => {
+                  setInitialDiffVersion(undefined);
+                  setDiffDialogOpen(true);
+                }}
+                className="w-full h-14 rounded-none font-semibold uppercase tracking-widest text-[11px] border-t border-outline-variant/30 hover:bg-surface-container-high disabled:opacity-40"
               >
                 Full Differential View
               </Button>
@@ -677,6 +699,14 @@ export default function IndividualClausePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Amendment history diff -- triggered from the Version Control card. */}
+      <AmendmentDiffDialog
+        open={diffDialogOpen}
+        onOpenChange={setDiffDialogOpen}
+        versions={versionHistory as VersionRow[]}
+        initialNewerVersionNumber={initialDiffVersion}
+      />
     </>
   );
 }

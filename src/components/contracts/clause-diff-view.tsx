@@ -33,6 +33,20 @@ interface Props {
   libraryText: string | null | undefined;
   emptyContractLabel?: string;
   emptyLibraryLabel?: string;
+  /** Override the left column header. Defaults to "Extracted from Contract". */
+  contractLabel?: string;
+  /** Override the right column header. Defaults to "Company Standard (Library)". */
+  libraryLabel?: string;
+  /** Optional icon overrides for each column header. */
+  contractIcon?: React.ReactNode;
+  libraryIcon?: React.ReactNode;
+  /**
+   * Legend wording for the bottom badges. Useful when the comparison is
+   * older-vs-newer (e.g. "Added in v3" / "Removed in v3") rather than
+   * contract-vs-library.
+   */
+  addedLegend?: string;
+  removedLegend?: string;
 }
 
 export function ClauseDiffView({
@@ -40,6 +54,12 @@ export function ClauseDiffView({
   libraryText,
   emptyContractLabel = "No exact text snippet captured during scan.",
   emptyLibraryLabel = "No baseline standard available for this provision.",
+  contractLabel = "Extracted from Contract",
+  libraryLabel = "Company Standard (Library)",
+  contractIcon,
+  libraryIcon,
+  addedLegend = "Added in contract",
+  removedLegend = "Removed from library",
 }: Props) {
   const [mode, setMode] = React.useState<"diff" | "plain">("diff");
 
@@ -86,8 +106,8 @@ export function ClauseDiffView({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Column
           tone="contract"
-          title="Extracted from Contract"
-          icon={<FileText className="size-3.5" />}
+          title={contractLabel}
+          icon={contractIcon ?? <FileText className="size-3.5" />}
           emptyLabel={emptyContractLabel}
           text={left}
         >
@@ -100,8 +120,8 @@ export function ClauseDiffView({
 
         <Column
           tone="library"
-          title="Company Standard (Library)"
-          icon={<BookOpen className="size-3.5" />}
+          title={libraryLabel}
+          icon={libraryIcon ?? <BookOpen className="size-3.5" />}
           emptyLabel={emptyLibraryLabel}
           text={right}
         >
@@ -120,9 +140,9 @@ export function ClauseDiffView({
       {hasBoth ? (
         <div className="text-[10px] text-on-surface-variant flex items-center gap-4 px-1">
           <LegendDot className="bg-emerald-500/30 border border-emerald-500/60" />
-          Added in contract
+          {addedLegend}
           <LegendDot className="bg-rose-500/30 border border-rose-500/60" />
-          Removed from library
+          {removedLegend}
         </div>
       ) : null}
     </div>
