@@ -1034,39 +1034,29 @@ export default function ContractAnalysisPage() {
               >
                 {/* Summary Widget */}
                 {contract.analysis?.summary && (
-                  <div className="w-full bg-background border border-outline-variant/50 rounded-xl p-8 lg:p-10 shadow-sm relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 opacity-[0.06] pointer-events-none">
-                      <BookOpen className="size-32 rotate-12 text-primary" />
-                    </div>
-                    <div className="relative z-10 space-y-6">
-                      <div className="flex items-center gap-4">
-                        <div className="size-12 bg-primary/10 rounded-2xl flex items-center justify-center">
-                          <FileText className="size-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
-                            Intelligence Summary
-                          </h3>
-                          <p className="text-xl font-semibold text-on-surface uppercase tracking-tight">
-                            Executive Document Brief
-                          </p>
-                        </div>
+                  <div className="w-full bg-background border border-outline-variant/40 rounded-lg p-5 relative overflow-hidden">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <FileText className="size-4 text-primary" />
+                        <h3 className="text-sm font-semibold text-on-surface">
+                          Executive summary
+                        </h3>
                       </div>
-                      <p className="text-on-surface text-base md:text-lg font-normal leading-relaxed whitespace-pre-wrap">
+                      <p className="text-on-surface text-sm leading-relaxed whitespace-pre-wrap">
                         {contract.analysis.summary}
                       </p>
                       {contract.analysis.keyHighlights &&
                         contract.analysis.keyHighlights.length > 0 && (
-                          <div className="flex flex-wrap gap-3 pt-4">
+                          <div className="flex flex-wrap gap-1.5 pt-2">
                             {contract.analysis.keyHighlights.map(
                               (highlight: string, i: number) => (
-                                <div
+                                <span
                                   key={i}
-                                  className="flex items-center gap-2 px-4 py-2 bg-surface-container-low border border-outline-variant/30 rounded-full text-xs font-medium uppercase tracking-wider text-on-surface"
+                                  className="inline-flex items-center gap-1 px-2 py-0.5 bg-surface-container-low border border-outline-variant/30 rounded-md text-xs text-on-surface"
                                 >
-                                  <Sparkles className="size-3 text-primary" />{" "}
+                                  <Sparkles className="size-3 text-primary" />
                                   {highlight}
-                                </div>
+                                </span>
                               ),
                             )}
                           </div>

@@ -175,21 +175,16 @@ export function AnalysisChecklist({
                   type="button"
                   onClick={() => setSelectedId(isActive ? null : event.id)}
                   className={cn(
-                    "w-full text-left p-3 sm:p-4 rounded-xl sm:rounded-2xl border transition-all duration-200 min-w-0",
+                    "w-full text-left px-3 py-2 rounded-md border transition-colors min-w-0",
                     isActive
-                      ? "ring-2 ring-primary border-transparent shadow-lg bg-surface-container"
-                      : "bg-surface-container-low border-outline-variant/50 hover:border-primary/40",
-                    isGreen
-                      ? "hover:bg-emerald-50/30 dark:hover:bg-emerald-950/10"
-                      : isAmber
-                        ? "hover:bg-amber-50/30 dark:hover:bg-amber-950/10"
-                        : "hover:bg-red-50/30 dark:hover:bg-red-950/10",
+                      ? "ring-1 ring-primary border-transparent bg-surface-container"
+                      : "bg-surface-container-low border-outline-variant/40 hover:border-primary/40",
                   )}
                 >
-                  <div className="flex items-start gap-2 sm:gap-3 min-w-0">
+                  <div className="flex items-start gap-2 min-w-0">
                     <div
                       className={cn(
-                        "size-8 sm:size-9 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0",
+                        "size-6 rounded-md flex items-center justify-center shrink-0 mt-0.5",
                         isGreen
                           ? "bg-emerald-500/10 text-emerald-500"
                           : isAmber
@@ -198,55 +193,55 @@ export function AnalysisChecklist({
                       )}
                     >
                       {isGreen ? (
-                        <CheckCircle2 className="size-4 sm:size-5" />
+                        <CheckCircle2 className="size-3.5" />
                       ) : isAmber ? (
-                        <Scale className="size-4 sm:size-5" />
+                        <Scale className="size-3.5" />
                       ) : (
-                        <XCircle className="size-4 sm:size-5" />
+                        <XCircle className="size-3.5" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0 overflow-hidden">
-                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <h4 className="font-semibold text-xs sm:text-sm uppercase tracking-tight text-on-surface truncate max-w-full">
+                      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+                        <h4 className="font-medium text-sm text-on-surface truncate max-w-full">
                           {clauseName}
                         </h4>
                         <Badge
                           variant="outline"
                           className={cn(
-                            "text-[8px] sm:text-[9px] uppercase font-semibold tracking-widest px-1.5 py-0 border-none shrink-0",
+                            "text-[10px] font-medium px-1.5 py-0 border rounded shrink-0",
                             isGreen
-                              ? "bg-emerald-500 text-white"
+                              ? "bg-emerald-500/15 text-emerald-500 border-emerald-500/30"
                               : isAmber
-                                ? "bg-amber-500 text-white"
-                                : "bg-red-500 text-white",
+                                ? "bg-amber-500/15 text-amber-500 border-amber-500/30"
+                                : "bg-red-500/15 text-red-500 border-red-500/30",
                           )}
                         >
                           {isGreen
                             ? "Matched"
                             : isAmber
                               ? "Custom"
-                              : "Not Matched"}
+                              : "Missing"}
                         </Badge>
                       </div>
-                      <p className="text-[9px] font-bold text-on-surface-variant/60 uppercase tracking-widest mt-0.5 truncate">
-                        {event.metadata.category || "General Provision"}
+                      <p className="text-[11px] text-on-surface-variant/70 truncate mt-0.5">
+                        {event.metadata.category || "General"}
                       </p>
                       {!isListMode && snippet && (
-                        <p className="mt-2 text-[11px] text-on-surface-variant line-clamp-2 leading-relaxed">
+                        <p className="mt-1.5 text-xs text-on-surface-variant line-clamp-2 leading-snug">
                           {snippet}
                         </p>
                       )}
                       {isListMode && snippet && (
-                        <p className="mt-1.5 text-[10px] text-on-surface-variant/80 line-clamp-1">
+                        <p className="mt-1 text-[11px] text-on-surface-variant/80 line-clamp-1">
                           {snippet.slice(0, 120)}
                           {snippet.length > 120 ? "…" : ""}
                         </p>
                       )}
                     </div>
-                    <div className="flex flex-col items-end gap-0.5 shrink-0">
+                    <div className="flex flex-col items-end gap-0 shrink-0">
                       <span
                         className={cn(
-                          "text-[9px] sm:text-[10px] font-semibold",
+                          "text-[11px] font-semibold tabular-nums",
                           isGreen
                             ? "text-emerald-500"
                             : isAmber
