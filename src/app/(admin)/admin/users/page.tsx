@@ -3,9 +3,14 @@
  *
  * Cross-org list of every user in the platform with their primary org
  * affiliation and lifecycle dates.
+ *
+ * Implementation note: we deliberately do two simple queries and aggregate in
+ * JS instead of one big SQL with correlated subqueries. The dataset is small
+ * (admin-only view), and the previous raw-SQL approach with `${member}`
+ * interpolation was throwing on Neon serverless.
  */
 import { db } from "@/db/drizzle";
-import { sql } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { user, member, organization } from "@/db/schema";
 import { format } from "date-fns";
 import { UsersTable } from "@/components/admin/users-table";
@@ -13,42 +18,64 @@ import { UsersTable } from "@/components/admin/users-table";
 export const dynamic = "force-dynamic";
 
 async function loadUsers() {
-  // Each user with their org membership count + most recent org name
-  const rows = await db.execute(sql`
-    SELECT
-      u.id,
-      u.email,
-      u.name,
-      u.role,
-      u.email_verified,
-      u.created_at,
-      (SELECT count(*)::int FROM ${member} m WHERE m.user_id = u.id) AS membership_count,
-      (
-        SELECT o.name
-        FROM ${member} m
-        JOIN ${organization} o ON o.id = m.organization_id
-        WHERE m.user_id = u.id
-        ORDER BY m.created_at DESC
-        LIMIT 1
-      ) AS primary_org_name
-    FROM "user" u
-    ORDER BY u.created_at DESC
-  `);
+  const [users, memberships] = await Promise.all([
+    db
+      .select({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt,
+      })
+      .from(user)
+      .orderBy(desc(user.createdAt)),
+    db
+      .select({
+        userId: member.userId,
+        orgName: organization.name,
+        memberCreatedAt: member.createdAt,
+      })
+      .from(member)
+      .leftJoin(organization, eq(member.organizationId, organization.id)),
+  ]);
 
-  // drizzle returns rows in `rows` property
-  const data = (rows as any).rows ?? rows;
-  return (data as Array<Record<string, any>>).map((r) => ({
-    id: r.id,
-    email: r.email,
-    name: r.name,
-    role: r.role ?? "u",
-    emailVerified: !!r.email_verified,
-    primaryOrgName: r.primary_org_name as string | null,
-    membershipCount: Number(r.membership_count ?? 0),
-    createdAt: r.created_at
-      ? format(new Date(r.created_at), "d MMM yyyy")
-      : "—",
-  }));
+  // Per-user index of memberships, newest first.
+  const byUser = new Map<
+    string,
+    { orgName: string | null; memberCreatedAt: Date }[]
+  >();
+  for (const m of memberships) {
+    const list = byUser.get(m.userId) ?? [];
+    list.push({
+      orgName: m.orgName,
+      memberCreatedAt: m.memberCreatedAt as Date,
+    });
+    byUser.set(m.userId, list);
+  }
+  for (const list of byUser.values()) {
+    list.sort(
+      (a, b) =>
+        new Date(b.memberCreatedAt).getTime() -
+        new Date(a.memberCreatedAt).getTime(),
+    );
+  }
+
+  return users.map((u) => {
+    const ms = byUser.get(u.id) ?? [];
+    return {
+      id: u.id,
+      email: u.email,
+      name: u.name,
+      role: u.role ?? "u",
+      emailVerified: !!u.emailVerified,
+      primaryOrgName: ms[0]?.orgName ?? null,
+      membershipCount: ms.length,
+      createdAt: u.createdAt
+        ? format(new Date(u.createdAt), "d MMM yyyy")
+        : "—",
+    };
+  });
 }
 
 export default async function AdminUsersPage() {
