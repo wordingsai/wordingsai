@@ -109,7 +109,14 @@ export function ClauseDiffView({
         ) : null}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 min-w-0">
+      <div
+        // `auto-fit` + minmax means: lay out as 2 columns when the parent
+        // is wide enough for each column to be at least 280px, otherwise
+        // stack to 1 column. This works for *container* width (not viewport)
+        // so it adapts correctly inside the narrow PANEL 3 of the contract
+        // page as well as inside the wide AmendmentDiffDialog.
+        className="grid gap-3 md:gap-4 min-w-0 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]"
+      >
         <Column
           tone="contract"
           title={contractLabel}
@@ -277,9 +284,7 @@ function PlainText({
 }) {
   if (!text) {
     return (
-      <span className="text-on-surface-variant/60 text-xs italic">
-        {emptyLabel}
-      </span>
+      <span className="text-xs italic opacity-50">{emptyLabel}</span>
     );
   }
   return (
