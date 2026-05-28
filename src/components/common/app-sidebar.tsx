@@ -30,6 +30,7 @@ import { authClient } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCurrentPlan } from "@/hooks/use-current-plan";
 import { WorkspaceSwitcher } from "../workspace-switcher";
+import { cn } from "@/lib/utils";
 
 import { NavUser } from "./nav-user";
 
@@ -59,37 +60,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       variant="inset"
       {...props}
     >
-      <SidebarHeader>
+      <SidebarHeader className="gap-1.5">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              size="lg"
               asChild
-              className="hover:bg-transparent"
+              className="hover:bg-transparent h-9 px-2"
             >
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-secondary/60 text-primary-foreground transition-transform group-hover:scale-110">
+              <Link href="/" className="flex items-center gap-2 group">
+                <div className="flex aspect-square size-6 items-center justify-center rounded-md bg-secondary/60">
                   <Image
                     src="/logo.png"
-                    alt="Logo"
-                    width={24}
-                    height={24}
+                    alt="WordingsAI"
+                    width={18}
+                    height={18}
                     style={{ width: "auto", height: "auto" }}
                   />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold uppercase tracking-tighter">
-                    WordingsAI
-                  </span>
-                  <span className="truncate text-[10px] font-medium text-muted-foreground uppercase tracking-widest">
-                    Neural Engine
-                  </span>
-                </div>
+                <span className="truncate text-sm font-semibold tracking-tight">
+                  WordingsAI
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-        <div className="px-2 mt-2">
+        <div className="px-2">
           <WorkspaceSwitcher />
         </div>
       </SidebarHeader>
@@ -136,7 +131,7 @@ function NavMain({
 
   return (
     <SidebarGroup>
-      <SidebarGroupContent className="flex flex-col gap-2 px-0 py-4">
+      <SidebarGroupContent className="flex flex-col gap-0.5 px-0 py-2">
         <SidebarMenu>
           {filteredItems.map((item) => {
             const isActive = pathname === item.url;
@@ -146,18 +141,18 @@ function NavMain({
                 <SidebarMenuButton
                   asChild
                   tooltip={item.title}
-                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors
-                  ${
+                  className={cn(
+                    "flex w-full items-center gap-2 rounded-md px-2.5 h-8 text-sm font-medium transition-colors",
                     isActive
                       ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-                  }`}
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                  )}
                 >
                   <Link
                     href={item.url}
-                    className="flex items-center gap-3 w-full"
+                    className="flex items-center gap-2 w-full"
                   >
-                    {item.icon && <item.icon className="size-5 shrink-0" />}
+                    {item.icon && <item.icon className="size-4 shrink-0" />}
                     <span>{item.title}</span>
                   </Link>
                 </SidebarMenuButton>

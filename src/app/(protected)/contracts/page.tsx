@@ -287,44 +287,45 @@ export default function ContractsPage() {
   };
 
   return (
-    <main className="flex-1 p-4 lg:p-10 bg-background transition-colors duration-300 overflow-x-hidden">
+    <main className="flex-1 p-6 lg:px-8 lg:py-7 bg-background overflow-x-hidden">
       {/* Page Header */}
-      <div className="mb-6 lg:mb-10">
-        <div className="flex items-center gap-2 mb-4 lg:mb-6">
+      <div className="mb-5">
+        <div className="mb-2">
           <Breadcrumb>
-            <BreadcrumbList>
+            <BreadcrumbList className="text-xs">
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
-                  Portfolio Management
+                <BreadcrumbPage className="text-on-surface-variant">
+                  Contracts
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3">
+          <div className="space-y-1">
+            <h1 className="text-xl lg:text-2xl font-semibold tracking-tight text-on-surface">
               {viewMode === "active"
-                ? "Contract Portfolio"
+                ? "Contract portfolio"
                 : viewMode === "archive"
                   ? "Archive"
-                  : "Trash Bin"}
+                  : "Trash bin"}
             </h1>
-            <p className="text-on-surface-variant text-base lg:text-lg font-medium max-w-2xl">
+            <p className="text-on-surface-variant text-sm">
               {viewMode === "active"
-                ? "Centralized repository for all wordings and neural reinsurance documentation."
+                ? "Centralized repository for all wordings and reinsurance documentation."
                 : viewMode === "archive"
                   ? "Archived contracts are stored for reference. The 10 most recent stay in Active automatically."
                   : "Contracts here will be permanently deleted after 7 days."}
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex gap-0.5 p-1 bg-surface-container-low border border-outline-variant rounded-lg">
+          <div className="flex items-center gap-2">
+            <div className="flex gap-0.5 p-0.5 bg-surface-container-low border border-outline-variant/60 rounded-md">
               <Button
                 variant={viewMode === "active" ? "default" : "ghost"}
                 size="sm"
+                className="h-7 text-xs"
                 onClick={() => setViewMode("active")}
               >
                 Active
@@ -334,13 +335,13 @@ export default function ContractsPage() {
                 size="sm"
                 onClick={() => setViewMode("archive")}
                 className={cn(
-                  "gap-1.5",
+                  "h-7 text-xs gap-1",
                   viewMode === "archive"
                     ? "bg-amber-500 text-white hover:bg-amber-500/90"
                     : "",
                 )}
               >
-                <Archive className="size-3.5" />
+                <Archive className="size-3" />
                 Archive
               </Button>
               <Button
@@ -348,22 +349,22 @@ export default function ContractsPage() {
                 size="sm"
                 onClick={() => setViewMode("bin")}
                 className={cn(
-                  "gap-1.5",
+                  "h-7 text-xs gap-1",
                   viewMode === "bin"
                     ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     : "",
                 )}
               >
-                <Trash2 className="size-3.5" />
+                <Trash2 className="size-3" />
                 Bin
               </Button>
             </div>
 
             {isSuperUser && viewMode === "active" && (
-              <Link href="/contracts/upload" className="w-full lg:w-auto">
-                <Button size="lg" className="w-full lg:w-auto gap-2">
-                  <Plus className="size-4" />
-                  Add new wording
+              <Link href="/contracts/upload">
+                <Button size="sm" className="gap-1.5">
+                  <Plus className="size-3.5" />
+                  Add new
                 </Button>
               </Link>
             )}
@@ -372,15 +373,15 @@ export default function ContractsPage() {
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-col gap-4 mb-6 lg:mb-8">
-        <div className="flex flex-col lg:flex-row gap-4">
+      <div className="flex flex-col gap-3 mb-4">
+        <div className="flex flex-col lg:flex-row gap-2">
           <div className="relative flex-1 group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant group-focus-within:text-primary transition-colors" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant group-focus-within:text-primary transition-colors" />
             <Input
-              placeholder="Search by name, reinsured, or broker..."
+              placeholder="Search by name, reinsured, or broker…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 bg-surface-container-low border-outline-variant transition-all focus:ring-4 focus:ring-primary/10"
+              className="pl-9 h-9 bg-surface-container-low border-outline-variant/60 focus:ring-2 focus:ring-primary/20"
             />
           </div>
 
@@ -389,14 +390,14 @@ export default function ContractsPage() {
               value={typeFilter}
               onValueChange={(v) => setTypeFilter(v as string)}
             >
-              <SelectTrigger className="flex-1 lg:w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider">
-                <div className="flex items-center gap-2">
-                  <LayoutGrid className="w-4 h-4 text-primary" />
+              <SelectTrigger className="flex-1 lg:w-[140px] h-9 bg-surface-container-low border-outline-variant/60 rounded-md text-xs">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <LayoutGrid className="size-3.5 text-primary shrink-0" />
                   <SelectValue placeholder="Type" />
                 </div>
               </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="type">All Types</SelectItem>
+              <SelectContent>
+                <SelectItem value="type">All types</SelectItem>
                 {availableContractTypes.map((t) => (
                   <SelectItem key={t} value={t} className="capitalize">
                     {t}
@@ -409,14 +410,14 @@ export default function ContractsPage() {
               value={brokerFilter}
               onValueChange={(v) => setBrokerFilter(v as string)}
             >
-              <SelectTrigger className="flex-1 lg:w-[160px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider">
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-primary" />
+              <SelectTrigger className="flex-1 lg:w-[140px] h-9 bg-surface-container-low border-outline-variant/60 rounded-md text-xs">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <Users className="size-3.5 text-primary shrink-0" />
                   <SelectValue placeholder="Broker" />
                 </div>
               </SelectTrigger>
-              <SelectContent className="rounded-xl">
-                <SelectItem value="broker">All Brokers</SelectItem>
+              <SelectContent>
+                <SelectItem value="broker">All brokers</SelectItem>
                 {availableBrokers.map((b) => (
                   <SelectItem key={b} value={b}>
                     {b}
@@ -430,11 +431,11 @@ export default function ContractsPage() {
                 <Button
                   variant="outline"
                   className={cn(
-                    "flex-1 lg:w-[200px] h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider justify-start gap-2",
+                    "flex-1 lg:w-[180px] h-9 bg-surface-container-low border-outline-variant/60 rounded-md text-xs font-normal justify-start gap-1.5",
                     !dateFrom && !dateTo && "text-on-surface-variant",
                   )}
                 >
-                  <CalendarIcon className="w-4 h-4 text-primary" />
+                  <CalendarIcon className="size-3.5 text-primary" />
                   {dateFrom ? (
                     dateTo ? (
                       <>
@@ -445,7 +446,7 @@ export default function ContractsPage() {
                       format(dateFrom, "dd MMM")
                     )
                   ) : (
-                    "Date Range"
+                    "Date range"
                   )}
                 </Button>
               </PopoverTrigger>
@@ -521,28 +522,28 @@ export default function ContractsPage() {
       </div>
 
       {/* Content Area */}
-      <div className="bg-surface-container-low border border-outline-variant rounded-lg lg:rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-surface-container-low border border-outline-variant/60 rounded-xl overflow-hidden">
         {/* Header (Desktop) */}
-        <div className="hidden lg:grid grid-cols-[2.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_1fr] gap-4 px-10 py-7 bg-surface-container-highest/30 border-b border-outline-variant/50">
-          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+        <div className="hidden lg:grid grid-cols-[2.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_1fr] gap-3 px-4 h-9 items-center bg-surface-container-highest/30 border-b border-outline-variant/40">
+          <div className="text-[11px] font-medium uppercase tracking-wider text-on-surface-variant">
             Reference
           </div>
-          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+          <div className="text-[11px] font-medium uppercase tracking-wider text-on-surface-variant">
             Reinsured
           </div>
-          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center">
+          <div className="text-[11px] font-medium uppercase tracking-wider text-on-surface-variant text-center">
             Type
           </div>
-          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+          <div className="text-[11px] font-medium uppercase tracking-wider text-on-surface-variant">
             From
           </div>
-          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+          <div className="text-[11px] font-medium uppercase tracking-wider text-on-surface-variant">
             Execution
           </div>
-          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center">
+          <div className="text-[11px] font-medium uppercase tracking-wider text-on-surface-variant text-center">
             Status
           </div>
-          <div className="text-xs font-medium uppercase tracking-wider text-on-surface-variant text-right">
+          <div className="text-[11px] font-medium uppercase tracking-wider text-on-surface-variant text-right">
             Actions
           </div>
         </div>
@@ -620,42 +621,42 @@ export default function ContractsPage() {
                   <ContextMenuTrigger asChild>
                     <div className="group hover:bg-surface-container/50 transition-colors cursor-pointer">
                       {/* Desktop Row */}
-                      <div className="hidden lg:grid grid-cols-[2.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_1fr] gap-4 px-10 py-8 items-center">
-                        <div className="flex items-center gap-6 min-w-0">
-                          <div className="size-14 bg-surface-container-highest rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
-                            <FileText className="w-6 h-6 text-on-surface-variant group-hover:text-primary transition-colors" />
+                      <div className="hidden lg:grid grid-cols-[2.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_1fr] gap-3 px-4 py-2.5 items-center">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="size-7 bg-surface-container-highest rounded-md flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
+                            <FileText className="size-3.5 text-on-surface-variant group-hover:text-primary transition-colors" />
                           </div>
                           <div className="flex flex-col min-w-0">
                             <span className="text-sm font-medium text-on-surface group-hover:text-primary transition-colors truncate">
                               {contract.contractName}
                             </span>
-                            <span className="text-xs font-medium text-on-surface-variant uppercase tracking-wider mt-1">
-                              ID: PL-{contract.id.slice(0, 8).toUpperCase()}
+                            <span className="text-[11px] text-on-surface-variant font-mono">
+                              PL-{contract.id.slice(0, 8).toUpperCase()}
                             </span>
                           </div>
                         </div>
 
-                        <div className="font-bold text-sm text-on-surface truncate">
+                        <div className="text-sm text-on-surface truncate">
                           {contract.reinsured}
                         </div>
 
                         <div className="flex justify-center">
                           <Badge
                             variant="outline"
-                            className="text-xs font-medium uppercase tracking-wider bg-surface-container p-2.5 border-outline-variant text-on-surface-variant rounded-full whitespace-nowrap"
+                            className="text-[11px] font-medium px-2 py-0.5 bg-surface-container border-outline-variant/60 text-on-surface-variant rounded-md whitespace-nowrap"
                           >
                             {contract.contractType}
                           </Badge>
                         </div>
 
-                        <div className="text-on-surface-variant font-bold text-sm uppercase">
+                        <div className="text-on-surface-variant text-xs">
                           {contract.periodFrom
                             ? format(new Date(contract.periodFrom), "dd MMM yy")
                             : "—"}
                         </div>
 
-                        <div className="text-on-surface-variant font-bold text-sm uppercase flex items-center gap-2">
-                          <CalendarIcon className="w-4 h-4 opacity-30" />
+                        <div className="text-on-surface-variant text-xs flex items-center gap-1.5">
+                          <CalendarIcon className="size-3 opacity-40" />
                           {contract.periodFrom || contract.executionDate
                             ? format(
                                 new Date(
@@ -671,7 +672,7 @@ export default function ContractsPage() {
                           <Badge
                             variant="outline"
                             className={cn(
-                              "rounded-full text-xs font-medium uppercase tracking-tighter p-2.5 whitespace-nowrap",
+                              "rounded-md text-[11px] font-medium px-2 py-0.5 whitespace-nowrap",
                               getStatusStyle(contract.auditStatus || "pending"),
                             )}
                           >
@@ -679,14 +680,14 @@ export default function ContractsPage() {
                           </Badge>
                         </div>
 
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-0.5">
                           <Link href={`/contracts/${contract.id}`}>
                             <Button
                               size="icon"
                               variant="ghost"
-                              className="size-11 rounded-2xl hover:bg-primary/10 text-on-surface-variant hover:text-primary transition-all"
+                              className="size-7 rounded-md hover:bg-primary/10 text-on-surface-variant hover:text-primary transition-all"
                             >
-                              <ChevronRight className="w-6 h-6" />
+                              <ChevronRight className="size-3.5" />
                             </Button>
                           </Link>
                           <DropdownMenu>
@@ -694,38 +695,39 @@ export default function ContractsPage() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="size-11 rounded-2xl hover:bg-surface-container-highest transition-all"
+                                className="size-7 rounded-md hover:bg-surface-container-highest"
                               >
-                                <MoreHorizontal className="w-6 h-6" />
+                                <MoreHorizontal className="size-3.5" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                               align="end"
-                              className="rounded-2xl w-56 p-2 border-outline-variant shadow-2xl"
+                              className="w-44 p-1 border-outline-variant/60"
                             >
                               <DropdownMenuItem
-                                className="rounded-xl font-bold cursor-pointer h-12"
+                                className="cursor-pointer text-xs"
                                 onClick={() =>
                                   router.push(`/contracts/${contract.id}`)
                                 }
                               >
-                                Access Portfolio
+                                Open
                               </DropdownMenuItem>
 
                               {isSuperUser && viewMode === "active" && (
                                 <>
                                   <DropdownMenuItem
-                                    className="rounded-xl font-bold cursor-pointer text-amber-600 h-12"
+                                    className="cursor-pointer text-xs text-amber-600 focus:text-amber-600"
                                     onClick={() => handleArchive(contract.id)}
                                   >
-                                    <Archive className="mr-2 w-4 h-4" />
-                                    Move to Archive
+                                    <Archive className="mr-2 size-3.5" />
+                                    Archive
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
-                                    className="rounded-xl font-bold cursor-pointer text-destructive h-12"
+                                    className="cursor-pointer text-xs text-destructive focus:text-destructive"
                                     onClick={() => setDeleteId(contract.id)}
                                   >
-                                    Move to Bin
+                                    <Trash2 className="mr-2 size-3.5" />
+                                    Move to bin
                                   </DropdownMenuItem>
                                 </>
                               )}
@@ -733,18 +735,18 @@ export default function ContractsPage() {
                               {isSuperUser && viewMode === "archive" && (
                                 <>
                                   <DropdownMenuItem
-                                    className="rounded-xl font-bold cursor-pointer text-primary h-12"
+                                    className="cursor-pointer text-xs text-primary focus:text-primary"
                                     onClick={() => handleUnarchive(contract.id)}
                                   >
-                                    <ArchiveRestore className="mr-2 w-4 h-4" />
-                                    Restore to Active
+                                    <ArchiveRestore className="mr-2 size-3.5" />
+                                    Restore
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
-                                    className="rounded-xl font-bold cursor-pointer text-destructive h-12"
+                                    className="cursor-pointer text-xs text-destructive focus:text-destructive"
                                     onClick={() => setDeleteId(contract.id)}
                                   >
-                                    <Trash2 className="mr-2 w-4 h-4" />
-                                    Move to Bin
+                                    <Trash2 className="mr-2 size-3.5" />
+                                    Move to bin
                                   </DropdownMenuItem>
                                 </>
                               )}
