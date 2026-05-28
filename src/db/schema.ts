@@ -213,6 +213,54 @@ export const workspaces = pgTable(
   }),
 );
 
+/**
+ * Workspace-scoped invitations.
+ *
+ * Parallel to Better Auth's org-level `invitation` table -- this one lets a
+ * super-user / admin invite a specific email to a specific workspace
+ * (rather than the whole organisation). On accept we insert a row into
+ * `workspaceAccess` and mark the invitation accepted.
+ *
+ * Lifecycle:
+ *   pending  -> created by inviter, email dispatched
+ *   accepted -> invitee opened the magic link while logged-in as that email
+ *   expired  -> not yet enforced in code, but `expires_at` is the cut-off
+ */
+export const workspaceInvitations = pgTable(
+  "workspace_invitations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    workspaceId: uuid("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => organization.id, { onDelete: "cascade" }),
+    email: text("email").notNull(),
+    role: text("role").default("member").notNull(),
+    status: text("status").default("pending").notNull(),
+    /** Magic-link token; opaque and single-use. */
+    token: text("token").notNull().unique(),
+    inviterId: text("inviter_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    acceptedAt: timestamp("accepted_at"),
+  },
+  (table) => ({
+    workspaceInvitationsWorkspaceIdx: index(
+      "workspace_invitations_workspace_idx",
+    ).on(table.workspaceId),
+    workspaceInvitationsEmailIdx: index("workspace_invitations_email_idx").on(
+      table.email,
+    ),
+    workspaceInvitationsTokenIdx: uniqueIndex(
+      "workspace_invitations_token_idx",
+    ).on(table.token),
+  }),
+);
+
 export const workspaceAccess = pgTable(
   "workspace_access",
   {
@@ -1218,6 +1266,7 @@ export const schema = {
   organization,
   workspaces,
   workspaceAccess,
+  workspaceInvitations,
   member,
   invitation,
   userRelations,

@@ -32,6 +32,8 @@ import { getWorkspaces } from "@/server/workspaces";
 import { Badge } from "@/components/ui/badge";
 import { useCurrentPlan } from "@/hooks/use-current-plan";
 import { CreateWorkspaceDialog } from "./contracts/create-workspace-dialog";
+import { WorkspaceInviteDialog } from "./settings/workspace-invite-dialog";
+import { UserPlus } from "lucide-react";
 
 type Workspace = {
   id: string;
@@ -46,6 +48,7 @@ export function WorkspaceSwitcher() {
   const { plan: currentPlan } = useCurrentPlan();
   const [open, setOpen] = React.useState(false);
   const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
+  const [inviteDialogOpen, setInviteDialogOpen] = React.useState(false);
   const [workspaces, setWorkspaces] = React.useState<Workspace[]>([]);
   const router = useRouter();
 
@@ -220,7 +223,28 @@ export function WorkspaceSwitcher() {
               </CommandGroup>
             </CommandList>
             <CommandSeparator className="my-3 bg-outline-variant/30" />
-            <div className="p-1">
+            <div className="p-1 space-y-1">
+              {activeWorkspace ? (
+                <button
+                  className="w-full flex items-center gap-3 p-4 rounded-2xl cursor-pointer text-primary hover:bg-primary/5 transition-all duration-300 group"
+                  onClick={() => {
+                    setOpen(false);
+                    setInviteDialogOpen(true);
+                  }}
+                >
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                    <UserPlus className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-medium uppercase tracking-wider">
+                      Invite teammates
+                    </span>
+                    <span className="text-[9px] font-bold uppercase text-primary/40">
+                      Share {activeWorkspace.name}
+                    </span>
+                  </div>
+                </button>
+              ) : null}
               <button
                 className="w-full flex items-center gap-3 p-4 rounded-2xl cursor-pointer text-primary hover:bg-primary/5 transition-all duration-300 group"
                 onClick={handleCreateWorkspace}
@@ -248,6 +272,15 @@ export function WorkspaceSwitcher() {
         workspaces={workspaces}
         activeOrgId={activeOrg.id}
       />
+
+      {activeWorkspace ? (
+        <WorkspaceInviteDialog
+          open={inviteDialogOpen}
+          onOpenChange={setInviteDialogOpen}
+          workspaceId={activeWorkspace.id}
+          workspaceName={activeWorkspace.name}
+        />
+      ) : null}
     </>
   );
 }
