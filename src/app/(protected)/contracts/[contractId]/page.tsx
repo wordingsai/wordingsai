@@ -67,6 +67,7 @@ import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { AnalysisChecklist } from "@/components/contracts/analysis-checklist";
 import { SaveClauseToLibraryDialog } from "@/components/contracts/save-clause-to-library-dialog";
+import { ClauseDiffView } from "@/components/contracts/clause-diff-view";
 import { useCurrentPlan } from "@/hooks/use-current-plan";
 import { authClient } from "@/lib/auth-client";
 import { useAnalysisSync } from "@/hooks/use-analysis-sync";
@@ -1303,84 +1304,32 @@ export default function ContractAnalysisPage() {
                         </div>
 
                         <div className="p-6 md:p-8 space-y-8 overflow-y-auto no-scrollbar flex-1 bg-background/50">
-                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            {/* Source Panel */}
-                            <div className="space-y-4">
-                              <div className="flex items-center justify-between px-2">
-                                <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-on-surface flex items-center gap-2">
-                                  <div className="size-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                                    <FileText className="size-3.5 text-primary" />
-                                  </div>{" "}
-                                  Extracted from Contract
-                                </h4>
-                                <div className="flex items-center gap-1">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="h-8 rounded-lg font-semibold uppercase text-[9px] tracking-widest text-on-surface-variant hover:text-primary"
-                                    disabled={
-                                      !selectedEvent.metadata?.documentText
-                                    }
-                                    onClick={() => setSaveDialogOpen(true)}
-                                    title="Save this clause to your library so you can reuse it later"
-                                  >
-                                    <BookmarkPlus className="size-3.5 mr-1" />
-                                    Save to library
-                                  </Button>
-                                  <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    className="size-8 rounded-lg"
-                                    onClick={() => {
-                                      navigator.clipboard.writeText(
-                                        selectedEvent.metadata?.documentText ||
-                                          "",
-                                      );
-                                      toast.success("Copied to clipboard");
-                                    }}
-                                  >
-                                    <Copy className="size-4" />
-                                  </Button>
-                                </div>
-                              </div>
-                              <div className="bg-surface-container-low p-4 sm:p-6 rounded-2xl border border-outline-variant/30 shadow-inner min-h-[120px] max-h-[40vh] overflow-y-auto">
-                                <TruncatedText
-                                  text={selectedEvent.metadata?.documentText}
-                                  maxLines={12}
-                                  emptyLabel="No exact text snippet captured during scan."
-                                />
-                              </div>
+                          {/* Side-by-side comparison: contract vs library
+                              with inline word-level diff. The Save-to-library
+                              action sits in this section's toolbar since it
+                              operates on the contract side. */}
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 rounded-lg font-semibold uppercase text-[9px] tracking-widest text-on-surface-variant hover:text-primary"
+                                disabled={!selectedEvent.metadata?.documentText}
+                                onClick={() => setSaveDialogOpen(true)}
+                                title="Save this clause to your library so you can reuse it later"
+                              >
+                                <BookmarkPlus className="size-3.5 mr-1" />
+                                Save to library
+                              </Button>
                             </div>
-
-                            {/* Library Panel */}
-                            <div className="space-y-4">
-                              <div className="flex items-center justify-between px-2">
-                                <h4 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary flex items-center gap-2">
-                                  <div className="size-6 rounded-lg bg-primary/10 flex items-center justify-center">
-                                    <BookOpen className="size-3.5 text-primary" />
-                                  </div>{" "}
-                                  Company Standard (Library)
-                                </h4>
-                                {selectedEvent.status === "Missing" && (
-                                  <Button
-                                    variant="secondary"
-                                    size="sm"
-                                    className="h-8 rounded-lg font-semibold uppercase text-[9px] tracking-widest"
-                                  >
-                                    <Zap className="size-3 mr-1" /> Sync to
-                                    Library
-                                  </Button>
-                                )}
-                              </div>
-                              <div className="bg-primary/5 p-4 sm:p-6 rounded-2xl border-2 border-primary/20 shadow-inner min-h-[120px] max-h-[40vh] overflow-y-auto">
-                                <TruncatedText
-                                  text={selectedEvent.metadata?.libraryStandard}
-                                  maxLines={12}
-                                  className="italic text-primary"
-                                  emptyLabel="No baseline standard available for this provision."
-                                />
-                              </div>
-                            </div>
+                            <ClauseDiffView
+                              contractText={
+                                selectedEvent.metadata?.documentText
+                              }
+                              libraryText={
+                                selectedEvent.metadata?.libraryStandard
+                              }
+                            />
                           </div>
 
                           {/* Cognitive Reasoning */}
