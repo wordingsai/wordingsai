@@ -64,6 +64,23 @@ export function NavUser({
   const { plan, isPending } = useCurrentPlan();
   const [sessions, setSessions] = React.useState<any[]>([]);
   const { data: sessionData } = authClient.useSession();
+  // Role is not in the Better Auth session payload — fetch it from /api/me
+  // so we can conditionally surface the Admin panel link to psa/su users.
+  // The /admin layout enforces the gate server-side; this is purely UX.
+  const [role, setRole] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (!sessionData?.user?.id) return;
+    let cancelled = false;
+    fetch("/api/me", { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!cancelled && d?.role) setRole(d.role);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionData?.user?.id]);
 
   React.useEffect(() => {
     async function loadSessions() {
@@ -270,20 +287,14 @@ export function NavUser({
                     Billing & usage
                   </DropdownMenuItem>
                 </Link>
-                {(() => {
-                  const role = (sessionData?.user as any)?.role as
-                    | string
-                    | undefined;
-                  if (role !== "psa" && role !== "su") return null;
-                  return (
-                    <Link href="/admin">
-                      <DropdownMenuItem className="cursor-pointer text-primary hover:bg-primary/5 focus:bg-primary/5 focus:text-primary">
-                        <Shield className="mr-2 size-4" />
-                        Admin panel
-                      </DropdownMenuItem>
-                    </Link>
-                  );
-                })()}
+                {role === "psa" || role === "su" ? (
+                  <Link href="/admin">
+                    <DropdownMenuItem className="cursor-pointer text-primary hover:bg-primary/5 focus:bg-primary/5 focus:text-primary">
+                      <Shield className="mr-2 size-4" />
+                      Admin panel
+                    </DropdownMenuItem>
+                  </Link>
+                ) : null}
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="my-2 opacity-50" />
               <DropdownMenuGroup className="space-y-1">
