@@ -1,6 +1,6 @@
 import { db } from "@/db/drizzle";
 import { clauses, workspaceClauses, workspaces } from "@/db/schema";
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, eq, or, sql, isNull } from "drizzle-orm";
 
 /** Platform seed org — Custom library rows here are private to this org only. */
 export const MASTER_CLAUSE_ORG_ID =
@@ -11,9 +11,37 @@ export type ClauseAccessRow = {
   organizationId: string | null;
   isGlobal: boolean | null;
   library?: string | null;
+  /**
+   * When set, the clause is private to that user (a "Custom" clause they
+   * added themselves). Other org members cannot see it.
+   * When null, the clause is org-scoped or global per the other flags.
+   */
+  ownerUserId?: string | null;
 };
 
-/** Whether an organization may read this clause in the library or during analysis. */
+/**
+ * Whether a user may read this clause in the library or during analysis.
+ *
+ * Rules (in order):
+ *  - Platform-global clauses (isGlobal=true) are readable by everyone.
+ *  - A clause owned by a specific user (ownerUserId != null) is readable
+ *    ONLY by that user. Even other members of the same org cannot see it.
+ *  - Otherwise, the clause must belong to the same org as the reader.
+ */
+export function isClauseReadableByUser(
+  clause: ClauseAccessRow,
+  organizationId: string,
+  userId: string | null,
+): boolean {
+  if (clause.isGlobal) return true;
+  if (clause.ownerUserId) {
+    return clause.ownerUserId === userId;
+  }
+  if (!clause.organizationId) return false;
+  return clause.organizationId === organizationId;
+}
+
+/** Back-compat shim: org-scoped read check (does not enforce per-user privacy). */
 export function isClauseReadableByOrg(
   clause: ClauseAccessRow,
   organizationId: string,
@@ -23,7 +51,19 @@ export function isClauseReadableByOrg(
   return clause.organizationId === organizationId;
 }
 
-/** Whether the active org may edit/delete this clause. */
+/** Whether the user may edit/delete this clause. */
+export function isClauseEditableByUser(
+  clause: ClauseAccessRow,
+  organizationId: string,
+  userId: string | null,
+): boolean {
+  if (clause.isGlobal) return false;
+  // A user-owned custom clause is editable only by that user.
+  if (clause.ownerUserId) return clause.ownerUserId === userId;
+  return clause.organizationId === organizationId;
+}
+
+/** Back-compat shim. */
 export function isClauseEditableByOrg(
   clause: ClauseAccessRow,
   organizationId: string,
@@ -37,14 +77,26 @@ function dedupeById<T extends { id: string }>(rows: T[]): T[] {
 }
 
 /**
- * All clauses visible in the library for the active org + workspace:
- * - Platform global Core (`isGlobal`)
- * - This org's own clauses (including Custom library)
- * - Workspace-linked rows from other orgs are excluded
+ * All clauses visible in the library for the active org + workspace + user.
+ *
+ * Visibility tiers (in order):
+ *  1. Platform global Core (clauses.isGlobal = true) — visible to everyone.
+ *  2. Org-shared clauses (organizationId = active org, ownerUserId IS NULL)
+ *     — visible to all members of the org.
+ *  3. User-private "Custom" clauses (organizationId = active org,
+ *     ownerUserId = current user) — visible ONLY to that user.
+ *
+ *  Workspace-linked rows from other orgs are excluded. Other users' custom
+ *  clauses in the same org are also excluded (privacy).
+ *
+ * `userId` may be null in cases where we're computing a workspace-wide
+ * library for matching (e.g. global core workspace lookups). In that case
+ * we just return the visible-to-org set and skip per-user filtering.
  */
 export async function fetchVisibleClausesForWorkspace(
   organizationId: string,
   workspaceId: string,
+  userId: string | null = null,
 ) {
   const workspaceRes = await db
     .select({ type: workspaces.type, isGlobal: workspaces.isGlobal })
@@ -65,6 +117,7 @@ export async function fetchVisibleClausesForWorkspace(
           organizationId: clauses.organizationId,
           workspaceId: clauses.workspaceId,
           isGlobal: clauses.isGlobal,
+          ownerUserId: clauses.ownerUserId,
           clauseName: clauses.clauseName,
           category: clauses.category,
           status: clauses.status,
@@ -89,6 +142,7 @@ export async function fetchVisibleClausesForWorkspace(
           organizationId: clauses.organizationId,
           workspaceId: clauses.workspaceId,
           isGlobal: clauses.isGlobal,
+          ownerUserId: clauses.ownerUserId,
           clauseName: clauses.clauseName,
           category: clauses.category,
           status: clauses.status,
@@ -119,14 +173,18 @@ export async function fetchVisibleClausesForWorkspace(
       );
   }
 
-  // Deduplicate and map to clause objects
+  // Deduplicate and apply per-user privacy filter.
   const seen = new Set();
   const visibleClauses = results
     .map((r) => r.clause)
     .filter((c) => {
       if (seen.has(c.id)) return false;
       seen.add(c.id);
-      return isClauseReadableByOrg(c, organizationId);
+      // If we have a userId, enforce per-user privacy (hides other users'
+      // custom clauses). If not, fall back to org-scoped visibility.
+      return userId
+        ? isClauseReadableByUser(c, organizationId, userId)
+        : isClauseReadableByOrg(c, organizationId);
     });
 
   return visibleClauses;

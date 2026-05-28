@@ -184,6 +184,14 @@ export const workspaces = pgTable(
       .references(() => organization.id, { onDelete: "cascade" }),
     type: text("type").default("general").notNull(), // e.g. "reinsurance", "property"
     isGlobal: boolean("is_global").notNull().default(false),
+    /**
+     * Per-user "custom" workspaces. When set, this workspace is private to
+     * that user — invisible to other org members unless they're invited via
+     * `workspace_access`. NULL means org-scoped (the default, shared) workspace.
+     */
+    ownerUserId: text("owner_user_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
     mandatoryRegistry: jsonb("mandatory_registry").default([]), // For Fast Checklist deterministic matching
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
@@ -196,6 +204,7 @@ export const workspaces = pgTable(
       table.organizationId,
     ),
     workspaceGlobalIdx: index("workspace_global_idx").on(table.isGlobal),
+    workspaceOwnerIdx: index("workspace_owner_user_idx").on(table.ownerUserId),
     workspaceOrgTypeGlobalUnique: uniqueIndex(
       "workspace_org_type_global_unique",
     )
@@ -491,6 +500,15 @@ export const clauses = pgTable(
     workspaceId: uuid("workspace_id").references(() => workspaces.id, {
       onDelete: "set null",
     }),
+    /**
+     * Per-user "custom" clauses. When set, the clause is private to that
+     * user — even other org members can't see it (unless they have explicit
+     * workspace_access on the owning workspace). NULL means org-scoped (or
+     * global if isGlobal=true).
+     */
+    ownerUserId: text("owner_user_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
     isGlobal: boolean("is_global").notNull().default(false),
     clauseName: text("clause_name").notNull(),
     category: clauseCategoryEnum("clause_category").notNull(),
@@ -537,6 +555,7 @@ export const clauses = pgTable(
     clausesIdxWorkspace: index("clauses_workspace_idx").on(table.workspaceId),
     clausesIdxCategory: index("clauses_category_idx").on(table.category),
     clausesIdxLibrary: index("clauses_library_idx").on(table.library),
+    clausesIdxOwnerUser: index("clauses_owner_user_idx").on(table.ownerUserId),
   }),
 );
 

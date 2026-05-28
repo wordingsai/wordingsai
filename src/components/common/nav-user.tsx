@@ -11,6 +11,7 @@ import {
   ShieldCheck,
   Zap,
   Plus,
+  Shield,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -269,6 +270,20 @@ export function NavUser({
                     Billing & usage
                   </DropdownMenuItem>
                 </Link>
+                {(() => {
+                  const role = (sessionData?.user as any)?.role as
+                    | string
+                    | undefined;
+                  if (role !== "psa" && role !== "su") return null;
+                  return (
+                    <Link href="/admin">
+                      <DropdownMenuItem className="cursor-pointer text-primary hover:bg-primary/5 focus:bg-primary/5 focus:text-primary">
+                        <Shield className="mr-2 size-4" />
+                        Admin panel
+                      </DropdownMenuItem>
+                    </Link>
+                  );
+                })()}
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="my-2 opacity-50" />
               <DropdownMenuGroup className="space-y-1">
