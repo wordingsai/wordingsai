@@ -1,110 +1,61 @@
-import { DocumentProcessorServiceClient } from "@google-cloud/documentai";
-import vision from "@google-cloud/vision";
+/**
+ * Document extraction for WordingsAI.
+ *
+ * The file name "extract-gcp" is retained for import-compat with the rest of the
+ * codebase, but this implementation has nothing to do with GCP anymore.
+ *
+ * Strategy:
+ *   1. For PDFs: split into 5-page chunks (Vercel 60s + Gemini inline limits)
+ *   2. For each chunk: call Gemini 2.5 Flash multimodal with the PDF bytes as
+ *      inlineData. Gemini sees the page visually, so layout + OCR + table
+ *      structure are preserved in one pass. Works for both clean digital PDFs
+ *      AND scanned PDFs with hand-applied highlights (Richard's actual workflow).
+ *   3. For images: same Gemini multimodal call, single shot.
+ *
+ * The returned `rawText` is layout-preserved markdown-ish text. Tables come back
+ * as markdown tables. Field labels stay aligned with their values. Section
+ * headings are preserved. The downstream heuristic structuring functions in
+ * `lib/contract-structuring.ts` then parse this into the StructuredContract
+ * format that the rule engine consumes.
+ */
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PDFDocument } from "pdf-lib";
-import crypto from "crypto";
-import { getGlobalCache } from "@/lib/cache";
 import {
   downloadFromSupabase,
-  deleteFromSupabase,
   extractPathFromSupabaseUrl,
 } from "@/lib/supabase/storage";
-import {
-  gcpAuthClient,
-  GCP_PROJECT_ID,
-  GCP_PROJECT_NUMBER,
-  GCP_SERVICE_ACCOUNT_EMAIL,
-} from "@/lib/gcp/auth";
 
-const DOCAI_PROCESSOR_ID = process.env.DOCAI_PROCESSOR_ID;
-// Document AI Processor Location. Defaulting to europe-west2 per user request.
-const LOCATION =
-  process.env.DOCAI_LOCATION ||
-  process.env.GCP_CLOUD_LOCATION ||
-  "europe-west2";
-// No auto-mapping to eu/us multi-regions to respect specific regional processors.
-
-// We split at 5 pages to safely stay well under the Vercel 60s timeout.
-// Legal documents are dense and DocAI can take ~10-12s per page sometimes.
 const MAX_PAGES_PER_CHUNK = 5;
+const GEMINI_MODEL = "gemini-2.5-flash";
+const MAX_OUTPUT_TOKENS = 16384;
+const PER_CHUNK_CONCURRENCY = 3;
 
-function getGcpOptions() {
-  const options: any = {};
+const EXTRACTION_PROMPT = `You are a verbatim insurance contract OCR + layout extractor.
 
-  const projectId = GCP_PROJECT_ID || GCP_PROJECT_NUMBER;
-  if (projectId) {
-    options.projectId = projectId;
-  }
+Extract ALL text from this document, preserving the original layout. Critical rules:
 
-  if (gcpAuthClient) {
-    console.log("[GCP Auth] Using Vercel OIDC Client");
-    options.auth = gcpAuthClient;
-  } else {
-    // Fallback: If no gcpAuthClient (Local Dev), the SDK will automatically
-    // find your local ADC (e.g. from 'gcloud auth application-default login').
-    console.log("[GCP Auth] Using Application Default Credentials (ADC)");
-    console.warn(
-      "[GCP Auth] No explicit credentials found. Falling back to Application Default Credentials.",
-    );
-    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-      console.log(
-        `[GCP Auth] GOOGLE_APPLICATION_CREDENTIALS is set to: ${process.env.GOOGLE_APPLICATION_CREDENTIALS}`,
-      );
-    }
-  }
-  return options;
-}
+1. Keep field labels (Reinsured, UMR, Period, Class of Business, Type, Limits, Conditions, etc.) aligned with their values. Use two columns when the original is two-column.
+2. Render tables as proper markdown tables with | separators and a --- header row.
+3. Preserve section headings (Risk Details, Premium, Conditions, Notices, etc.) on their own lines.
+4. Keep clause references (LSW316, LMA 3100, LSW334A, etc.) intact, verbatim.
+5. Preserve numbered/bulleted lists exactly as they appear.
+6. Include page numbers and section breaks where visible.
+7. Do NOT summarise. Do NOT paraphrase. Do NOT add commentary. Do NOT skip content.
+8. Return only the extracted text.`;
 
-export const getDocAIClient = () => {
-  const options = getGcpOptions();
-  return new DocumentProcessorServiceClient({
-    ...options,
-    apiEndpoint: `${LOCATION}-documentai.googleapis.com`,
-  });
-};
-
-export const getVisionClient = () => {
-  const options = getGcpOptions();
-  return new vision.ImageAnnotatorClient(options);
-};
-
-// For backward compatibility and internal use in this file
-const docaiClient = getDocAIClient();
-const visionClient = getVisionClient();
+const genAI = process.env.GEMINI_API_KEY
+  ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
+  : null;
 
 export type GCPExtractionResult = {
   rawText: string;
   structuredJSON?: any;
-  method: "DOCUMENT_AI_SYNC" | "DOCUMENT_AI_ASYNC" | "VISION_API_FALLBACK";
+  method: "GEMINI_MULTIMODAL" | "GEMINI_MULTIMODAL_CHUNKED";
 };
 
 /**
- * Retries a function with exponential backoff
- */
-async function withRetry<T>(
-  fn: () => Promise<T>,
-  maxRetries: number = 3,
-  baseDelay: number = 1000,
-): Promise<T> {
-  let lastError: any;
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      return await fn();
-    } catch (err: any) {
-      lastError = err;
-      if (attempt < maxRetries) {
-        const delay = baseDelay * Math.pow(2, attempt);
-        console.warn(
-          `[GCP Retry] Attempt ${attempt + 1} failed. Retrying in ${delay}ms... Error: ${err.message}`,
-        );
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-    }
-  }
-  throw lastError;
-}
-
-/**
- * Splits a PDF buffer into chunks of MAX_PAGES_PER_CHUNK pages each.
+ * Split a PDF buffer into <= MAX_PAGES_PER_CHUNK page sub-PDFs.
+ * Each chunk is independently sendable to Gemini inline.
  */
 export async function splitPdfIntoChunks(
   pdfBuffer: Buffer,
@@ -113,7 +64,7 @@ export async function splitPdfIntoChunks(
   const srcDoc = await PDFDocument.load(pdfBuffer, { ignoreEncryption: true });
   const totalPages = srcDoc.getPageCount();
   console.log(
-    `[GCP Parse] PDF has ${totalPages} pages — splitting into ${MAX_PAGES_PER_CHUNK}-page chunks ${limit ? `(limit: ${limit})` : ""}`,
+    `[Extract] PDF has ${totalPages} pages, splitting into ${MAX_PAGES_PER_CHUNK}-page chunks${limit ? ` (limit ${limit})` : ""}`,
   );
 
   const chunks: Buffer[] = [];
@@ -129,327 +80,198 @@ export async function splitPdfIntoChunks(
     copiedPages.forEach((p) => chunkDoc.addPage(p));
     const chunkBytes = await chunkDoc.save();
     chunks.push(Buffer.from(chunkBytes));
-    console.log(
-      `[GCP Parse] Chunk ${chunks.length}: pages ${start + 1}–${end} (${(chunkBytes.byteLength / 1024 / 1024).toFixed(2)}MB)`,
-    );
   }
-
   return chunks;
 }
 
 /**
- * Merges multiple Document AI results into a single structured document.
+ * Run Gemini 2.5 Flash multimodal on a single PDF/image buffer.
+ * Returns the layout-preserved extracted text.
  */
-export function mergeDocAIResults(documents: any[]): any {
-  if (documents.length === 0) return null;
-  if (documents.length === 1) return documents[0];
-
-  const merged = {
-    text: "",
-    pages: [] as any[],
-  };
-
-  let currentTextOffset = 0;
-
-  for (const doc of documents) {
-    const docText = doc.text || "";
-    const textLen = docText.length;
-
-    if (doc.pages) {
-      for (const page of doc.pages) {
-        const clonedPage = JSON.parse(JSON.stringify(page));
-        offsetTextAnchors(clonedPage, currentTextOffset);
-        merged.pages.push(clonedPage);
-      }
-    }
-
-    merged.text += docText;
-    currentTextOffset += textLen;
+async function extractWithGemini(
+  buffer: Buffer,
+  mimetype: string,
+  label?: string,
+): Promise<string> {
+  if (!genAI) {
+    throw new Error(
+      "GEMINI_API_KEY is not set, cannot run multimodal extraction",
+    );
   }
+  const model = genAI.getGenerativeModel({
+    model: GEMINI_MODEL,
+    generationConfig: {
+      temperature: 0,
+      maxOutputTokens: MAX_OUTPUT_TOKENS,
+    },
+  });
 
-  return merged;
+  const t0 = Date.now();
+  const result = await model.generateContent([
+    {
+      inlineData: {
+        data: buffer.toString("base64"),
+        mimeType: mimetype,
+      },
+    },
+    EXTRACTION_PROMPT,
+  ]);
+  const text = result.response.text();
+  const ms = Date.now() - t0;
+  console.log(
+    `[Extract] Gemini multimodal${label ? ` (${label})` : ""}: ${text.length} chars in ${ms}ms`,
+  );
+  return text;
 }
 
 /**
- * Recursively offsets textAnchor indexes within a Document AI object.
- */
-function offsetTextAnchors(obj: any, offset: number) {
-  if (!obj || typeof obj !== "object" || offset === 0) return;
-
-  if (obj.textAnchor && Array.isArray(obj.textAnchor.textSegments)) {
-    for (const segment of obj.textAnchor.textSegments) {
-      if (segment.startIndex) {
-        segment.startIndex = String(Number(segment.startIndex) + offset);
-      } else {
-        segment.startIndex = String(offset);
-      }
-
-      if (segment.endIndex) {
-        segment.endIndex = String(Number(segment.endIndex) + offset);
-      }
-    }
-  }
-
-  // Recurse through all properties to find nested textAnchors (blocks, paragraphs, lines, tokens, etc.)
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      const value = obj[key];
-      if (Array.isArray(value)) {
-        for (const item of value) {
-          if (typeof item === "object") offsetTextAnchors(item, offset);
-        }
-      } else if (value && typeof value === "object") {
-        offsetTextAnchors(value, offset);
-      }
-    }
-  }
-}
-
-/**
- * Processes a single PDF buffer synchronously using Document AI.
+ * Backward-compat name. Called by extract-metadata/route.ts.
+ * `processorName` is ignored (no Document AI anymore).
  */
 export async function processChunkWithDocAI(
   chunk: Buffer,
   mimetype: string,
-  processorName: string,
-): Promise<any> {
-  const [result] = await docaiClient.processDocument({
-    name: processorName,
-    rawDocument: {
-      content: chunk.toString("base64"),
-      mimeType: mimetype,
-    },
-    fieldMask: {
-      paths: [
-        "text",
-        "pages.pageNumber",
-        "pages.tokens",
-        "pages.paragraphs",
-        "pages.blocks",
-        "pages.lines",
-      ],
-    },
-  });
-  return result.document;
+  _processorName: string,
+): Promise<{ text: string }> {
+  const text = await extractWithGemini(chunk, mimetype, "metadata-chunk");
+  return { text };
 }
 
-const TIMEOUT_MS = 60000; // 60 second timeout per chunk
+/**
+ * Kept for backward-compat. Just concatenates extracted text from chunk
+ * results. (Document AI structured shape no longer applies.)
+ */
+export function mergeDocAIResults(documents: any[]): any {
+  if (documents.length === 0) return null;
+  if (documents.length === 1) return documents[0];
+  return {
+    text: documents.map((d) => d?.text ?? "").join("\n\n"),
+  };
+}
 
+/**
+ * Process N items with limited concurrency.
+ */
+async function runWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let nextIndex = 0;
+  const workers = Array.from(
+    { length: Math.min(concurrency, items.length) },
+    async () => {
+      while (true) {
+        const i = nextIndex++;
+        if (i >= items.length) return;
+        results[i] = await fn(items[i], i);
+      }
+    },
+  );
+  await Promise.all(workers);
+  return results;
+}
+
+/**
+ * Main public entrypoint used by the Inngest pipeline.
+ *
+ * Downloads the file from Supabase, then runs Gemini 2.5 Flash multimodal
+ * extraction. For multi-page PDFs the document is split into 5-page chunks
+ * processed with bounded concurrency.
+ *
+ * `skipDocAI` is preserved for signature compat but has no effect — there is
+ * no Document AI anymore.
+ */
 export async function extractDocumentGCP(
   filePath: string,
   mimetype: string,
-  skipDocAI: boolean = false,
+  _skipDocAI: boolean = false,
   onProgress?: (current: number, total: number) => Promise<void>,
 ): Promise<GCPExtractionResult> {
-  return withRetry(
-    async () => {
-      const isImage = mimetype.startsWith("image/");
+  console.log(`[Extract] Downloading ${filePath}...`);
+  let fileBuffer: Buffer;
 
-      console.log(`[GCP Parse] Downloading ${filePath}...`);
-      let fileBuffer: Buffer;
+  const supabasePath = extractPathFromSupabaseUrl(filePath);
+  if (supabasePath || filePath.includes("supabase.co")) {
+    fileBuffer = await downloadFromSupabase(supabasePath || filePath);
+  } else {
+    throw new Error(`Unable to determine storage source for: ${filePath}`);
+  }
 
-      const supabasePath = extractPathFromSupabaseUrl(filePath);
-      if (supabasePath || filePath.includes("supabase.co")) {
-        console.log(
-          `[GCP Parse] Detected Supabase path: ${supabasePath || filePath}`,
-        );
-        fileBuffer = await downloadFromSupabase(supabasePath || filePath);
-      } else {
-        throw new Error("Unable to determine storage source for file");
-      }
+  const sizeMB = (fileBuffer.byteLength / 1024 / 1024).toFixed(2);
+  console.log(`[Extract] Downloaded ${sizeMB}MB`);
 
-      const downloadedFileSizeMB = (
-        fileBuffer.byteLength /
-        1024 /
-        1024
-      ).toFixed(2);
-      console.log(`[GCP Parse] Downloaded ${downloadedFileSizeMB}MB`);
+  // Images: single multimodal call
+  if (mimetype.startsWith("image/")) {
+    if (onProgress) await onProgress(1, 1).catch(() => {});
+    const text = await extractWithGemini(fileBuffer, mimetype, "image");
+    return { rawText: text, method: "GEMINI_MULTIMODAL" };
+  }
 
-      if (isImage || skipDocAI) {
-        console.log(
-          `[GCP Parse] Using Vision API (inline content) for ${filePath}`,
-        );
-        const [result] = await visionClient.documentTextDetection({
-          image: { content: fileBuffer.toString("base64") },
-        });
-        return {
-          rawText: result.fullTextAnnotation?.text || "",
-          method: "VISION_API_FALLBACK",
-        };
-      }
+  // Single-page or small PDFs: one call
+  const srcDoc = await PDFDocument.load(fileBuffer, { ignoreEncryption: true });
+  const pageCount = srcDoc.getPageCount();
 
-      if (!DOCAI_PROCESSOR_ID) throw new Error("DOCAI_PROCESSOR_ID is missing");
+  if (pageCount <= MAX_PAGES_PER_CHUNK) {
+    if (onProgress) await onProgress(1, 1).catch(() => {});
+    const text = await extractWithGemini(
+      fileBuffer,
+      mimetype,
+      `single-shot ${pageCount}p`,
+    );
+    return { rawText: text, method: "GEMINI_MULTIMODAL" };
+  }
 
-      const projectId =
-        getGcpOptions().projectId || GCP_PROJECT_ID || GCP_PROJECT_NUMBER;
-      if (!projectId) {
-        throw new Error(
-          "GCP Project ID is missing. Please check your environment variables.",
-        );
-      }
+  // Larger PDFs: chunk + parallelise (bounded)
+  const chunks = await splitPdfIntoChunks(fileBuffer);
+  console.log(
+    `[Extract] Processing ${chunks.length} chunks at concurrency ${PER_CHUNK_CONCURRENCY}`,
+  );
 
-      const processorName = `projects/${projectId}/locations/${LOCATION}/processors/${DOCAI_PROCESSOR_ID}`;
-
+  let completed = 0;
+  const chunkTexts = await runWithConcurrency(
+    chunks,
+    PER_CHUNK_CONCURRENCY,
+    async (chunk, idx) => {
       try {
-        let finalDoc: any = null;
-        let method: GCPExtractionResult["method"] = "DOCUMENT_AI_SYNC";
-
-        if (mimetype === "application/pdf") {
-          const srcDoc = await PDFDocument.load(fileBuffer, {
-            ignoreEncryption: true,
-          });
-          const totalPages = srcDoc.getPageCount();
-
-          if (totalPages > MAX_PAGES_PER_CHUNK) {
-            const chunks = await splitPdfIntoChunks(fileBuffer);
-            console.log(
-              `[GCP Parse] Processing ${chunks.length} chunk(s) with Document AI sync...`,
-            );
-
-            // Compute file content hash to check for cached first chunk
-            let cachedChunk0: any = null;
-            try {
-              const fileHash = crypto
-                .createHash("sha256")
-                .update(fileBuffer)
-                .digest("hex");
-              const cacheKey = `docai:chunk0:${fileHash}`;
-              cachedChunk0 = await getGlobalCache<any>(cacheKey);
-              if (cachedChunk0) {
-                console.log(
-                  `[GCP Parse] Cache HIT: Reusing cached Document AI result for chunk 0!`,
-                );
-              }
-            } catch (hashErr) {
-              console.warn(
-                `[GCP Parse] Non-fatal: Failed to query cache for chunk 0:`,
-                hashErr,
-              );
-            }
-
-            // Process chunks in batches to prevent overwhelming GCP quota and respect serverless limits
-            const results: any[] = [];
-            const BATCH_SIZE = 5;
-            for (let i = 0; i < chunks.length; i += BATCH_SIZE) {
-              const batch = chunks.slice(i, i + BATCH_SIZE);
-              console.log(
-                `[GCP Parse] Processing batch ${Math.floor(i / BATCH_SIZE) + 1} of ${Math.ceil(chunks.length / BATCH_SIZE)}...`,
-              );
-
-              const batchResults = await Promise.all(
-                batch.map(async (chunk, batchIdx) => {
-                  const idx = i + batchIdx;
-                  if (idx === 0 && cachedChunk0) {
-                    console.log(
-                      `[GCP Parse] Chunk 1 (index 0) matched cache. Skipping API call.`,
-                    );
-                    if (onProgress) {
-                      await onProgress(1, chunks.length).catch(() => {});
-                    }
-                    return { doc: cachedChunk0, index: 0 };
-                  }
-
-                  try {
-                    const doc = await processChunkWithDocAI(
-                      chunk,
-                      mimetype,
-                      processorName,
-                    );
-                    if (onProgress) {
-                      await onProgress(idx + 1, chunks.length).catch(() => {});
-                    }
-                    return { doc, index: idx };
-                  } catch (chunkErr: any) {
-                    console.error(
-                      `[GCP Parse] Chunk ${idx + 1} failed:`,
-                      chunkErr.message,
-                    );
-                    return { doc: null, index: idx };
-                  }
-                }),
-              );
-              results.push(...batchResults);
-            }
-
-            // Sort by chunk index to maintain correct document page order before merging
-            const docParts = results
-              .sort((a, b) => a.index - b.index)
-              .map((r) => r.doc)
-              .filter(Boolean);
-
-            if (docParts.length > 0) {
-              finalDoc = mergeDocAIResults(docParts);
-            }
-          } else {
-            // Single chunk processing
-            console.log(`[GCP Parse] Processing document with Document AI...`);
-            const [result] = await docaiClient.processDocument({
-              name: processorName,
-              rawDocument: {
-                content: fileBuffer.toString("base64"),
-                mimeType: mimetype,
-              },
-              fieldMask: {
-                paths: [
-                  "text",
-                  "pages.pageNumber",
-                  "pages.tokens",
-                  "pages.paragraphs",
-                  "pages.blocks",
-                  "pages.lines",
-                ],
-              },
-            });
-            finalDoc = result.document;
-          }
-
-          // --- VISION FALLBACK LOGIC ---
-          const textLength = finalDoc?.text?.length || 0;
-          const pageCount = totalPages;
-          const charsPerPage = pageCount > 0 ? textLength / pageCount : 0;
-
-          // If very little text was extracted (e.g. < 100 chars per page), it's likely a scanned PDF
-          if (!finalDoc || charsPerPage < 100) {
-            console.warn(
-              `[GCP Parse] Low text volume (${charsPerPage.toFixed(0)} chars/page). Falling back to Vision API...`,
-            );
-
-            // Vision API documentTextDetection for PDFs requires GCS, but we can process it as an image if it's small,
-            // or use the inline visionClient.documentTextDetection if we convert pages to images.
-            // Simplified fallback: use Vision API on the whole buffer (Vision supports PDF in some contexts, but let's be safe)
-            try {
-              const [visionResult] = await visionClient.documentTextDetection({
-                image: { content: fileBuffer.toString("base64") },
-              });
-
-              if (visionResult.fullTextAnnotation?.text) {
-                console.log("[GCP Parse] Vision API fallback successful.");
-                return {
-                  rawText: visionResult.fullTextAnnotation.text,
-                  method: "VISION_API_FALLBACK",
-                };
-              }
-            } catch (vErr) {
-              console.error("[GCP Parse] Vision Fallback failed:", vErr);
-            }
-          }
+        const text = await extractWithGemini(
+          chunk,
+          mimetype,
+          `chunk ${idx + 1}/${chunks.length}`,
+        );
+        completed++;
+        if (onProgress) {
+          await onProgress(completed, chunks.length).catch(() => {});
         }
-
-        if (!finalDoc) {
-          throw new Error("Failed to extract content from document");
-        }
-
-        return {
-          rawText: finalDoc.text || "",
-          structuredJSON: finalDoc,
-          method,
-        };
+        return text;
       } catch (err: any) {
-        console.error("[GCP Parse] Extraction failure:", err.message);
-        throw err;
+        console.error(
+          `[Extract] Chunk ${idx + 1} failed: ${err?.message}. Returning empty.`,
+        );
+        completed++;
+        if (onProgress) {
+          await onProgress(completed, chunks.length).catch(() => {});
+        }
+        return "";
       }
     },
-    1,
-    1000,
   );
+
+  const startPage = (i: number) => i * MAX_PAGES_PER_CHUNK + 1;
+  const endPage = (i: number) =>
+    Math.min((i + 1) * MAX_PAGES_PER_CHUNK, pageCount);
+
+  const rawText = chunkTexts
+    .map(
+      (text, i) =>
+        `\n\n--- PAGES ${startPage(i)}-${endPage(i)} ---\n\n${text}`,
+    )
+    .join("")
+    .trim();
+
+  return {
+    rawText,
+    method: "GEMINI_MULTIMODAL_CHUNKED",
+  };
 }

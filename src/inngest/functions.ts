@@ -31,7 +31,6 @@ import {
   ruleVersions,
 } from "@/db/schema";
 import { extractDocumentGCP } from "@/server/extract-gcp";
-import { gcpAuthClient } from "@/lib/gcp/auth";
 import type { OrganizationPlan } from "@/lib/ai-router";
 import {
   isQualityStructuredMap,

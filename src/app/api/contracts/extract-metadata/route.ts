@@ -1,14 +1,22 @@
+/**
+ * POST /api/contracts/extract-metadata
+ *
+ * Fires from the contract upload UI to auto-fill the metadata form (UMR /
+ * Reinsured / Broker / Type / Period). Reads the uploaded file, runs Gemini
+ * 2.5 Flash multimodal on the first 5 pages, then asks for structured JSON
+ * with the workspace-specific field set.
+ *
+ * Workspace-aware: when workspaceType === "property" the prompt + field
+ * descriptions switch to property-policy terminology (Policy Number,
+ * Policyholder, etc.) instead of the reinsurance default (UMR, Reinsured).
+ */
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
-import {
-  processChunkWithDocAI,
-  splitPdfIntoChunks,
-  extractDocumentGCP,
-} from "@/server/extract-gcp";
+import { processChunkWithDocAI, splitPdfIntoChunks } from "@/server/extract-gcp";
 import {
   downloadFromSupabase,
   extractPathFromSupabaseUrl,
@@ -16,10 +24,9 @@ import {
 import { generateJSON } from "@/lib/ai-router";
 import { z } from "zod";
 import crypto from "crypto";
-import { setGlobalCache } from "@/lib/cache";
+import { setGlobalCache, getGlobalCache } from "@/lib/cache";
 
-const DOCAI_PROCESSOR_ID = process.env.DOCAI_PROCESSOR_ID;
-const LOCATION = process.env.GCP_CLOUD_LOCATION || "europe-west2";
+const METADATA_FIRST_PAGES = 5;
 
 async function extractMetadataWithGemini(
   buffer: Buffer,
@@ -29,52 +36,47 @@ async function extractMetadataWithGemini(
   let textToAnalyze = "";
 
   console.log(
-    `[ExtractMetadata] Starting serverless extraction for mimetype: ${mimetype}`,
+    `[ExtractMetadata] Multimodal extraction for mimetype=${mimetype}, size=${(buffer.byteLength / 1024).toFixed(0)}KB`,
   );
 
   if (mimetype === "application/pdf") {
-    // Only process the first chunk (5 pages) to keep it fast and under Vercel limits
-    const chunks = await splitPdfIntoChunks(buffer, 1);
-    const firstChunk = chunks[0];
+    // Cache the extracted text by file hash — repeated uploads of the same
+    // file skip the LLM call.
+    const fileHash = crypto.createHash("sha256").update(buffer).digest("hex");
+    const cacheKey = `metadata-extract:firstpages:${fileHash}`;
+    const cached = await getGlobalCache<{ text: string }>(cacheKey);
 
-    const projectId = process.env.GCP_PROJECT_ID;
-    if (!projectId) throw new Error("GCP Project ID is missing.");
-    const processorName = `projects/${projectId}/locations/${LOCATION}/processors/${DOCAI_PROCESSOR_ID}`;
-
-    console.log(`[ExtractMetadata] Running Document AI on first 5 pages...`);
-    const doc = await processChunkWithDocAI(
-      firstChunk,
-      mimetype,
-      processorName,
-    );
-    textToAnalyze = doc.text || "";
-
-    // Cache the first chunk's parsed Document AI JSON, keyed by the document's SHA-256 hash
-    try {
-      const fileHash = crypto.createHash("sha256").update(buffer).digest("hex");
-      const cacheKey = `docai:chunk0:${fileHash}`;
-      await setGlobalCache(cacheKey, doc, 86400); // cache for 24 hours
+    if (cached?.text) {
       console.log(
-        `[ExtractMetadata] Safely cached chunk 0 for file hash: ${fileHash}`,
+        `[ExtractMetadata] Cache HIT for file hash ${fileHash.slice(0, 12)}`,
       );
-    } catch (cacheErr) {
-      console.warn(
-        "[ExtractMetadata] Non-fatal: Failed to cache chunk 0:",
-        cacheErr,
-      );
+      textToAnalyze = cached.text;
+    } else {
+      // Only process the first N pages — that's where slip-style metadata lives.
+      const chunks = await splitPdfIntoChunks(buffer, 1);
+      const firstChunk = chunks[0] || buffer;
+      const doc = await processChunkWithDocAI(firstChunk, mimetype, "");
+      textToAnalyze = doc.text || "";
+      if (textToAnalyze.length > 50) {
+        await setGlobalCache(cacheKey, { text: textToAnalyze }, 86400).catch(
+          () => undefined,
+        );
+      }
     }
   } else {
+    // Non-PDF: treat as text-ish, take first 15K chars
     textToAnalyze = buffer.toString("utf-8", 0, 15000);
   }
 
   if (!textToAnalyze || textToAnalyze.length < 50) {
     console.warn(
-      "[ExtractMetadata] Warning: Very little text extracted from document.",
+      `[ExtractMetadata] Very little text extracted (${textToAnalyze.length} chars). Returning empty metadata.`,
     );
+    return NextResponse.json({});
   }
 
   console.log(
-    `[ExtractMetadata] Running LLM analysis on ${textToAnalyze.length} chars...`,
+    `[ExtractMetadata] Running LLM analysis on ${textToAnalyze.length} chars (workspace=${workspaceType ?? "reinsurance"})`,
   );
 
   const isProperty = workspaceType === "property";
@@ -87,7 +89,7 @@ async function extractMetadataWithGemini(
         .describe(
           isProperty
             ? "The Policy Number or Contract Number"
-            : "The Unique Market Reference (UMR) - e.g. B1234ABC",
+            : "The Unique Market Reference (UMR), e.g. B1234ABC",
         ),
       reinsured: z
         .string()
@@ -104,33 +106,33 @@ async function extractMetadataWithGemini(
         .describe(
           isProperty
             ? "Policy type (e.g., Commercial Property, General Liability)"
-            : "Full descriptive class of business or contract type (e.g. Reinsured for losses, Professional Indemnity)",
+            : "Full descriptive class of business or contract type (e.g. Excess of Loss Reinsurance, Public Liability)",
         ),
-      periodFrom: z.string().optional().describe("Inception date (YYYY-MM-DD)"),
-      periodTo: z.string().optional().describe("Expiration date (YYYY-MM-DD)"),
+      periodFrom: z.string().optional().describe("Inception date in YYYY-MM-DD"),
+      periodTo: z.string().optional().describe("Expiry date in YYYY-MM-DD"),
     }),
     [
       {
         role: "user",
-        content: `Analyze the following insurance contract text and extract the key metadata.
-        
-        Specific Instructions:
-        - contractName: ${isProperty ? "Look specifically for the 'Policy Number' or 'Contract Number'." : "Look specifically for the 'Unique Market Reference' or 'UMR'. This is often on the first page or in the Slip Header."}
-        - reinsured: ${isProperty ? "Extract the primary legal entity name of the Policyholder only." : "Extract the primary legal entity name of the Reinsured only. Do NOT include phrases like 'if applicable', 'and/or their subsidiary', or 'for their respective rights and interests'."}
-        - broker: Extract the primary name of the Broker (e.g., Willis, Aon, Marsh).
-        - contractType: ${isProperty ? "Extract the policy type exactly as it appears (e.g., 'Commercial Property', 'General Liability')." : 'Extract the FULL descriptive class of business or wording type exactly as it appears (e.g., "Reinsured for losses", "Excess of Loss Reinsurance", "Public Liability"). Do NOT shorten to a single word.'}
-        - periodFrom: Effective date in YYYY-MM-DD format.
-        - periodTo: Expiry date in YYYY-MM-DD format.
-        
-        Text:
-        ${textToAnalyze.substring(0, 15000)}`,
+        content: `Analyse the following insurance contract text and extract the key metadata.
+
+Specific instructions:
+- contractName: ${isProperty ? "Look specifically for 'Policy Number' or 'Contract Number'." : "Look specifically for 'Unique Market Reference' or 'UMR'. Usually on the first page or in the slip header."}
+- reinsured: ${isProperty ? "Extract the primary legal entity name of the Policyholder only." : "Extract the primary legal entity name of the Reinsured only. Do NOT include phrases like 'if applicable', 'and/or their subsidiary', or 'for their respective rights and interests'."}
+- broker: Extract the primary name of the Broker (e.g. Willis, Aon, Marsh, Guy Carpenter, JLT).
+- contractType: ${isProperty ? "Extract the policy type exactly as it appears (e.g. 'Commercial Property', 'General Liability')." : "Extract the FULL descriptive class of business or wording type exactly as it appears (e.g. 'Excess of Loss Reinsurance', 'Public Liability'). Do NOT shorten to a single word."}
+- periodFrom: Effective date in YYYY-MM-DD format. If only a range is given, use the start.
+- periodTo: Expiry date in YYYY-MM-DD format. If only a range is given, use the end.
+
+Text:
+${textToAnalyze.substring(0, 15000)}`,
       },
     ],
     "You are a professional insurance contract analyst.",
   );
 
   console.log(
-    "[ExtractMetadata] AI Results:",
+    "[ExtractMetadata] AI results:",
     JSON.stringify(metadata, null, 2),
   );
   return NextResponse.json(metadata);
@@ -157,17 +159,10 @@ export async function POST(req: NextRequest) {
     }
 
     if (fileUrl) {
-      console.log(
-        `[ExtractMetadata] Direct serverless extraction for: ${fileUrl}`,
-      );
-
+      console.log(`[ExtractMetadata] Source: ${fileUrl}`);
       const path = extractPathFromSupabaseUrl(fileUrl);
-      if (path) {
-        console.log(`[ExtractMetadata] Downloading from Supabase: ${path}`);
-        buffer = await downloadFromSupabase(path);
-      } else {
-        throw new Error("Unable to extract path from URL");
-      }
+      if (!path) throw new Error("Unable to extract path from URL");
+      buffer = await downloadFromSupabase(path);
     } else {
       const formData = await req.formData();
       const file = formData.get("file") as File;
