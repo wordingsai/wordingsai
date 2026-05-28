@@ -603,15 +603,15 @@ export default function ContractsPage() {
                 </div>
               ))
             ) : paginated.length === 0 ? (
-              <div className="py-32 text-center">
-                <div className="flex flex-col items-center gap-4 opacity-30">
-                  <FileText className="w-20 h-20" />
-                  <p className="text-xl font-bold uppercase tracking-widest">
+              <div className="py-16 text-center">
+                <div className="flex flex-col items-center gap-2 opacity-40">
+                  <FileText className="size-8" />
+                  <p className="text-sm">
                     {viewMode === "active"
-                      ? "No results discovered."
+                      ? "No contracts match your filters"
                       : viewMode === "archive"
-                        ? "Archive is empty."
-                        : "Your trash bin is empty."}
+                        ? "Archive is empty"
+                        : "Your trash bin is empty"}
                   </p>
                 </div>
               </div>
@@ -904,32 +904,38 @@ export default function ContractsPage() {
         </div>
 
         {/* Pagination Footer */}
-        <div className="p-6 lg:p-10 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-6 bg-surface-container-highest/20">
-          <div className="text-[10px] lg:text-xs font-medium uppercase tracking-wider text-on-surface-variant text-center sm:text-left">
-            Capacity: <span className="text-on-surface">{filtered.length}</span>{" "}
+        <div className="px-4 py-2.5 border-t border-outline-variant/40 flex flex-col sm:flex-row items-center justify-between gap-3 bg-surface-container-highest/20">
+          <div className="text-xs text-on-surface-variant">
+            <span className="text-on-surface font-medium">{filtered.length}</span>{" "}
             {viewMode === "active"
-              ? "Active Wordings"
+              ? filtered.length === 1
+                ? "active contract"
+                : "active contracts"
               : viewMode === "archive"
-                ? "Archived Wordings"
-                : "Deleted Wordings"}
+                ? filtered.length === 1
+                  ? "archived contract"
+                  : "archived contracts"
+                : filtered.length === 1
+                  ? "deleted contract"
+                  : "deleted contracts"}
           </div>
 
           <Pagination className="w-auto mx-0">
-            <PaginationContent className="gap-1 lg:gap-2">
+            <PaginationContent className="gap-1">
               <PaginationPrevious
-                className="rounded-xl border-outline-variant hover:bg-background h-10 px-3 lg:px-4"
+                className="h-7 px-2.5 rounded-md border-outline-variant/60 hover:bg-background text-xs"
                 onClick={() => page > 1 && setPage(page - 1)}
               />
-              <div className="hidden sm:flex items-center gap-1.5 mx-2">
+              <div className="hidden sm:flex items-center gap-1 mx-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => (
                   <Button
                     key={i}
                     variant={page === i + 1 ? "default" : "outline"}
                     className={cn(
-                      "h-10 w-10 rounded-xl font-semibold text-sm",
+                      "h-7 w-7 rounded-md font-medium text-xs p-0",
                       page === i + 1
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                        : "bg-transparent border-outline-variant hover:bg-background",
+                        ? ""
+                        : "bg-transparent border-outline-variant/60 hover:bg-background",
                     )}
                     onClick={() => setPage(i + 1)}
                   >
@@ -938,7 +944,7 @@ export default function ContractsPage() {
                 ))}
               </div>
               <PaginationNext
-                className="rounded-xl border-outline-variant hover:bg-background h-10 px-3 lg:px-4"
+                className="h-7 px-2.5 rounded-md border-outline-variant/60 hover:bg-background text-xs"
                 onClick={() => page < totalPages && setPage(page + 1)}
               />
             </PaginationContent>

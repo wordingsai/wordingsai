@@ -6,7 +6,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { InstrumentationClient } from "@/instrumentation-client";
-import { ChatWidget } from "@/components/ChatWidget";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -59,7 +58,6 @@ export default function RootLayout({
         >
           <ViewTransitions>
             <TooltipProvider>{children}</TooltipProvider>
-            {/* <ChatWidget /> */}
           </ViewTransitions>
           <Toaster />
         </ThemeProvider>

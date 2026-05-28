@@ -77,31 +77,29 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <main className="flex-1 p-6 lg:p-8 bg-background transition-colors duration-300">
+    <main className="flex-1 p-6 lg:px-8 lg:py-7 bg-background">
       <TooltipProvider>
         {/* Page header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-8">
-          <div className="space-y-1.5">
-            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
-              Operational overview
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3 mb-5">
+          <div className="space-y-1">
+            <h1 className="text-xl lg:text-2xl font-semibold tracking-tight text-on-surface">
+              Dashboard
             </h1>
-            <p className="text-sm text-on-surface-variant max-w-2xl">
-              WordingsAI is actively monitoring{" "}
-              <span className="text-primary font-semibold">
+            <p className="text-sm text-on-surface-variant">
+              Monitoring{" "}
+              <span className="text-primary font-medium">
                 {stats?.summary?.totalContracts ?? 0}
               </span>{" "}
-              active wordings.
+              active contracts.
             </p>
           </div>
 
-          <div className="flex gap-2">
-            <Link href="/contracts/upload">
-              <Button size="lg" className="gap-2">
-                <Plus className="size-4" />
-                New wording
-              </Button>
-            </Link>
-          </div>
+          <Link href="/contracts/upload">
+            <Button size="sm" className="gap-1.5">
+              <Plus className="size-3.5" />
+              New contract
+            </Button>
+          </Link>
         </div>
 
         {/* Quick stats */}
@@ -145,7 +143,7 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="text-3xl font-semibold text-on-surface tracking-tight">
+                <div className="text-2xl font-semibold text-on-surface tracking-tight">
                   {stats?.summary.totalContracts || 0}
                 </div>
                 <p className="text-xs text-on-surface-variant mt-1">
@@ -177,7 +175,7 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="text-3xl font-semibold text-on-surface tracking-tight">
+                <div className="text-2xl font-semibold text-on-surface tracking-tight">
                   {Math.round(stats?.summary.avgRiskScore || 0)}%
                 </div>
                 <p className="text-xs text-on-surface-variant mt-1">
@@ -209,7 +207,7 @@ export default function DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="text-3xl font-semibold text-destructive tracking-tight">
+                <div className="text-2xl font-semibold text-destructive tracking-tight">
                   {(stats?.summary.riskDist.Red || 0) +
                     (stats?.summary.riskDist.Amber || 0)}
                 </div>
