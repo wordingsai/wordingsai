@@ -10,7 +10,6 @@ import { getActiveOrganization } from "@/server/organizations";
 import { getActiveWorkspace } from "@/server/workspaces";
 import { isAdmin } from "@/server/permissions";
 import { inngest } from "@/inngest/client";
-import type { ContractAnalysis } from "@/types/contracts";
 
 // chunkText is now imported from @/lib/text-processing
 
@@ -373,6 +372,11 @@ export async function GET() {
       isNull(contracts.archivedAt),
     );
 
+    // PERF: project only the fields the list UI uses, plus the *single*
+    // JSONB path we need to compute auditStatus. Previously this query
+    // pulled the whole `analysis` blob (executive summary + per-rule
+    // results + structured contract -- often 50-200kB per row) which
+    // dominated payload size and serialisation time on long lists.
     const userContracts = await db
       .select({
         id: contracts.id,
@@ -382,49 +386,46 @@ export async function GET() {
         contractType: contracts.contractType,
         periodFrom: contracts.periodFrom,
         periodTo: contracts.periodTo,
-        tags: contracts.tags,
-        contractStatus: contracts.contractStatus,
-        analysisStage: contracts.analysisStage,
         analysisProgress: contracts.analysisProgress,
         totalRules: contracts.totalRules,
-        riskScore: contracts.riskScore,
         createdAt: contracts.createdAt,
-        analysis: contracts.analysis,
+        analysisStatus: sql<string | null>`${contracts.analysis}->>'status'`,
       })
       .from(contracts)
       .where(whereClause)
       .orderBy(desc(contracts.createdAt));
 
-    const contractsWithStatus = userContracts.map((contract: any) => {
-      let auditStatus = "pending";
-      const { analysisProgress } = contract;
-      const analysis = contract.analysis as ContractAnalysis | null;
+    const contractsWithStatus = userContracts.map((contract) => {
+      let auditStatus: "pending" | "reviewing" | "completed" | "failed" =
+        "pending";
+      const status = contract.analysisStatus ?? "";
 
       if (
-        analysis?.status?.includes("Processing") ||
-        analysis?.status?.toLowerCase().includes("reviewing") ||
-        analysis?.status?.includes("Neural") ||
-        analysis?.status?.includes("Vetting") ||
-        analysis?.status?.includes("Mapping")
+        status.includes("Processing") ||
+        status.toLowerCase().includes("reviewing") ||
+        status.includes("Neural") ||
+        status.includes("Vetting") ||
+        status.includes("Mapping")
       ) {
         auditStatus = "reviewing";
       } else if (
         contract.totalRules &&
+        contract.analysisProgress != null &&
         contract.analysisProgress >= contract.totalRules &&
         contract.totalRules > 0
       ) {
         auditStatus = "completed";
-      } else if (
-        analysis?.status?.includes("failed") ||
-        analysis?.status?.includes("Failed")
-      ) {
+      } else if (status.includes("failed") || status.includes("Failed")) {
         auditStatus = "failed";
       }
 
-      return {
-        ...contract,
-        auditStatus,
-      };
+      // Drop fields the list UI doesn't actually render.
+      const { analysisStatus: _drop, totalRules: _t, analysisProgress: _p, ...rest } =
+        contract;
+      void _drop;
+      void _t;
+      void _p;
+      return { ...rest, auditStatus };
     });
 
     console.log(

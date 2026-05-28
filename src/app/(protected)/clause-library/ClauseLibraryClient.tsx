@@ -171,23 +171,28 @@ export default function ClauseLibraryClient({
   }, [clauses]);
 
   useEffect(() => {
-    const fetchClauses = async () => {
+    // PERF: previously this also refetched every time the tab regained
+    // focus, which pulled the entire clause list (often 500+ rows) on
+    // every alt-tab. We now fetch once on mount; the user can pull
+    // fresh data by navigating away and back, or by reloading.
+    let cancelled = false;
+    (async () => {
       setLoading(true);
       try {
-        const res = await fetch("/api/clauses", { cache: "no-store" });
+        const res = await fetch("/api/clauses");
         const data = await res.json();
+        if (cancelled) return;
         setClauses(Array.isArray(data) ? data : (data.clauses ?? []));
       } catch (err) {
+        if (cancelled) return;
         console.error("Error fetching clauses:", err);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
+    })();
+    return () => {
+      cancelled = true;
     };
-    fetchClauses();
-
-    const onFocus = () => fetchClauses();
-    window.addEventListener("focus", onFocus);
-    return () => window.removeEventListener("focus", onFocus);
   }, []);
 
   const filtered = useMemo(() => {

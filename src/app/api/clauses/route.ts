@@ -58,7 +58,17 @@ export async function GET(req: NextRequest) {
       context.userId,
     );
 
-    return NextResponse.json(uniqueClauses);
+    // PERF: encourage SWR-style caching on the browser. We never want a
+    // stale clause to render after a write, so we set max-age=0 (always
+    // revalidate) but allow stale-while-revalidate for 60s so repeat
+    // page visits in the same session render instantly from cache while
+    // a background refresh happens.
+    return NextResponse.json(uniqueClauses, {
+      headers: {
+        "Cache-Control":
+          "private, max-age=0, must-revalidate, stale-while-revalidate=60",
+      },
+    });
   } catch (error) {
     console.error("[Clauses API] GET error:", error);
     return NextResponse.json(
