@@ -118,146 +118,126 @@ export function WorkspaceSwitcher() {
         <PopoverTrigger asChild>
           <button
             className={cn(
-              "w-full flex items-center justify-between bg-surface-container-low border border-outline-variant hover:bg-surface-container-high px-3 h-12 rounded-lg transition-all duration-300 shadow-sm group",
-              open &&
-                "ring-2 ring-primary/20 border-primary/50 bg-surface-container-high",
+              "w-full flex items-center justify-between bg-surface-container-low border border-outline-variant/60 hover:bg-surface-container-high px-2.5 h-10 rounded-md transition-colors group",
+              open && "ring-1 ring-primary/30 border-primary/40",
             )}
           >
-            <div className="flex items-center gap-3 text-left overflow-hidden">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform duration-300">
-                <BrainCircuit className="h-5 w-5" />
+            <div className="flex items-center gap-2 text-left overflow-hidden">
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                <BrainCircuit className="h-3.5 w-3.5" />
               </div>
-              <div className="flex flex-col gap-0.5 overflow-hidden">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] font-semibold uppercase tracking-tight text-on-surface">
-                    Wordings AI
-                  </span>
-                  <span className="text-on-surface-variant/40 font-bold text-[10px]">
-                    —
-                  </span>
-                </div>
-                <span className="truncate font-semibold text-[11px] uppercase tracking-widest text-primary">
-                  {activeWorkspace?.name || "Active Workspace"}
+              <div className="flex flex-col gap-0 overflow-hidden leading-tight">
+                <span className="text-[10px] text-on-surface-variant truncate">
+                  Wordings AI
+                </span>
+                <span className="truncate text-xs font-medium text-on-surface">
+                  {activeWorkspace?.name || "Active workspace"}
                 </span>
               </div>
             </div>
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-30 group-hover:opacity-100 transition-opacity" />
+            <ChevronsUpDown className="ml-1.5 h-3.5 w-3.5 shrink-0 opacity-40 group-hover:opacity-80 transition-opacity" />
           </button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-[300px] p-2 rounded-lg border-outline-variant shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] bg-popover"
+          className="w-[280px] p-1 rounded-lg border-outline-variant/60 shadow-xl bg-popover"
           align="start"
-          sideOffset={12}
+          sideOffset={6}
         >
-          <div className="px-4 py-4 mb-2 border-b border-outline-variant/30 flex items-center justify-between">
-            <div className="space-y-0.5">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-on-surface-variant/60">
-                Cognitive Scope
-              </span>
-              <p className="text-xs font-semibold text-on-surface uppercase tracking-tight">
-                Active Environments
-              </p>
-            </div>
-            <Badge className="bg-primary/10 text-primary border-none text-[8px] font-semibold uppercase tracking-tighter">
-              {workspaces.length} Scopes
+          <div className="px-2.5 py-2 flex items-center justify-between">
+            <span className="text-[11px] font-medium text-on-surface-variant">
+              Workspaces
+            </span>
+            <Badge className="bg-primary/10 text-primary border-none text-[10px] font-normal px-1.5 py-0 rounded">
+              {workspaces.length}
             </Badge>
           </div>
           <Command className="bg-transparent">
             <CommandInput
-              placeholder="Filter environments..."
-              className="h-11 text-xs font-medium uppercase tracking-wider border-none focus:ring-0"
+              placeholder="Filter workspaces…"
+              className="h-8 text-xs border-none focus:ring-0"
             />
-            <CommandList className="max-h-[350px] mt-2 no-scrollbar">
-              <CommandEmpty className="py-12 text-center">
-                <Search className="size-8 mx-auto mb-3 opacity-10" />
-                <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/40">
-                  No matching scope found.
+            <CommandList className="max-h-[320px] mt-1 no-scrollbar">
+              <CommandEmpty className="py-6 text-center">
+                <Search className="size-5 mx-auto mb-2 opacity-20" />
+                <p className="text-xs text-on-surface-variant">
+                  No workspace found.
                 </p>
               </CommandEmpty>
-              <CommandGroup>
+              <CommandGroup className="p-0">
                 {workspaces.map((workspace) => (
                   <CommandItem
                     key={workspace.id}
                     onSelect={() => handleWorkspaceChange(workspace.id)}
                     className={cn(
-                      "flex items-center justify-between p-4 rounded-2xl cursor-pointer transition-all duration-300 mb-1.5",
+                      "flex items-center justify-between px-2 py-1.5 rounded-md cursor-pointer transition-colors mb-0.5",
                       activeWorkspace?.id === workspace.id
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-[1.02]"
-                        : "hover:bg-primary/10 hover:text-primary",
+                        ? "bg-primary/10 text-primary"
+                        : "hover:bg-surface-container-high",
                     )}
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 min-w-0">
                       <div
                         className={cn(
-                          "flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-300",
+                          "flex h-6 w-6 items-center justify-center rounded-md shrink-0",
                           activeWorkspace?.id === workspace.id
-                            ? "bg-white/20"
-                            : "bg-surface-container-highest group-hover:bg-primary/10",
+                            ? "bg-primary/20 text-primary"
+                            : "bg-surface-container-highest text-on-surface-variant",
                         )}
                       >
-                        <LayoutGrid className="h-5 w-5" />
+                        <LayoutGrid className="h-3 w-3" />
                       </div>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium uppercase tracking-wider">
+                      <div className="flex flex-col min-w-0 leading-tight">
+                        <span className="text-xs font-medium truncate">
                           {workspace.name}
                         </span>
-                        <span
-                          className={cn(
-                            "text-[9px] font-bold uppercase",
-                            activeWorkspace?.id === workspace.id
-                              ? "text-white/60"
-                              : "text-on-surface-variant/40",
-                          )}
-                        >
-                          {workspace.type || "General"} Engine
+                        <span className="text-[10px] text-on-surface-variant/70 capitalize truncate">
+                          {workspace.type || "general"}
                         </span>
                       </div>
                     </div>
                     {activeWorkspace?.id === workspace.id ? (
-                      <Check className="h-4 w-4 text-white animate-in zoom-in duration-300" />
-                    ) : (
-                      <ChevronRight className="h-3 w-3 opacity-0 group-hover:opacity-40 transition-all -translate-x-2 group-hover:translate-x-0" />
-                    )}
+                      <Check className="h-3.5 w-3.5 text-primary shrink-0" />
+                    ) : null}
                   </CommandItem>
                 ))}
               </CommandGroup>
             </CommandList>
-            <CommandSeparator className="my-3 bg-outline-variant/30" />
-            <div className="p-1 space-y-1">
+            <CommandSeparator className="my-1 bg-outline-variant/30" />
+            <div className="p-0.5 space-y-0.5">
               {activeWorkspace ? (
                 <button
-                  className="w-full flex items-center gap-3 p-4 rounded-2xl cursor-pointer text-primary hover:bg-primary/5 transition-all duration-300 group"
+                  className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer hover:bg-primary/5 transition-colors text-left"
                   onClick={() => {
                     setOpen(false);
                     setInviteDialogOpen(true);
                   }}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                    <UserPlus className="h-5 w-5" />
+                  <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 text-primary shrink-0">
+                    <UserPlus className="h-3 w-3" />
                   </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-medium uppercase tracking-wider">
+                  <div className="flex flex-col leading-tight min-w-0">
+                    <span className="text-xs font-medium text-on-surface truncate">
                       Invite teammates
                     </span>
-                    <span className="text-[9px] font-bold uppercase text-primary/40">
+                    <span className="text-[10px] text-on-surface-variant truncate">
                       Share {activeWorkspace.name}
                     </span>
                   </div>
                 </button>
               ) : null}
               <button
-                className="w-full flex items-center gap-3 p-4 rounded-2xl cursor-pointer text-primary hover:bg-primary/5 transition-all duration-300 group"
+                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer hover:bg-primary/5 transition-colors text-left"
                 onClick={handleCreateWorkspace}
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                  <Plus className="h-5 w-5" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 text-primary shrink-0">
+                  <Plus className="h-3 w-3" />
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-medium uppercase tracking-wider">
-                    New Intelligence Scope
+                <div className="flex flex-col leading-tight min-w-0">
+                  <span className="text-xs font-medium text-on-surface truncate">
+                    New workspace
                   </span>
-                  <span className="text-[9px] font-bold uppercase text-primary/40">
-                    Expand Platform Capacity
+                  <span className="text-[10px] text-on-surface-variant truncate">
+                    Add another environment
                   </span>
                 </div>
               </button>

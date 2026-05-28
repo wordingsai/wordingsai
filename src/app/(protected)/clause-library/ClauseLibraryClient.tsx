@@ -239,60 +239,59 @@ export default function ClauseLibraryClient({
   const canMutate = plan === "plus" || plan === "basic";
 
   return (
-    <main className="flex-1 p-4 lg:p-10 bg-background transition-colors duration-300 overflow-x-hidden">
+    <main className="flex-1 p-6 lg:px-8 lg:py-7 bg-background overflow-x-hidden">
       {/* Page Header */}
-      <div className="mb-6 lg:mb-10">
-        <div className="flex items-center gap-2 mb-4 lg:mb-6">
+      <div className="mb-5">
+        <div className="mb-2">
           <Breadcrumb>
-            <BreadcrumbList>
+            <BreadcrumbList className="text-xs">
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant">
-                  Regulatory Framework
+                <BreadcrumbPage className="text-on-surface-variant">
+                  Clause library
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
-              Clause Library
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3">
+          <div className="space-y-1">
+            <h1 className="text-xl lg:text-2xl font-semibold tracking-tight text-on-surface">
+              Clause library
             </h1>
-            <p className="text-on-surface-variant text-base lg:text-lg font-medium max-w-2xl leading-relaxed">
-              Verified treaty wordings and standardized clauses for treaty
-              construction.
+            <p className="text-on-surface-variant text-sm">
+              Verified treaty wordings and standardized clauses for treaty construction.
             </p>
           </div>
 
-          <div className="flex flex-col items-stretch lg:items-end gap-2 w-full lg:w-auto">
+          <div className="flex items-center gap-2 shrink-0">
             {!canMutate && !isPlanPending && (
-              <span className="text-[9px] font-semibold text-amber-500 uppercase tracking-[0.15em] bg-amber-500/10 px-4 py-1.5 rounded-full border border-amber-500/20 text-center">
+              <span className="text-[11px] font-medium text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md border border-amber-500/20">
                 Upgrade to add clauses
               </span>
             )}
             {activeWorkspace?.isGlobal && isPlus && (
-              <span className="text-[9px] font-semibold text-primary uppercase tracking-[0.15em] bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20 text-center">
-                Creating here saves privately to your org
+              <span className="text-[11px] font-medium text-primary bg-primary/10 px-2 py-1 rounded-md border border-primary/20">
+                Saved privately to your org
               </span>
             )}
             {activeWorkspace?.isGlobal && !isPlus && (
-              <span className="text-[9px] font-semibold text-primary uppercase tracking-[0.15em] bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20 text-center">
-                Global workspace is read-only
+              <span className="text-[11px] font-medium text-primary bg-primary/10 px-2 py-1 rounded-md border border-primary/20">
+                Global workspace · read-only
               </span>
             )}
             <Button
-              size="lg"
+              size="sm"
               disabled={!canMutate || isPlanPending}
               onClick={() => canMutate && router.push("/clause-library/new")}
               className={cn(
-                "gap-2",
+                "gap-1.5",
                 canMutate && !isPlanPending
                   ? ""
                   : "opacity-50 cursor-not-allowed",
               )}
             >
-              <BookOpen className="size-4" />
+              <BookOpen className="size-3.5" />
               Add to library
             </Button>
           </div>
@@ -300,30 +299,30 @@ export default function ClauseLibraryClient({
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-col gap-4 mb-6 lg:mb-8">
+      <div className="flex flex-col gap-3 mb-4">
         <div className="relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant group-focus-within:text-primary transition-colors z-10" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-on-surface-variant group-focus-within:text-primary transition-colors z-10" />
           <Input
-            placeholder="Search clauses..."
+            placeholder="Search clauses by name, code, or content…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-surface-container-low border-outline-variant transition-all focus:ring-4 focus:ring-primary/10"
+            className="pl-9 h-9 bg-surface-container-low border-outline-variant/60 focus:ring-2 focus:ring-primary/20"
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
           <Select
             value={scopeFilter}
             onValueChange={(v) => setScopeFilter(v ?? "scope")}
           >
-            <SelectTrigger className="w-full h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider lg:text-[11px]">
-              <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-primary" />
+            <SelectTrigger className="w-full h-9 bg-surface-container-low border-outline-variant/60 rounded-md text-xs">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Globe className="size-3.5 text-primary shrink-0" />
                 <SelectValue placeholder="Scope" />
               </div>
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="scope">All Scope</SelectItem>
+            <SelectContent>
+              <SelectItem value="scope">All scopes</SelectItem>
               <SelectItem value="global">Global</SelectItem>
               {plan !== "fast" && (
                 <SelectItem value="custom">Custom</SelectItem>
@@ -335,16 +334,16 @@ export default function ClauseLibraryClient({
             value={categoryFilter}
             onValueChange={(v) => setCategoryFilter(v ?? "category")}
           >
-            <SelectTrigger className="w-full h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider lg:text-[11px]">
-              <div className="flex items-center gap-2">
-                <LayoutGrid className="w-4 h-4 text-primary" />
+            <SelectTrigger className="w-full h-9 bg-surface-container-low border-outline-variant/60 rounded-md text-xs">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <LayoutGrid className="size-3.5 text-primary shrink-0" />
                 <SelectValue placeholder="Category" />
               </div>
             </SelectTrigger>
-            <SelectContent className="rounded-xl max-h-[300px]">
-              <SelectItem value="category">All Domain</SelectItem>
+            <SelectContent className="max-h-[320px]">
+              <SelectItem value="category">All categories</SelectItem>
               {clauseCategories.map((t) => (
-                <SelectItem key={t} value={t} className="capitalize py-3">
+                <SelectItem key={t} value={t} className="capitalize">
                   {t}
                 </SelectItem>
               ))}
@@ -355,16 +354,16 @@ export default function ClauseLibraryClient({
             value={libraryFilter}
             onValueChange={(v) => setLibraryFilter(v ?? "library")}
           >
-            <SelectTrigger className="w-full h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider lg:text-[11px]">
-              <div className="flex items-center gap-2 text-on-surface-variant">
-                <Filter className="w-4 h-4 text-secondary" />
+            <SelectTrigger className="w-full h-9 bg-surface-container-low border-outline-variant/60 rounded-md text-xs">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <Filter className="size-3.5 text-secondary shrink-0" />
                 <SelectValue placeholder="Library" />
               </div>
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="library">Any Library</SelectItem>
+            <SelectContent className="max-h-[320px]">
+              <SelectItem value="library">Any library</SelectItem>
               {availableLibraries.map((s) => (
-                <SelectItem key={s} value={s} className="capitalize py-3">
+                <SelectItem key={s} value={s} className="capitalize">
                   {s}
                 </SelectItem>
               ))}
@@ -375,14 +374,14 @@ export default function ClauseLibraryClient({
             value={statusFilter}
             onValueChange={(v) => setStatusFilter(v ?? "status")}
           >
-            <SelectTrigger className="w-full h-14 bg-surface-container-low border-outline-variant rounded-2xl text-xs font-medium uppercase tracking-wider lg:text-[11px]">
-              <div className="flex items-center gap-2 text-on-surface-variant">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <SelectTrigger className="w-full h-9 bg-surface-container-low border-outline-variant/60 rounded-md text-xs">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" />
                 <SelectValue placeholder="Status" />
               </div>
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="status">All Status</SelectItem>
+            <SelectContent>
+              <SelectItem value="status">All statuses</SelectItem>
               <SelectItem value="Approved">Approved</SelectItem>
               <SelectItem value="Unapproved">Unapproved</SelectItem>
             </SelectContent>
@@ -391,7 +390,7 @@ export default function ClauseLibraryClient({
       </div>
 
       {/* Content Container */}
-      <div className="bg-surface-container-low border border-outline-variant rounded-lg lg:rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-surface-container-low border border-outline-variant/60 rounded-xl overflow-hidden">
         {/* Mobile View: Cards */}
         <div className="block lg:hidden divide-y divide-outline-variant/30">
           <AnimatePresence mode="popLayout">
@@ -622,21 +621,21 @@ export default function ClauseLibraryClient({
         {/* Desktop View: Table */}
         <div className="hidden lg:block overflow-x-hidden">
           <Table>
-            <TableHeader className="bg-surface-container-highest/10">
-              <TableRow className="hover:bg-transparent border-outline-variant/50">
-                <TableHead className="py-5 px-10 text-xs font-medium uppercase tracking-wider text-on-surface-variant min-w-[300px]">
-                  Clause Identification
+            <TableHeader className="bg-surface-container-highest/20">
+              <TableRow className="hover:bg-transparent border-outline-variant/40">
+                <TableHead className="h-9 px-4 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[280px]">
+                  Clause
                 </TableHead>
-                <TableHead className="py-5 text-xs font-medium uppercase tracking-wider text-on-surface-variant min-w-[150px]">
-                  Clause Category
+                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[140px]">
+                  Category
                 </TableHead>
-                <TableHead className="py-5 text-xs font-medium uppercase tracking-wider text-on-surface-variant min-w-[120px]">
+                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[100px]">
                   Status
                 </TableHead>
-                <TableHead className="py-5 text-xs font-medium uppercase tracking-wider text-on-surface-variant min-w-[150px]">
-                  Source Library
+                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[140px]">
+                  Library
                 </TableHead>
-                <TableHead className="py-5 text-right px-10 text-xs font-medium uppercase tracking-wider text-on-surface-variant w-[140px]">
+                <TableHead className="h-9 text-right px-4 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant w-[80px]">
                   Action
                 </TableHead>
               </TableRow>
@@ -646,33 +645,33 @@ export default function ClauseLibraryClient({
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i} className="border-outline-variant/30">
-                    <TableCell className="px-10 py-6">
-                      <div className="flex items-center gap-4">
-                        <Skeleton className="size-10 rounded-2xl" />
-                        <Skeleton className="h-6 w-48 rounded-lg" />
+                    <TableCell className="px-4 py-2.5">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="size-7 rounded-md" />
+                        <Skeleton className="h-4 w-48 rounded" />
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-8 w-24 rounded-full" />
+                      <Skeleton className="h-5 w-20 rounded" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-8 w-24 rounded-full" />
+                      <Skeleton className="h-5 w-20 rounded" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-4 w-32 rounded-lg" />
+                      <Skeleton className="h-4 w-32 rounded" />
                     </TableCell>
-                    <TableCell className="px-10 text-right">
-                      <Skeleton className="size-10 ml-auto rounded-full" />
+                    <TableCell className="px-4 text-right">
+                      <Skeleton className="size-7 ml-auto rounded" />
                     </TableCell>
                   </TableRow>
                 ))
               ) : paginated.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="py-40 text-center">
-                    <div className="flex flex-col items-center gap-4 opacity-30">
-                      <FileSearch className="size-20" />
-                      <p className="text-xl font-semibold uppercase tracking-[0.2em]">
-                        No wordings found in library
+                  <TableCell colSpan={5} className="py-16 text-center">
+                    <div className="flex flex-col items-center gap-2 opacity-40">
+                      <FileSearch className="size-8" />
+                      <p className="text-sm">
+                        No clauses match your filters
                       </p>
                     </div>
                   </TableCell>
@@ -694,31 +693,31 @@ export default function ClauseLibraryClient({
         </div>
 
         {/* Pagination Footer */}
-        <div className="p-6 lg:p-10 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-8 bg-surface-container-highest/20 rounded-b-[2rem] lg:rounded-b-[3rem]">
-          <div className="text-[10px] lg:text-[11px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant text-center sm:text-left">
-            Capacity: <span className="text-on-surface">{filtered.length}</span>{" "}
-            Wordings
+        <div className="px-4 py-2.5 border-t border-outline-variant/40 flex flex-col sm:flex-row items-center justify-between gap-3 bg-surface-container-highest/20">
+          <div className="text-xs text-on-surface-variant">
+            <span className="text-on-surface font-medium">{filtered.length}</span>{" "}
+            {filtered.length === 1 ? "clause" : "clauses"}
           </div>
 
           <Pagination className="w-auto mx-0">
-            <PaginationContent className="gap-1.5 lg:gap-2">
+            <PaginationContent className="gap-1">
               <PaginationItem>
                 <PaginationPrevious
-                  className="rounded-xl border-outline-variant hover:bg-background h-10 px-3 lg:px-5"
+                  className="h-7 px-2.5 rounded-md border-outline-variant/60 hover:bg-background text-xs"
                   onClick={() => page > 1 && setPage(page - 1)}
                 />
               </PaginationItem>
 
-              <div className="hidden lg:flex items-center gap-2 mx-2">
+              <div className="hidden lg:flex items-center gap-1 mx-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => (
                   <Button
                     key={i}
                     variant={page === i + 1 ? "default" : "outline"}
                     className={cn(
-                      "h-10 w-10 rounded-xl font-semibold text-xs",
+                      "h-7 w-7 rounded-md font-medium text-xs p-0",
                       page === i + 1
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                        : "bg-transparent border-outline-variant hover:bg-background",
+                        ? ""
+                        : "bg-transparent border-outline-variant/60 hover:bg-background",
                     )}
                     onClick={() => setPage(i + 1)}
                   >
@@ -727,13 +726,13 @@ export default function ClauseLibraryClient({
                 ))}
               </div>
 
-              <div className="flex lg:hidden items-center px-4 font-semibold text-[11px] uppercase tracking-widest text-on-surface-variant">
+              <div className="flex lg:hidden items-center px-2 text-xs text-on-surface-variant">
                 {page} / {totalPages}
               </div>
 
               <PaginationItem>
                 <PaginationNext
-                  className="rounded-xl border-outline-variant hover:bg-background h-10 px-3 lg:px-5"
+                  className="h-7 px-2.5 rounded-md border-outline-variant/60 hover:bg-background text-xs"
                   onClick={() => page < totalPages && setPage(page + 1)}
                 />
               </PaginationItem>
@@ -779,60 +778,58 @@ function ClauseRow({
             )}
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            <TableCell className="px-10 py-6">
-              <div className="flex items-center gap-6">
+            <TableCell className="px-4 py-2.5">
+              <div className="flex items-center gap-3">
                 <div
                   className={cn(
-                    "size-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors",
+                    "size-7 rounded-md flex items-center justify-center shrink-0 transition-colors",
                     isExpanded
                       ? "bg-primary text-primary-foreground"
                       : "bg-surface-container-highest group-hover:bg-primary/10 group-hover:text-primary",
                   )}
                 >
-                  <BookOpen className="size-5" />
+                  <BookOpen className="size-3.5" />
                 </div>
-                <div className="flex flex-col truncate max-w-[350px]">
-                  <div className="flex items-center gap-3 mb-1">
-                    {clause.source && (
-                      <span className="text-[10px] font-semibold bg-primary/10 text-primary px-2 py-0.5 rounded-md uppercase tracking-widest border border-primary/20 shrink-0">
-                        {clause.source}
-                      </span>
-                    )}
+                <div className="flex flex-col min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="text-sm font-medium text-on-surface group-hover:text-primary transition-colors truncate">
                       {clause.clauseName}
                     </span>
                     {clause.isGlobal && (
-                      <Badge className="h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter bg-primary/10 text-primary border-primary/20 rounded-sm">
+                      <Badge className="h-4 px-1.5 text-[9px] font-medium bg-primary/10 text-primary border border-primary/20 rounded">
                         Global
                       </Badge>
                     )}
                     {clause.code && (
-                      <Badge className="h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter bg-violet-500/10 text-violet-500 border-violet-500/20 rounded-sm">
+                      <Badge className="h-4 px-1.5 text-[9px] font-mono font-normal bg-violet-500/10 text-violet-500 border border-violet-500/20 rounded">
                         {clause.code}
                       </Badge>
                     )}
                   </div>
-                  <span className="text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                    ID: CL-{clause.id.slice(0, 8).toUpperCase()}
+                  <span className="text-[11px] text-on-surface-variant font-mono">
+                    CL-{clause.id.slice(0, 8).toUpperCase()}
                   </span>
                 </div>
               </div>
             </TableCell>
 
-            <TableCell>
+            <TableCell className="py-2.5">
               <Badge
                 variant="outline"
-                className={getCategoryBadgeClasses(clause.category)}
+                className={cn(
+                  "text-[11px] font-medium px-2 py-0.5 rounded-md",
+                  getCategoryBadgeClasses(clause.category),
+                )}
               >
                 {clause.category}
               </Badge>
             </TableCell>
 
-            <TableCell>
+            <TableCell className="py-2.5">
               <Badge
                 variant="outline"
                 className={cn(
-                  "text-[10px] font-medium uppercase tracking-wider py-1 px-3 rounded-full border",
+                  "text-[11px] font-medium py-0.5 px-2 rounded-md border",
                   clause.status === "Approved"
                     ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                     : "bg-red-500/10 text-red-500 border-red-500/20",
@@ -842,17 +839,17 @@ function ClauseRow({
               </Badge>
             </TableCell>
 
-            <TableCell className="text-on-surface-variant font-semibold uppercase text-[11px] tracking-[0.15em]">
+            <TableCell className="py-2.5 text-on-surface-variant text-xs">
               {clause.library}
             </TableCell>
 
-            <TableCell className="px-10 text-right">
-              <div className="flex items-center justify-end gap-2">
+            <TableCell className="px-4 py-2.5 text-right">
+              <div className="flex items-center justify-end gap-0.5">
                 <Button
                   variant="ghost"
                   size="icon"
                   className={cn(
-                    "size-12 rounded-2xl transition-all",
+                    "size-7 rounded-md transition-all",
                     isExpanded
                       ? "rotate-90 text-primary bg-primary/10"
                       : "text-on-surface-variant",
@@ -862,7 +859,7 @@ function ClauseRow({
                     setIsExpanded(!isExpanded);
                   }}
                 >
-                  <ChevronRight className="size-6" />
+                  <ChevronRight className="size-3.5" />
                 </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger
@@ -872,31 +869,31 @@ function ClauseRow({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="size-12 rounded-2xl hover:bg-surface-container-highest transition-all"
+                      className="size-7 rounded-md hover:bg-surface-container-highest"
                     >
-                      <MoreHorizontal className="size-6" />
+                      <MoreHorizontal className="size-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
-                    className="rounded-2xl w-56 p-2 border-outline-variant shadow-2xl"
+                    className="w-44 p-1 border-outline-variant/60"
                   >
                     <DropdownMenuItem
-                      className="rounded-xl font-bold cursor-pointer h-12"
+                      className="cursor-pointer text-xs"
                       onClick={() =>
                         router.push(`/clause-library/${clause.id}`)
                       }
                     >
-                      Full View
+                      View full
                     </DropdownMenuItem>
                     {!clause.isGlobal && plan !== "fast" && (
                       <DropdownMenuItem
-                        className="rounded-xl font-bold cursor-pointer h-12"
+                        className="cursor-pointer text-xs"
                         onClick={() =>
                           router.push(`/clause-library/${clause.id}/edit`)
                         }
                       >
-                        Edit Source
+                        Edit
                       </DropdownMenuItem>
                     )}
                   </DropdownMenuContent>
@@ -905,26 +902,26 @@ function ClauseRow({
             </TableCell>
           </TableRow>
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-64 rounded-[1.5rem] p-2 shadow-2xl border-outline-variant">
+        <ContextMenuContent className="w-48 p-1 border-outline-variant/60">
           <ContextMenuItem
-            className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer"
+            className="cursor-pointer text-xs"
             onClick={() => router.push(`/clause-library/${clause.id}`)}
           >
-            <Eye className="mr-2 size-4 text-primary" />
-            View Wording
+            <Eye className="mr-2 size-3.5 text-primary" />
+            View full
           </ContextMenuItem>
           {!clause.isGlobal && plan !== "fast" && (
             <ContextMenuItem
-              className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer"
+              className="cursor-pointer text-xs"
               onClick={() => router.push(`/clause-library/${clause.id}/edit`)}
             >
-              <Edit className="mr-2 size-4" />
-              Edit Source
+              <Edit className="mr-2 size-3.5" />
+              Edit
             </ContextMenuItem>
           )}
           {!clause.isGlobal && plan !== "fast" && (
             <ContextMenuItem
-              className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer text-destructive"
+              className="cursor-pointer text-xs text-destructive focus:text-destructive"
               onClick={async () => {
                 if (confirm("Are you sure?")) {
                   await fetch(`/api/clauses/${clause.id}`, {
@@ -934,8 +931,8 @@ function ClauseRow({
                 }
               }}
             >
-              <Trash2 className="mr-2 size-4" />
-              Delete Clause
+              <Trash2 className="mr-2 size-3.5" />
+              Delete
             </ContextMenuItem>
           )}
           <ContextMenuSeparator className="my-2" />

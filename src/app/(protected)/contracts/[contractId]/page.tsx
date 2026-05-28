@@ -806,16 +806,16 @@ export default function ContractAnalysisPage() {
           </Breadcrumb>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="space-y-3">
-            <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-on-surface leading-none">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-3">
+          <div className="space-y-1.5 min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl md:text-2xl font-semibold tracking-tight text-on-surface leading-tight">
                 {contract.contractName}
               </h1>
               <Badge
                 variant="outline"
                 className={cn(
-                  "rounded-full text-xs font-medium uppercase px-3 py-1 shrink-0",
+                  "rounded-md text-[11px] font-medium px-2 py-0.5 shrink-0",
                   auditStatus === "completed"
                     ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
                     : "bg-primary/10 text-primary border-primary/20 animate-pulse",
@@ -824,25 +824,25 @@ export default function ContractAnalysisPage() {
                 {auditStatus}
               </Badge>
             </div>
-            <div className="flex flex-wrap items-center gap-6">
-              <div className="flex items-center gap-2 text-on-surface-variant font-bold text-sm">
-                <Building2 className="size-4 text-primary" />{" "}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-on-surface-variant">
+              <span className="flex items-center gap-1.5">
+                <Building2 className="size-3.5 text-primary" />
                 {contract.reinsured}
-              </div>
-              <div className="flex items-center gap-2 text-on-surface-variant/60 font-bold text-[10px] uppercase tracking-widest">
+              </span>
+              <span className="flex items-center gap-1.5">
                 <LayoutGrid className="size-3" /> {contract.contractType}
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-outline-variant/30 text-[10px] font-medium uppercase tracking-wider text-on-surface-variant">
-                Plan:{" "}
+              </span>
+              <span className="flex items-center gap-1">
+                Plan
                 <span
                   className={cn(
-                    "ml-1",
+                    "font-medium",
                     isPlus ? "text-primary" : "text-on-surface",
                   )}
                 >
                   {plan?.toUpperCase() || "BASIC"}
                 </span>
-              </div>
+              </span>
             </div>
           </div>
 
@@ -1111,32 +1111,32 @@ export default function ContractAnalysisPage() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="w-full xl:w-[min(100%,320px)] xl:shrink-0 max-h-[280px] xl:max-h-[min(70vh,640px)] bg-surface-container-low border border-outline-variant/30 rounded-2xl xl:rounded-lg overflow-y-auto"
+                        className="w-full xl:w-[260px] xl:shrink-0 max-h-[240px] xl:max-h-[min(70vh,640px)] bg-surface-container-low border border-outline-variant/40 rounded-lg overflow-y-auto"
                       >
-                        <div className="p-8 space-y-10">
-                          {/* Global Rules Toggle */}
-                          <div className="flex items-center justify-between p-4 bg-primary/5 border border-primary/20 rounded-2xl">
-                            <div className="space-y-1">
-                              <p className="text-[10px] font-semibold uppercase tracking-tight text-primary">
-                                Unidentified clauses
+                        <div className="p-3 space-y-4">
+                          {/* Show-all toggle */}
+                          <div className="flex items-center justify-between gap-2 p-2.5 bg-primary/5 border border-primary/20 rounded-md">
+                            <div className="min-w-0">
+                              <p className="text-xs font-medium text-primary">
+                                Unmatched clauses
                               </p>
-                              <p className="text-[8px] font-bold text-on-surface-variant/60 uppercase">
-                                Show not matched in checklist
+                              <p className="text-[11px] text-on-surface-variant">
+                                Show in checklist
                               </p>
                             </div>
                             <Switch
                               checked={showUnidentifiedClauses}
                               onCheckedChange={setShowUnidentifiedClauses}
-                              className="data-[state=checked]:bg-emerald-500"
+                              className="data-[state=checked]:bg-emerald-500 shrink-0"
                             />
                           </div>
 
                           {/* Risk Drivers */}
-                          <div className="space-y-4">
-                            <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-red-500 flex items-center gap-2">
-                              <Shield className="size-4" /> Risk Drivers
+                          <div className="space-y-2">
+                            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-red-500 flex items-center gap-1.5">
+                              <Shield className="size-3" /> Risk drivers
                             </h3>
-                            <div className="space-y-3">
+                            <div className="space-y-1.5">
                               {contract.analysis?.plus?.riskBreakdown
                                 ?.categories ? (
                                 Object.entries(
@@ -1145,18 +1145,18 @@ export default function ContractAnalysisPage() {
                                 ).map(([cat, risk]) => (
                                   <div
                                     key={cat}
-                                    className="flex items-center justify-between p-3 bg-background border border-outline-variant/30 rounded-xl"
+                                    className="flex items-center justify-between gap-2 px-2 py-1.5 bg-background border border-outline-variant/30 rounded-md"
                                   >
-                                    <span className="text-[9px] font-semibold uppercase text-on-surface-variant">
+                                    <span className="text-xs text-on-surface-variant truncate">
                                       {cat}
                                     </span>
-                                    <Badge className="bg-red-500 text-white border-none rounded-lg font-semibold uppercase text-[8px]">
+                                    <Badge className="bg-red-500/15 text-red-500 border border-red-500/30 rounded text-[10px] font-medium px-1.5 py-0">
                                       {risk as string}
                                     </Badge>
                                   </div>
                                 ))
                               ) : (
-                                <p className="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-widest italic">
+                                <p className="text-xs italic text-on-surface-variant/60">
                                   No critical risks identified.
                                 </p>
                               )}
@@ -1165,21 +1165,21 @@ export default function ContractAnalysisPage() {
 
                           {/* Timeline Snippet */}
                           {contract.analysis?.plus?.timeline && (
-                            <div className="space-y-4">
-                              <h3 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary flex items-center gap-2">
-                                <Calendar className="size-4" /> Key Milestones
+                            <div className="space-y-2">
+                              <h3 className="text-[11px] font-semibold uppercase tracking-wider text-secondary flex items-center gap-1.5">
+                                <Calendar className="size-3" /> Key milestones
                               </h3>
-                              <div className="space-y-4">
+                              <div className="space-y-2">
                                 {contract.analysis.plus.timeline
                                   .slice(0, 3)
                                   .map((item: any, idx: number) => (
-                                    <div key={idx} className="flex gap-3">
-                                      <div className="size-2 rounded-full bg-secondary mt-1 shrink-0" />
-                                      <div>
-                                        <p className="text-[9px] font-semibold uppercase text-secondary">
+                                    <div key={idx} className="flex gap-2">
+                                      <div className="size-1.5 rounded-full bg-secondary mt-1.5 shrink-0" />
+                                      <div className="min-w-0">
+                                        <p className="text-[10px] font-medium uppercase tracking-wider text-secondary">
                                           {item.date}
                                         </p>
-                                        <p className="text-[11px] font-medium text-on-surface leading-tight">
+                                        <p className="text-xs text-on-surface leading-snug">
                                           {item.event}
                                         </p>
                                       </div>
@@ -1204,16 +1204,17 @@ export default function ContractAnalysisPage() {
                         : "xl:flex-1",
                     )}
                   >
-                    <div className="space-y-6">
+                    <div className="space-y-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <h2 className="text-base font-semibold text-on-surface tracking-tight flex items-center gap-2 sm:gap-3 flex-wrap">
-                          <ShieldCheck className="size-6 sm:size-7 text-emerald-500 shrink-0" />
-                          Foundational Checklist
+                        <h2 className="text-sm font-semibold text-on-surface flex items-center gap-2">
+                          <ShieldCheck className="size-4 text-emerald-500 shrink-0" />
+                          Foundational checklist
                           {checklistEvents.length > 0 && (
-                            <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/70">
+                            <span className="text-xs font-normal text-on-surface-variant">
+                              ·{" "}
                               {checklistEvents.length}
                               {expectedChecklistHeadings != null
-                                ? ` / ${expectedChecklistHeadings} map headings`
+                                ? ` / ${expectedChecklistHeadings} headings`
                                 : " provisions"}
                             </span>
                           )}
@@ -1221,7 +1222,7 @@ export default function ContractAnalysisPage() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          className="text-[10px] font-medium uppercase tracking-wider"
+                          className="h-7 text-xs"
                           onClick={() => setIsPanel1Open(!isPanel1Open)}
                         >
                           {isPanel1Open ? "Hide brief" : "Show brief"}
@@ -1254,30 +1255,30 @@ export default function ContractAnalysisPage() {
                           damping: 25,
                           stiffness: 200,
                         }}
-                        className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border-2 border-primary/20 rounded-2xl xl:rounded-xl overflow-hidden flex flex-col shadow-xl z-20"
+                        className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border border-primary/20 rounded-lg overflow-hidden flex flex-col shadow-sm z-20"
                       >
-                        <div className="bg-primary/5 p-8 border-b border-outline-variant/50 flex items-center justify-between shrink-0">
-                          <div className="flex items-center gap-4">
-                            <div className="size-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30 text-white">
-                              <Sparkles className="size-8" />
+                        <div className="bg-primary/5 px-4 py-3 border-b border-outline-variant/50 flex items-center justify-between gap-3 shrink-0">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="size-8 rounded-md bg-primary flex items-center justify-center text-white shrink-0">
+                              <Sparkles className="size-4" />
                             </div>
-                            <div>
-                              <h3 className="text-lg font-semibold text-on-surface uppercase tracking-tight leading-tight">
+                            <div className="min-w-0">
+                              <h3 className="text-sm font-semibold text-on-surface leading-tight truncate">
                                 {selectedEvent.metadata?.clauseName ||
-                                  "Analysis Detail"}
+                                  "Analysis detail"}
                               </h3>
-                              <div className="flex items-center gap-2 mt-1.5">
+                              <div className="flex items-center gap-2 mt-0.5">
                                 <Badge
                                   className={cn(
-                                    "uppercase text-[10px] font-semibold tracking-widest px-3 py-1 border-none",
+                                    "text-[10px] font-medium px-1.5 py-0 rounded border-none",
                                     selectedEvent.status === "Matched" ||
                                       selectedEvent.status === "Green"
-                                      ? "bg-emerald-500 text-white"
+                                      ? "bg-emerald-500/15 text-emerald-500"
                                       : selectedEvent.status === "Variation" ||
                                           selectedEvent.status === "Amber" ||
                                           selectedEvent.status === "Custom"
-                                        ? "bg-amber-500 text-white"
-                                        : "bg-red-500 text-white",
+                                        ? "bg-amber-500/15 text-amber-500"
+                                        : "bg-red-500/15 text-red-500",
                                   )}
                                 >
                                   {selectedEvent.status === "Variation" ||
@@ -1286,9 +1287,9 @@ export default function ContractAnalysisPage() {
                                     ? "Custom"
                                     : selectedEvent.status}
                                 </Badge>
-                                <span className="text-[10px] font-semibold text-on-surface-variant/40 uppercase tracking-widest">
+                                <span className="text-[11px] text-on-surface-variant/60 truncate">
                                   {selectedEvent.metadata?.category ||
-                                    "General Provision"}
+                                    "General provision"}
                                 </span>
                               </div>
                             </div>
@@ -1296,14 +1297,14 @@ export default function ContractAnalysisPage() {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="size-12 rounded-full hover:bg-primary/10 transition-colors"
+                            className="size-7 rounded-md hover:bg-primary/10 transition-colors shrink-0"
                             onClick={() => setSelectedResultId(null)}
                           >
-                            <XCircle className="size-8 text-on-surface-variant/40 hover:text-destructive" />
+                            <XCircle className="size-4 text-on-surface-variant hover:text-destructive" />
                           </Button>
                         </div>
 
-                        <div className="p-6 md:p-8 space-y-8 overflow-y-auto no-scrollbar flex-1 bg-background/50">
+                        <div className="p-4 md:p-5 space-y-5 overflow-y-auto no-scrollbar flex-1 bg-background/50">
                           {/* Side-by-side comparison: contract vs library
                               with inline word-level diff. The Save-to-library
                               action sits in this section's toolbar since it
@@ -1332,17 +1333,15 @@ export default function ContractAnalysisPage() {
                             />
                           </div>
 
-                          {/* Cognitive Reasoning */}
-                          <div className="bg-primary/10 p-10 rounded-xl border border-primary/20 space-y-6 shadow-sm">
-                            <div className="flex items-center gap-4">
-                              <div className="size-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                                <Zap className="size-6 text-primary animate-pulse" />
-                              </div>
-                              <h4 className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                                AI Compliance Verdict
+                          {/* AI verdict */}
+                          <div className="bg-primary/5 p-4 rounded-lg border border-primary/20 space-y-3">
+                            <div className="flex items-center gap-2">
+                              <Zap className="size-3.5 text-primary" />
+                              <h4 className="text-[11px] font-semibold uppercase tracking-wider text-primary">
+                                AI verdict
                               </h4>
                             </div>
-                            <p className="text-lg font-semibold text-on-surface leading-relaxed italic pl-6 border-l-4 border-primary/30">
+                            <p className="text-sm text-on-surface leading-relaxed italic pl-3 border-l-2 border-primary/30">
                               &ldquo;
                               {selectedEvent.metadata?.cognitiveReasoning ||
                                 selectedEvent.metadata?.reasoning ||
@@ -1352,12 +1351,12 @@ export default function ContractAnalysisPage() {
 
                             {selectedEvent.metadata?.confidence !==
                               undefined && (
-                              <div className="pt-6 space-y-3">
-                                <div className="flex justify-between items-center px-1">
-                                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
-                                    Vector Matching Precision
+                              <div className="space-y-1.5">
+                                <div className="flex justify-between items-center text-xs">
+                                  <span className="text-on-surface-variant">
+                                    Match confidence
                                   </span>
-                                  <span className="text-sm font-semibold text-primary">
+                                  <span className="font-semibold text-primary">
                                     {Math.round(
                                       selectedEvent.metadata.confidence * 100,
                                     )}
@@ -1368,7 +1367,7 @@ export default function ContractAnalysisPage() {
                                   value={
                                     selectedEvent.metadata.confidence * 100
                                   }
-                                  className="h-3 bg-primary/10 rounded-full"
+                                  className="h-1.5 bg-primary/10 rounded-full"
                                 />
                               </div>
                             )}

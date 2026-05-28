@@ -88,11 +88,37 @@ type VersionHistoryEntry = {
 
 const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "long",
+    month: "short",
     day: "numeric",
     year: "numeric",
   });
 };
+
+function MetaRow({
+  label,
+  value,
+  valueClassName,
+}: {
+  label: string;
+  value: string;
+  valueClassName?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className="text-[11px] uppercase tracking-wider text-on-surface-variant/70">
+        {label}
+      </span>
+      <span
+        className={cn(
+          "text-sm text-on-surface break-words",
+          valueClassName,
+        )}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
 
 export default function IndividualClausePage() {
   const { clauseId } = useParams() as { clauseId: string };
@@ -267,23 +293,23 @@ export default function IndividualClausePage() {
 
   return (
     <>
-      <main className="flex-1 p-6 lg:p-10 bg-background transition-colors duration-300">
+      <main className="flex-1 p-6 lg:px-8 lg:py-7 bg-background">
         {/* Page Header */}
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-6">
+        <div className="mb-6">
+          <div className="mb-3">
             <Breadcrumb>
-              <BreadcrumbList>
+              <BreadcrumbList className="text-xs">
                 <BreadcrumbItem>
                   <BreadcrumbLink
                     href="/clause-library"
-                    className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                    className="text-on-surface-variant hover:text-primary transition-colors"
                   >
-                    Regulatory Framework
+                    Clause library
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="text-on-surface-variant" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
+                  <BreadcrumbPage className="text-on-surface truncate max-w-[40ch]">
                     {clause.clauseName}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
@@ -291,15 +317,15 @@ export default function IndividualClausePage() {
             </Breadcrumb>
           </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
-                  {clause.clauseName}
-                </h1>
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+            <div className="space-y-2 min-w-0">
+              <h1 className="text-xl lg:text-2xl font-semibold tracking-tight text-on-surface">
+                {clause.clauseName}
+              </h1>
+              <div className="flex flex-wrap items-center gap-2 text-xs">
                 <Badge
                   variant="outline"
-                  className="rounded-full text-xs font-medium uppercase px-3 py-1 bg-surface-container text-on-surface-variant border-outline-variant"
+                  className="rounded-md font-medium px-2 py-0.5 bg-surface-container text-on-surface-variant border-outline-variant/60"
                 >
                   {clause.category}
                 </Badge>
@@ -307,7 +333,7 @@ export default function IndividualClausePage() {
                   <Badge
                     variant="outline"
                     className={cn(
-                      "rounded-full text-xs font-medium uppercase px-3 py-1",
+                      "rounded-md font-medium px-2 py-0.5",
                       clause.status === "Approved"
                         ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
                         : "bg-red-500/10 text-red-600 border-red-500/20",
@@ -316,93 +342,97 @@ export default function IndividualClausePage() {
                     {clause.status}
                   </Badge>
                 )}
+                {clause.code ? (
+                  <span className="text-on-surface-variant font-mono">
+                    {clause.code}
+                  </span>
+                ) : null}
+                <span className="text-on-surface-variant/60 flex items-center gap-1">
+                  <ShieldCheck className="size-3 text-primary" />
+                  Verified standard wording
+                </span>
               </div>
-              <p className="text-on-surface-variant text-lg font-medium max-w-2xl flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-primary" /> Verified
-                Standard Wording
-              </p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 shrink-0">
               {clause.isEditable && (
                 <Button
                   variant="outline"
-                  size="lg"
-                  className="rounded-md border-outline-variant hover:bg-surface-container-highest"
+                  size="sm"
                   onClick={() =>
                     router.push(`/clause-library/${clauseId}/edit`)
                   }
                 >
-                  <PencilLine className="w-4 h-4 mr-2" /> Edit Clause
+                  <PencilLine className="size-3.5 mr-1.5" />
+                  Edit
                 </Button>
               )}
               <Button
                 variant="outline"
-                size="lg"
-                className="rounded-md border-primary/40 text-primary hover:bg-primary/5"
+                size="sm"
                 onClick={() => setShowCopyDialog(true)}
               >
-                <BookCopy className="w-4 h-4 mr-2" /> Copy Clause
+                <BookCopy className="size-3.5 mr-1.5" />
+                Copy
               </Button>
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-md flex items-center gap-2 transition-all "
-                onClick={exportClause}
-              >
-                <Download className="w-5 h-5" /> EXPORT ASSET
+              <Button size="sm" onClick={exportClause}>
+                <Download className="size-3.5 mr-1.5" />
+                Export
               </Button>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-6">
           {/* Main Content: Wording & AI Insight */}
-          <div className="lg:col-span-8 space-y-8">
-            <Card className="bg-surface-container-low border border-outline-variant rounded-xl overflow-hidden shadow-sm">
-              <CardHeader className="p-8 border-b border-outline-variant/30 flex flex-row items-center justify-between bg-surface-container-highest/10">
-                <div className="flex items-center gap-3">
-                  <FileText className="w-5 h-5 text-primary" />
-                  <CardTitle className="text-sm font-semibold uppercase tracking-widest text-on-surface">
-                    Semantic Wording
+          <div className="lg:col-span-8 space-y-5">
+            <Card className="bg-surface-container-low border border-outline-variant/60 rounded-xl overflow-hidden shadow-none p-0">
+              <CardHeader className="px-5 py-3 border-b border-outline-variant/30 flex flex-row items-center justify-between gap-2 space-y-0">
+                <div className="flex items-center gap-2 min-w-0">
+                  <FileText className="size-4 text-primary shrink-0" />
+                  <CardTitle className="text-sm font-medium text-on-surface">
+                    Clause wording
                   </CardTitle>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={copyText}
-                  className="rounded-xl text-xs font-medium uppercase tracking-wider h-10 px-4 group"
+                  className="h-7 px-2 text-xs"
                 >
                   <Copy
                     className={cn(
-                      "w-3 h-3 mr-2",
+                      "size-3 mr-1.5",
                       copied
                         ? "text-emerald-500"
-                        : "text-on-surface-variant group-hover:text-primary",
+                        : "text-on-surface-variant",
                     )}
                   />
-                  {copied ? "TRANSFERRED" : "DUPLICATE TEXT"}
+                  {copied ? "Copied" : "Copy"}
                 </Button>
               </CardHeader>
-              <CardContent className="p-10 lg:p-14 bg-background">
-                <div className="prose prose-slate dark:prose-invert max-w-none">
-                  <p className="text-xl lg:text-2xl font-medium leading-relaxed text-on-surface tracking-tight whitespace-pre-wrap">
+              <CardContent className="p-5">
+                {clause.clauseText && clause.clauseText.trim() ? (
+                  <p className="text-sm leading-relaxed text-on-surface whitespace-pre-wrap break-words">
                     {clause.clauseText}
                   </p>
-                </div>
+                ) : (
+                  <p className="text-sm italic text-on-surface-variant/60">
+                    No clause text has been recorded for this entry.
+                  </p>
+                )}
               </CardContent>
             </Card>
 
-            <Card className="bg-primary/5 border border-primary/20 rounded-xl overflow-hidden">
-              <CardHeader className="p-8 pb-4">
-                <div className="flex items-center gap-3">
-                  <Sparkles className="w-6 h-6 text-primary" />
-                  <CardTitle className="text-base font-semibold text-primary">
-                    Neural Insights
-                  </CardTitle>
-                </div>
+            <Card className="bg-primary/5 border border-primary/20 rounded-xl overflow-hidden p-0">
+              <CardHeader className="px-5 py-3 border-b border-primary/10 flex flex-row items-center gap-2 space-y-0">
+                <Sparkles className="size-4 text-primary" />
+                <CardTitle className="text-sm font-medium text-primary">
+                  AI insights
+                </CardTitle>
               </CardHeader>
-              <CardContent className="p-8 pt-0 space-y-8">
-                <div className="text-lg font-medium text-on-surface leading-snug">
+              <CardContent className="p-5 space-y-4">
+                <div className="text-sm leading-relaxed text-on-surface">
                   <TextGenerateEffect
                     words={
                       clause.aiSummary ?? "Synthesizing semantic breakdown..."
@@ -412,18 +442,18 @@ export default function IndividualClausePage() {
 
                 {clause.aiRecommendedUse &&
                   clause.aiRecommendedUse.length > 0 && (
-                    <div className="space-y-4 pt-6 border-t border-primary/10">
-                      <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
-                        Suggested Implementation Domains
+                    <div className="space-y-2 pt-3 border-t border-primary/10">
+                      <h4 className="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">
+                        Recommended use
                       </h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1.5">
                         {clause.aiRecommendedUse.map((item, idx) => (
-                          <div
+                          <span
                             key={idx}
-                            className="flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-xl text-primary text-xs font-medium uppercase tracking-wider"
+                            className="inline-flex items-center gap-1 bg-primary/10 px-2 py-0.5 rounded-md text-primary text-xs"
                           >
-                            <CheckCircle2 className="w-3 h-3" /> {item}
-                          </div>
+                            <CheckCircle2 className="size-3" /> {item}
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -433,166 +463,126 @@ export default function IndividualClausePage() {
           </div>
 
           {/* Sidebar Metadata & History */}
-          <div className="lg:col-span-4 space-y-8">
-            <Card className="bg-surface-container-low border border-outline-variant rounded-xl p-8 shadow-sm">
-              <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-8 flex items-center gap-2">
-                <BrainCircuit className="w-3 h-3 text-secondary" /> Clause
-                Meta-Data
-              </h3>
-              <div className="space-y-6">
-                {clause.code && (
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-medium uppercase tracking-wider text-violet-500">
-                      Professional Reference
-                    </span>
-                    <span className="text-sm font-semibold text-violet-600 uppercase tracking-widest">
-                      {clause.code}
-                    </span>
-                  </div>
-                )}
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
-                    Heading Definition
-                  </span>
-                  <span className="text-sm font-bold text-on-surface uppercase tracking-tight">
-                    {clause.heading || "UNDEFINED"}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
-                    Source Archive
-                  </span>
-                  <span className="text-sm font-bold text-on-surface uppercase tracking-tight">
-                    {clause.source || "GENERAL ARCHIVE"}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
-                    Source Library
-                  </span>
-                  <span className="text-sm font-bold text-on-surface uppercase tracking-tight">
-                    {clause.library}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
-                    Approval Status
-                  </span>
-                  <span
-                    className={cn(
-                      "text-sm font-bold uppercase tracking-tight",
-                      clause.status === "Approved"
-                        ? "text-emerald-600"
-                        : "text-red-600",
-                    )}
-                  >
-                    {clause.status || "Approved"}
-                  </span>
-                </div>
-                <div className="pt-4 grid grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
-                      Initialized
-                    </span>
-                    <span className="text-xs font-bold text-on-surface">
-                      {formatDate(clause.createdAt)}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/60">
-                      Calibrated
-                    </span>
-                    <span className="text-xs font-bold text-on-surface">
-                      {formatDate(clause.updatedAt)}
-                    </span>
-                  </div>
+          <div className="lg:col-span-4 space-y-5">
+            <Card className="bg-surface-container-low border border-outline-variant/60 rounded-xl shadow-none p-0">
+              <div className="px-5 py-3 border-b border-outline-variant/30 flex items-center gap-2">
+                <BrainCircuit className="size-3.5 text-secondary" />
+                <h3 className="text-sm font-medium text-on-surface">
+                  Details
+                </h3>
+              </div>
+              <div className="p-5 space-y-3 text-sm">
+                <MetaRow label="Heading" value={clause.heading || "—"} />
+                <MetaRow label="Source" value={clause.source || "General"} />
+                <MetaRow label="Library" value={clause.library} />
+                <MetaRow
+                  label="Status"
+                  value={clause.status || "Approved"}
+                  valueClassName={cn(
+                    clause.status === "Approved"
+                      ? "text-emerald-500"
+                      : "text-red-500",
+                  )}
+                />
+                <div className="pt-2 grid grid-cols-2 gap-3">
+                  <MetaRow
+                    label="Created"
+                    value={formatDate(clause.createdAt)}
+                  />
+                  <MetaRow
+                    label="Updated"
+                    value={formatDate(clause.updatedAt)}
+                  />
                 </div>
               </div>
 
               {clause.organizationId && (
-                <div className="mt-8 pt-8 border-t border-outline-variant/30">
-                  <h4 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-4">
-                    Verification Layer
-                  </h4>
-                  <div className="flex items-center gap-4 p-4 bg-surface-container rounded-2xl">
-                    <UserCircle className="w-10 h-10 text-on-surface-variant" />
-                    <div>
-                      <p className="text-sm font-semibold text-on-surface">
-                        Organization Approved
-                      </p>
-                      <p className="text-[10px] font-bold text-on-surface-variant">
-                        Validated by Super User
-                      </p>
-                    </div>
+                <div className="px-5 py-3 border-t border-outline-variant/30 flex items-center gap-2.5">
+                  <UserCircle className="size-5 text-on-surface-variant shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-xs font-medium text-on-surface">
+                      Organization approved
+                    </p>
+                    <p className="text-[11px] text-on-surface-variant">
+                      Validated by super user
+                    </p>
                   </div>
                 </div>
               )}
             </Card>
 
-            {/* Keywords Section */}
-            <Card className="bg-surface-container-low border border-outline-variant rounded-xl p-8 shadow-sm">
-              <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant mb-6 flex items-center gap-2">
-                <Tag className="w-3 h-3 text-secondary" /> Semantic Keywords
-              </h3>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {(clause.keywords || []).map((kw, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center bg-primary/10 pl-3 pr-1 py-1 rounded-full border border-primary/20"
-                  >
-                    <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
-                      {kw}
+            {/* Keywords */}
+            <Card className="bg-surface-container-low border border-outline-variant/60 rounded-xl shadow-none p-0">
+              <div className="px-5 py-3 border-b border-outline-variant/30 flex items-center gap-2">
+                <Tag className="size-3.5 text-secondary" />
+                <h3 className="text-sm font-medium text-on-surface">Keywords</h3>
+              </div>
+              <div className="p-5 space-y-3">
+                <div className="flex flex-wrap gap-1.5 min-h-[24px]">
+                  {(clause.keywords || []).map((kw, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center bg-primary/10 pl-2 pr-1 py-0.5 rounded-md border border-primary/20"
+                    >
+                      <span className="text-[11px] font-medium text-primary">
+                        {kw}
+                      </span>
+                      {clause.isEditable && (
+                        <button
+                          onClick={() => handleRemoveKeyword(kw)}
+                          disabled={updatingKeywords}
+                          className="ml-1 hover:bg-primary/20 rounded p-0.5 transition-colors"
+                          aria-label={`Remove ${kw}`}
+                        >
+                          <X className="size-2.5 text-primary" />
+                        </button>
+                      )}
                     </span>
-                    {clause.isEditable && (
-                      <button
-                        onClick={() => handleRemoveKeyword(kw)}
-                        disabled={updatingKeywords}
-                        className="ml-2 hover:bg-primary/20 rounded-full p-1 transition-colors"
-                      >
-                        <X className="w-3 h-3 text-primary" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-                {(!clause.keywords || clause.keywords.length === 0) && (
-                  <div className="text-xs font-bold text-on-surface-variant/50 uppercase tracking-widest">
-                    No keywords assigned
+                  ))}
+                  {(!clause.keywords || clause.keywords.length === 0) && (
+                    <span className="text-xs italic text-on-surface-variant/60">
+                      No keywords assigned
+                    </span>
+                  )}
+                </div>
+
+                {clause.isEditable && (
+                  <div className="relative">
+                    <Input
+                      value={newKeyword}
+                      onChange={(e) => setNewKeyword(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleAddKeyword();
+                      }}
+                      placeholder="Add keyword…"
+                      disabled={updatingKeywords}
+                      className="h-8 bg-background border-outline-variant/60 rounded-md text-xs pr-9 focus-visible:ring-primary"
+                    />
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      onClick={handleAddKeyword}
+                      disabled={updatingKeywords || !newKeyword.trim()}
+                      className="absolute right-0.5 top-0.5 size-7 p-0 text-primary hover:bg-primary/10 rounded-sm"
+                    >
+                      <Plus className="size-3.5" />
+                    </Button>
                   </div>
                 )}
               </div>
-
-              {clause.isEditable && (
-                <div className="relative">
-                  <Input
-                    value={newKeyword}
-                    onChange={(e) => setNewKeyword(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleAddKeyword();
-                    }}
-                    placeholder="ADD KEYWORD..."
-                    disabled={updatingKeywords}
-                    className="h-12 bg-background border-outline-variant rounded-xl text-xs font-semibold uppercase tracking-widest pr-12 focus-visible:ring-primary"
-                  />
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={handleAddKeyword}
-                    disabled={updatingKeywords || !newKeyword.trim()}
-                    className="absolute right-1 top-1 h-10 w-10 p-0 text-primary hover:bg-primary/10 rounded-lg"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </Button>
-                </div>
-              )}
             </Card>
 
-            <Card className="bg-surface-container-low border border-outline-variant rounded-xl shadow-sm overflow-hidden">
-              <div className="p-8 border-b border-outline-variant/30 flex items-center justify-between">
-                <h3 className="text-xs font-medium uppercase tracking-wider text-on-surface-variant flex items-center gap-2">
-                  <History className="w-3 h-3 text-secondary" /> Version Control
-                </h3>
-                <Badge className="bg-secondary/10 text-secondary border-none font-semibold text-[9px]">
-                  {versionHistory.length} ENTRIES
+            {/* Version history */}
+            <Card className="bg-surface-container-low border border-outline-variant/60 rounded-xl shadow-none overflow-hidden p-0">
+              <div className="px-5 py-3 border-b border-outline-variant/30 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <History className="size-3.5 text-secondary" />
+                  <h3 className="text-sm font-medium text-on-surface">
+                    Version history
+                  </h3>
+                </div>
+                <Badge className="bg-secondary/10 text-secondary border-none font-medium text-[10px] rounded">
+                  {versionHistory.length}
                 </Badge>
               </div>
               <div className="divide-y divide-outline-variant/20">
@@ -605,34 +595,36 @@ export default function IndividualClausePage() {
                       setDiffDialogOpen(true);
                     }}
                     disabled={versionHistory.length < 2}
-                    className="w-full text-left p-6 hover:bg-surface-container-high transition-colors cursor-pointer group disabled:cursor-not-allowed disabled:opacity-50"
+                    className="w-full text-left px-5 py-3 hover:bg-surface-container-high transition-colors cursor-pointer group disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="flex justify-between items-baseline gap-2 mb-1">
                       <span
                         className={cn(
-                          "text-xs font-semibold uppercase tracking-widest",
+                          "text-xs font-semibold",
                           v.isActive
                             ? "text-primary"
                             : "text-on-surface-variant",
                         )}
                       >
-                        {v.version} {v.isActive ? "• CURRENT" : ""}
+                        {v.version}
+                        {v.isActive ? (
+                          <span className="ml-1 font-normal text-[10px]">
+                            · current
+                          </span>
+                        ) : null}
                       </span>
-                      <span className="text-[10px] font-bold text-on-surface-variant">
+                      <span className="text-[10px] text-on-surface-variant">
                         {formatDate(v.updatedAt)}
                       </span>
                     </div>
-                    <p className="text-xs font-medium text-on-surface-variant line-clamp-1 mb-2">
-                      {v.changeSummary}
+                    <p className="text-xs text-on-surface-variant line-clamp-1">
+                      {v.changeSummary || "—"}
                     </p>
-                    <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity text-primary">
-                      VIEW SNAPSHOT <ChevronRight className="w-3 h-3" />
-                    </div>
                   </button>
                 ))}
                 {versionHistory.length === 0 && (
-                  <div className="p-12 text-center text-xs font-medium uppercase tracking-wider opacity-20">
-                    No revision history
+                  <div className="p-6 text-center text-xs italic text-on-surface-variant/60">
+                    No revisions yet
                   </div>
                 )}
               </div>
@@ -643,9 +635,9 @@ export default function IndividualClausePage() {
                   setInitialDiffVersion(undefined);
                   setDiffDialogOpen(true);
                 }}
-                className="w-full h-14 rounded-none font-semibold uppercase tracking-widest text-[11px] border-t border-outline-variant/30 hover:bg-surface-container-high disabled:opacity-40"
+                className="w-full h-9 rounded-none text-xs font-medium border-t border-outline-variant/30 hover:bg-surface-container-high disabled:opacity-40"
               >
-                Full Differential View
+                Open full diff
               </Button>
             </Card>
           </div>
