@@ -144,7 +144,7 @@ export function SaveClauseToLibraryDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="w-[min(95vw,640px)] sm:max-w-[min(95vw,640px)] max-h-[90vh] overflow-y-auto p-6">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <BookmarkPlus className="size-5 text-primary" />

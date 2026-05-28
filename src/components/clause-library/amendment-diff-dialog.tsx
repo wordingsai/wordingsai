@@ -8,6 +8,11 @@
  *
  * Opens from the "Full Differential View" button on the clause-detail page.
  * Defaults to showing the most recent change (latest vs previous).
+ *
+ * Width note: shadcn Dialog defaults to `sm:max-w-sm` (~24rem). For this
+ * use-case that's far too small -- we need a wide diff view. The explicit
+ * `sm:max-w-[1100px]` here defeats that default at the sm breakpoint and
+ * up; on mobile the `w-[min(95vw,1100px)]` handles it.
  */
 
 import * as React from "react";
@@ -27,7 +32,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { ClauseDiffView } from "@/components/contracts/clause-diff-view";
-import { GitCompare, Clock } from "lucide-react";
+import { GitCompare, Clock, ArrowRight, UserCircle2 } from "lucide-react";
 
 export interface VersionRow {
   version: string;
@@ -82,39 +87,40 @@ export function AmendmentDiffDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <GitCompare className="size-5 text-primary" />
+      <DialogContent
+        className="
+          w-[min(95vw,1100px)]
+          sm:max-w-[min(95vw,1100px)]
+          max-h-[90vh]
+          overflow-y-auto
+          p-6
+        "
+      >
+        <DialogHeader className="space-y-1.5">
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <GitCompare className="size-4 text-primary" />
             Amendment history
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-xs">
             Compare any two versions of this clause to see exactly what
             changed and who changed it.
           </DialogDescription>
         </DialogHeader>
 
         {versions.length < 2 ? (
-          <div className="py-10 text-center text-sm text-on-surface-variant">
-            <Clock className="size-6 mx-auto mb-3 opacity-40" />
+          <div className="py-16 text-center text-sm text-on-surface-variant">
+            <Clock className="size-7 mx-auto mb-3 opacity-40" />
             Only one version exists for this clause yet — nothing to compare.
           </div>
         ) : (
           <div className="space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <VersionPicker
-                label="Older"
-                versions={sorted}
-                value={olderNum}
-                onChange={setOlderNum}
-              />
-              <VersionPicker
-                label="Newer"
-                versions={sorted}
-                value={newerNum}
-                onChange={setNewerNum}
-              />
-            </div>
+            <VersionPickerRow
+              sorted={sorted}
+              olderNum={olderNum}
+              newerNum={newerNum}
+              setOlderNum={setOlderNum}
+              setNewerNum={setNewerNum}
+            />
 
             {newer && older ? (
               <ClauseDiffView
@@ -126,19 +132,52 @@ export function AmendmentDiffDialog({
                 emptyLibraryLabel="(Empty)"
                 addedLegend={`Added in ${newer.version}`}
                 removedLegend={`Removed since ${older.version}`}
+                maxHeightClassName="max-h-[44vh]"
               />
             ) : null}
 
             {newer && older ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <VersionMeta v={older} />
                 <VersionMeta v={newer} />
+                <VersionMeta v={older} />
               </div>
             ) : null}
           </div>
         )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function VersionPickerRow({
+  sorted,
+  olderNum,
+  newerNum,
+  setOlderNum,
+  setNewerNum,
+}: {
+  sorted: VersionRow[];
+  olderNum?: number;
+  newerNum?: number;
+  setOlderNum: (n: number) => void;
+  setNewerNum: (n: number) => void;
+}) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-2">
+      <VersionPicker
+        label="Older"
+        versions={sorted}
+        value={olderNum}
+        onChange={setOlderNum}
+      />
+      <ArrowRight className="hidden sm:block size-4 text-on-surface-variant/40 mb-2 shrink-0" />
+      <VersionPicker
+        label="Newer"
+        versions={sorted}
+        value={newerNum}
+        onChange={setNewerNum}
+      />
+    </div>
   );
 }
 
@@ -154,28 +193,31 @@ function VersionPicker({
   onChange: (n: number) => void;
 }) {
   return (
-    <div className="space-y-1.5">
-      <div className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
+    <div className="space-y-1 flex-1 min-w-0">
+      <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant">
         {label}
       </div>
       <Select
         value={value != null ? String(value) : undefined}
         onValueChange={(v) => v && onChange(Number(v))}
       >
-        <SelectTrigger>
+        <SelectTrigger className="h-9">
           <SelectValue placeholder="Pick a version" />
         </SelectTrigger>
         <SelectContent>
           {versions.map((v) => (
             <SelectItem key={v.versionNumber} value={String(v.versionNumber)}>
-              {v.version}
-              {v.isActive ? " · Current" : ""}
-              {" — "}
-              {new Date(v.updatedAt).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
+              <span className="font-medium">{v.version}</span>
+              {v.isActive ? (
+                <span className="text-primary ml-1">· Current</span>
+              ) : null}
+              <span className="text-on-surface-variant ml-2 text-xs">
+                {new Date(v.updatedAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </span>
             </SelectItem>
           ))}
         </SelectContent>
@@ -186,8 +228,8 @@ function VersionPicker({
 
 function VersionMeta({ v }: { v: VersionRow }) {
   return (
-    <div className="rounded-lg border border-outline-variant/30 bg-surface-container-low p-3 space-y-1.5">
-      <div className="flex items-center gap-2">
+    <div className="rounded-lg border border-outline-variant/40 bg-surface-container-low p-3 space-y-1.5 min-w-0">
+      <div className="flex items-center justify-between gap-2">
         <Badge
           variant="outline"
           className="text-[10px] font-semibold uppercase tracking-wider"
@@ -195,7 +237,7 @@ function VersionMeta({ v }: { v: VersionRow }) {
           {v.version}
           {v.isActive ? " · Current" : ""}
         </Badge>
-        <span className="text-[10px] text-on-surface-variant">
+        <span className="text-[10px] text-on-surface-variant truncate">
           {new Date(v.updatedAt).toLocaleString("en-US", {
             month: "short",
             day: "numeric",
@@ -206,11 +248,14 @@ function VersionMeta({ v }: { v: VersionRow }) {
         </span>
       </div>
       {v.changeSummary ? (
-        <div className="text-xs text-on-surface">{v.changeSummary}</div>
+        <div className="text-xs text-on-surface break-words [overflow-wrap:anywhere]">
+          {v.changeSummary}
+        </div>
       ) : null}
       {v.modifiedBy ? (
-        <div className="text-[10px] text-on-surface-variant">
-          by {v.modifiedBy}
+        <div className="text-[10px] text-on-surface-variant flex items-center gap-1">
+          <UserCircle2 className="size-3" />
+          {v.modifiedBy}
         </div>
       ) : null}
     </div>
