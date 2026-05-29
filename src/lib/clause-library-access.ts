@@ -125,7 +125,18 @@ export async function fetchVisibleClausesForWorkspace(
           library: clauses.library,
           code: clauses.code,
           source: clauses.source,
+          // Display fields the library list + inline expand need (wording,
+          // heading, keywords, AI insight). Omitting these left the expanded
+          // clause panel blank.
+          clauseText: clauses.clauseText,
+          heading: clauses.heading,
+          keywords: clauses.keywords,
+          aiSummary: clauses.aiSummary,
+          aiFavorability: clauses.aiFavorability,
+          aiRecommendedUse: clauses.aiRecommendedUse,
+          aiNote: clauses.aiNote,
           createdAt: clauses.createdAt,
+          updatedAt: clauses.updatedAt,
         },
       })
       .from(clauses)
@@ -150,7 +161,18 @@ export async function fetchVisibleClausesForWorkspace(
           library: clauses.library,
           code: clauses.code,
           source: clauses.source,
+          // Display fields the library list + inline expand need (wording,
+          // heading, keywords, AI insight). Omitting these left the expanded
+          // clause panel blank.
+          clauseText: clauses.clauseText,
+          heading: clauses.heading,
+          keywords: clauses.keywords,
+          aiSummary: clauses.aiSummary,
+          aiFavorability: clauses.aiFavorability,
+          aiRecommendedUse: clauses.aiRecommendedUse,
+          aiNote: clauses.aiNote,
           createdAt: clauses.createdAt,
+          updatedAt: clauses.updatedAt,
         },
       })
       .from(clauses)
