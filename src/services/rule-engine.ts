@@ -1772,6 +1772,49 @@ export type ChecklistBatchPlan = {
   batchSize: number;
 };
 
+/**
+ * MRC slips open with an administrative header block — client / reinsured
+ * names, broker references, dates — laid out as field:value rows. Those are
+ * not contract provisions, so they must not enter the clause checklist (they
+ * still appear in the document map). Without this filter they get force-matched
+ * to the nearest library clause at low similarity, producing noise such as
+ * "CLIENT SHORTNAME ≈ Extra contractual obligations clause".
+ *
+ * Deliberately conservative: it targets recognised administrative field labels
+ * and generic container headings only, so real provisions (Reinsuring Clause,
+ * Premium, Exclusions, Governing Law, named LSW/NMA clauses, …) are kept.
+ */
+const NON_CLAUSE_HEADINGS = new Set([
+  "introduction",
+  "contract details",
+  "risk details",
+  "client information",
+  "agreement information",
+  "contract administration",
+  "agreement number",
+  "order hereon",
+  "unique market reference",
+  "umr",
+]);
+
+function isNonClauseHeading(headingRaw: string): boolean {
+  const h = headingRaw
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/:+$/, "");
+  if (!h) return true;
+  if (NON_CLAUSE_HEADINGS.has(h)) return true;
+  // Field labels: "<party> SHORTNAME/LONGNAME", references, dates.
+  if (/\b(short ?name|long ?name)$/.test(h)) return true;
+  if (/^(previous |client |reinsured |broker |cedant |cedent )?ref\.?(\s*\/\s*contact)?$/.test(h))
+    return true;
+  if (/(^|\b)(contract )?document date$/.test(h)) return true;
+  if (/^(client|reinsured|cedant|cedent|broker|insured) (name|number|code|contact)$/.test(h))
+    return true;
+  return false;
+}
+
 function buildChecklistCandidates(
   docMap: StructuredContract,
 ): ChecklistCandidate[] {
@@ -1784,6 +1827,9 @@ function buildChecklistCandidates(
   const pushHeading = (headingRaw: string, body: string, fallback: string) => {
     const heading = headingRaw?.trim() || fallback;
     if (isFallbackSectionHeading(heading)) return;
+    // Skip MRC administrative/metadata fields — they belong in the document
+    // map, not the clause checklist.
+    if (isNonClauseHeading(heading)) return;
     const bodyText = body.trim();
     const sectionQuery = buildSemanticQuery(heading, bodyText);
     candidates.push({
@@ -1849,7 +1895,17 @@ export async function loadChecklistCandidates(contractId: string): Promise<{
 
   const sanitized = sanitizeStructuredMap(docMap as StructuredContract);
   const candidates = buildChecklistCandidates(sanitized);
-  const expectedHeadingCount = countDocumentMapHeadings(sanitized);
+  // expectedHeadingCount must track the provisions we will actually check —
+  // the filtered candidate count, not every document-map heading (MRC metadata
+  // fields are excluded in buildChecklistCandidates). This keeps the stored
+  // checklistExpectedCount and the stored-vs-expected check consistent.
+  const mapHeadingCount = countDocumentMapHeadings(sanitized);
+  const expectedHeadingCount = candidates.length;
+  if (mapHeadingCount > candidates.length) {
+    console.log(
+      `[Checklist] Skipped ${mapHeadingCount - candidates.length} non-clause/metadata heading(s); ${candidates.length} provision(s) to check for ${contractId}`,
+    );
+  }
 
   if (candidates.length === 0) {
     console.warn(
