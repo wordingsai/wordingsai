@@ -6,10 +6,13 @@ import { sql, eq, count, isNotNull } from "drizzle-orm";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { RateLimiter } from "../src/lib/rate-limiter";
 import { withResilience } from "../src/lib/resilience";
+import { CLAUSE_INSIGHT_PROMPT, CLAUSE_INSIGHT_SYSTEM } from "../src/lib/ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!);
 const model = genAI.getGenerativeModel({
   model: "gemini-3.1-flash-lite-preview",
+  // Same reinsurance-specialist system prompt as the runtime path.
+  systemInstruction: CLAUSE_INSIGHT_SYSTEM,
   generationConfig: {
     responseMimeType: "application/json",
   },
@@ -18,15 +21,8 @@ const model = genAI.getGenerativeModel({
 // User Requirements: RPM 15, TPM 250k
 const aiLimiter = new RateLimiter({ rpm: 15, tpm: 250000 }, "GeminiAI");
 
-const PROMPT = `Analyze the following insurance/reinsurance clause and return structured insights in JSON format.
-The JSON must have:
-- summary: A concise professional summary
-- favorability: One of "vendor", "customer", or "neutral"
-- recommendedUse: Array of strings describing when to use it
-- note: A brief legal/professional note
-
-Clause:
-{{CLAUSE_TEXT}}`;
+// Shared with the runtime path (src/lib/ai.ts) so insights never drift.
+const PROMPT = CLAUSE_INSIGHT_PROMPT;
 
 async function generateLocalClauseAI(text: string) {
   // Estimate tokens (roughly 3 chars per token for safety)
@@ -53,7 +49,7 @@ async function generateLocalClauseAI(text: string) {
     aiRecommendedUse: parsed.recommendedUse,
     aiNote: parsed.note,
     aiGeneratedAt: new Date(),
-    aiVersion: "v1-direct",
+    aiVersion: "v2-reinsurance",
   };
 }
 
