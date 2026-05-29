@@ -55,6 +55,27 @@ def _table_to_markdown(table: list[list[str | None]]) -> str:
     return "\n".join(lines)
 
 
+def _is_real_table(table: list[list[str | None]]) -> bool:
+    """Heuristic to drop false-positive tables (aligned text that isn't a
+    grid). Require >= 2 rows, >= 2 columns, and at least 25% non-empty cells.
+    """
+    if not table or len(table) < 2 or not table[0] or len(table[0]) < 2:
+        return False
+    cells = [c for row in table for c in row]
+    if not cells:
+        return False
+    non_empty = sum(1 for c in cells if (c or "").strip())
+    return non_empty / len(cells) >= 0.25
+
+
+# Only treat ruled grids as tables (avoids columns of aligned text being
+# mis-read as tables). Mirrors the ParkerJones extraction approach.
+_TABLE_SETTINGS = {
+    "vertical_strategy": "lines_strict",
+    "horizontal_strategy": "lines_strict",
+}
+
+
 def _extract(pdf_bytes: bytes) -> dict[str, Any]:
     t0 = time.time()
     out_pages: list[dict[str, Any]] = []
@@ -65,7 +86,11 @@ def _extract(pdf_bytes: bytes) -> dict[str, Any]:
         for idx, page in enumerate(pdf.pages, start=1):
             # Layout-preserving text (keeps column structure, indentation).
             page_text = page.extract_text(layout=True) or ""
-            tables_raw = page.extract_tables() or []
+            try:
+                tables_raw = page.extract_tables(_TABLE_SETTINGS) or []
+            except Exception:
+                tables_raw = page.extract_tables() or []
+            tables_raw = [t for t in tables_raw if _is_real_table(t)]
             tables_md = [_table_to_markdown(t) for t in tables_raw]
 
             out_pages.append(
