@@ -56,21 +56,41 @@ export async function GET(
 
     console.log(`[PDF API] Retrieving PDF for contract ${contractId}`);
 
-    // Check if it's a Supabase URL and use the dedicated download helper
+    // Check if it's a Supabase URL and stream it through (don't buffer the
+    // whole file in memory — for a 60+ page PDF that delays first paint and
+    // bloats function memory). A signed URL lets us pipe the upstream body
+    // straight to the client; same-origin so no CORS concerns for react-pdf.
     if (contract.fileURL.includes("supabase.co")) {
-      const { downloadFromSupabase, extractPathFromSupabaseUrl } =
-        await import("@/lib/supabase/storage");
+      const {
+        getSupabaseSignedReadUrl,
+        downloadFromSupabase,
+        extractPathFromSupabaseUrl,
+      } = await import("@/lib/supabase/storage");
       const filePath = extractPathFromSupabaseUrl(contract.fileURL);
 
       if (filePath) {
+        const pdfHeaders = {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `inline; filename="${contract.contractName || "contract"}.pdf"`,
+          "Cache-Control": "public, max-age=31536000, immutable",
+        };
+        // Preferred: stream via signed URL (no server-side buffering).
+        try {
+          const signedUrl = await getSupabaseSignedReadUrl(filePath, 3600);
+          if (signedUrl) {
+            const upstream = await fetch(signedUrl);
+            if (upstream.ok && upstream.body) {
+              return new NextResponse(upstream.body, { headers: pdfHeaders });
+            }
+          }
+        } catch (streamErr) {
+          console.error("[PDF API] Signed-URL stream failed:", streamErr);
+        }
+        // Fallback: buffered download.
         try {
           const buffer = await downloadFromSupabase(filePath);
           return new NextResponse(new Blob([new Uint8Array(buffer)]), {
-            headers: {
-              "Content-Type": "application/pdf",
-              "Content-Disposition": `inline; filename="${contract.contractName || "contract"}.pdf"`,
-              "Cache-Control": "public, max-age=31536000, immutable",
-            },
+            headers: pdfHeaders,
           });
         } catch (downloadErr) {
           console.error("[PDF API] Supabase download failed:", downloadErr);

@@ -39,6 +39,26 @@ export function getSupabasePublicUrl(filePath: string) {
 }
 
 /**
+ * Creates a short-lived signed READ url for a stored file. Used to stream
+ * large files (e.g. PDFs) through our API without buffering the whole file
+ * into the serverless function's memory first.
+ */
+export async function getSupabaseSignedReadUrl(
+  filePath: string,
+  expiresInSeconds = 3600,
+): Promise<string | null> {
+  const { data, error } = await supabaseServer.storage
+    .from(SUPABASE_BUCKET_NAME)
+    .createSignedUrl(filePath, expiresInSeconds);
+
+  if (error || !data?.signedUrl) {
+    console.error("[Supabase Storage] Signed URL failed:", error);
+    return null;
+  }
+  return data.signedUrl;
+}
+
+/**
  * Downloads a file buffer from Supabase Storage.
  */
 export async function downloadFromSupabase(filePath: string): Promise<Buffer> {
