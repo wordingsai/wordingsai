@@ -1993,6 +1993,94 @@ export async function prepareDocumentMapChecklist(
 /**
  * Process a single checklist batch (one Inngest step — stays under Vercel 60s).
  */
+/**
+ * Clause-code classification (Richard's Rule A / B / C).
+ *
+ * Reinsurance contracts frequently incorporate a library clause purely by
+ * reference: the contract shows only a heading + a market code (e.g.
+ * "Errors and Omissions - LSW321") with no clause body, meaning the library
+ * wording is authoritative and must be "read in". When that happens the
+ * provision is a 100% match to the coded library clause, regardless of
+ * semantic similarity.
+ *
+ *   Rule A  heading carries a code, no substantive body   -> 100% (read-in)
+ *   Rule C  heading carries a code, plus extra body text   -> 100% (+ context)
+ *   Rule B  bespoke/amended body, no code match            -> semantic (Amber)
+ *
+ * We match against the ACTUAL library codes (loaded into an index) rather
+ * than guessing a regex, so only real references count.
+ */
+type CodeIndexRow = {
+  id: string;
+  clauseName: string;
+  clauseText: string;
+  library: string | null;
+  category: string | null;
+  code: string;
+};
+
+/** Uppercase + strip everything but A-Z0-9 so "LSW 321", "lsw-321" all match. */
+function normalizeCodeToken(s: string): string {
+  return (s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+/** Build a normalized-code -> clause index for all coded clauses in scope. */
+async function buildWorkspaceCodeIndex(
+  organizationId: string,
+): Promise<Map<string, CodeIndexRow>> {
+  const rows = await db
+    .select({
+      id: clauses.id,
+      clauseName: clauses.clauseName,
+      clauseText: clauses.clauseText,
+      library: clauses.library,
+      category: clauses.category,
+      code: clauses.code,
+    })
+    .from(clauses)
+    .where(
+      and(
+        or(
+          eq(clauses.isGlobal, true),
+          eq(clauses.organizationId, organizationId),
+        ),
+        sql`${clauses.code} IS NOT NULL AND ${clauses.code} <> ''`,
+      ),
+    );
+
+  const index = new Map<string, CodeIndexRow>();
+  for (const r of rows) {
+    if (!r.code) continue;
+    const norm = normalizeCodeToken(r.code);
+    // Codes shorter than 5 normalized chars are too ambiguous to substring-match.
+    if (norm.length < 5) continue;
+    // First writer wins; core (global) rows are returned first by default.
+    if (!index.has(norm)) index.set(norm, r as CodeIndexRow);
+  }
+  return index;
+}
+
+/**
+ * Find a library clause whose code appears in the given heading/lead text.
+ * Returns the longest (most specific) matching code's clause, or null.
+ */
+function findCodeReference(
+  text: string,
+  codeIndex: Map<string, CodeIndexRow>,
+): CodeIndexRow | null {
+  const hay = normalizeCodeToken(text);
+  if (!hay) return null;
+  let best: CodeIndexRow | null = null;
+  let bestLen = 0;
+  for (const [norm, row] of codeIndex) {
+    if (norm.length > bestLen && hay.includes(norm)) {
+      best = row;
+      bestLen = norm.length;
+    }
+  }
+  return best;
+}
+
 export async function runDocumentMapChecklistBatch(
   contractId: string,
   workspaceId: string,
@@ -2027,7 +2115,59 @@ export async function runDocumentMapChecklistBatch(
     console.error(`[Checklist] Batch ${batchIndex + 1} failed:`, err);
   }
 
+  // Code index for Rule A/C: any contract heading that carries a real
+  // library code is an incorporation-by-reference and counts as a 100% match.
+  let codeIndex = new Map<string, CodeIndexRow>();
+  try {
+    codeIndex = await buildWorkspaceCodeIndex(orgId);
+  } catch (err) {
+    console.warn("[Checklist] code index build failed:", err);
+  }
+
   const eventValues = batch.map((candidate, idx) => {
+    // ── Rule A / C: code reference in the heading (or its lead text) ──
+    // Look in the heading first, then a short lead of the body, since the
+    // code sometimes lands at the very start of the section body.
+    const codeHaystack = `${candidate.heading}\n${candidate.fullText.slice(0, 200)}`;
+    const codeHit = findCodeReference(codeHaystack, codeIndex);
+
+    if (codeHit) {
+      // Does the provision carry substantive body text beyond the heading?
+      // buildChecklistCandidates sets fullText = body || heading, so an
+      // empty body means fullText === heading.
+      const bodyOnly =
+        candidate.fullText.trim() === candidate.heading.trim()
+          ? ""
+          : candidate.fullText.trim();
+      const hasContext = bodyOnly.replace(/\s+/g, " ").length > 60;
+
+      const reasoning = hasContext
+        ? `Library clause ${codeHit.code} incorporated by reference, with contract-specific additions (100% match).`
+        : `Incorporated by reference to ${codeHit.code} — the library wording is authoritative (100% match).`;
+
+      return {
+        workspaceId,
+        contractId,
+        organizationId: orgId,
+        eventType: "clause_detected" as const,
+        status: "Matched" as const,
+        metadata: {
+          clauseName: candidate.heading,
+          category: codeHit.category || "Contract Provision",
+          documentText: candidate.fullText,
+          documentTextSnippet: candidate.fullText.substring(0, 300),
+          libraryStandard: codeHit.clauseText || "No library standard found.",
+          reasoning,
+          confidence: 1,
+          clauseCode: codeHit.code,
+          matchType: "code" as const,
+          libraryPlusContext: hasContext,
+          isGlobal: true,
+        },
+      };
+    }
+
+    // ── Rule B: no code reference, fall back to semantic similarity ──
     const matches = matchesBatch[idx] || [];
     const bestMatch =
       matches.length > 0
@@ -2063,7 +2203,9 @@ export async function runDocumentMapChecklistBatch(
         libraryStandard: bestMatch?.clauseText || "No library standard found.",
         reasoning,
         confidence: similarity,
-        clauseCode: bestMatch?.id || null,
+        clauseCode: bestMatch?.code || null,
+        matchType: "semantic" as const,
+        libraryPlusContext: false,
         isGlobal: true,
       },
     };
@@ -2656,6 +2798,8 @@ export async function findClosestLibraryMatchesBatch(
             clauseName: clauses.clauseName,
             clauseText: clauses.clauseText,
             library: clauses.library,
+            code: clauses.code,
+            category: clauses.category,
             similarity: sql<number>`1.0`,
             keywords: clauses.keywords,
           })
@@ -2708,6 +2852,8 @@ export async function findClosestLibraryMatchesBatch(
             clauseName: clauses.clauseName,
             clauseText: clauses.clauseText,
             library: clauses.library,
+            code: clauses.code,
+            category: clauses.category,
             keywords: clauses.keywords,
           })
           .from(clauses)

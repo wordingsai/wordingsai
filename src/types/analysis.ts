@@ -78,6 +78,12 @@ export interface AnalysisEvent {
     status?: string;
     isGlobal?: boolean;
     clauseCode?: string | null;
+    /** How this clause was matched: "code" = exact library-code reference
+     * (Rule A/C, 100%), "semantic" = vector similarity (Rule B). */
+    matchType?: "code" | "semantic";
+    /** Rule C: the contract carries the coded library clause PLUS extra
+     * contract-specific wording (vs pure incorporation-by-reference). */
+    libraryPlusContext?: boolean;
   };
   timestamp: string;
 }
