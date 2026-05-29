@@ -1655,47 +1655,50 @@ export async function generateFastSummary(
     if (ws) workspaceType = ws.type;
   }
 
+  // Typed, described metadata schema per workspace. A previous open
+  // z.record(...) let weaker models satisfy the schema with an empty {}
+  // (which is exactly what we saw in production — blank metadata despite the
+  // prose containing every value). Named fields force population and lift
+  // structured-output reliability on cheaper models like Gemma. Every field
+  // is a string; the prompt instructs "Not specified" rather than omission.
+  const reinsuranceMeta = z.object({
+    cedent: z.string().describe("Ceding company / reinsured."),
+    reinsurer: z.string().describe("Reinsurer(s) / subscribing underwriters."),
+    broker: z.string().describe("Broker / intermediary, if any."),
+    treatyType: z
+      .string()
+      .describe("e.g. Excess of Loss, Quota Share, Surplus, Facultative."),
+    period: z.string().describe("Treaty period (inception to expiry) as written."),
+    retentionPriority: z
+      .string()
+      .describe("Retention / priority / deductible."),
+    limitIndemnity: z.string().describe("Limit / indemnity / cover amount."),
+    governingLaw: z.string().describe("Governing law & jurisdiction."),
+  });
+  const generalMeta = z.object({
+    parties: z.string().describe("Contracting parties."),
+    effectiveDate: z.string(),
+    expiryDate: z.string(),
+    governingLaw: z.string(),
+    liabilityCap: z.string().describe("Liability / indemnity cap if identifiable."),
+  });
   const summarySchema = z.object({
     summary: z.string(),
-    metadata: z.record(z.string(), z.string()),
+    metadata: workspaceType === "reinsurance" ? reinsuranceMeta : generalMeta,
     riskConsensus: z.string(),
     keyHighlights: z.array(z.string()),
   });
 
-  let workspaceInstructions = "";
-  if (workspaceType === "reinsurance") {
-    workspaceInstructions = `
-2. Extract key-value metadata specific to REINSURANCE: 
-   - Identification of Cedent and Reinsurer
-   - Treaty Period (Effective/Expiry)
-   - Type of Treaty (Quota Share, Excess of Loss, etc.)
-   - Retention and Limits
-   - Governing Law & Jurisdiction`;
-  } else if (workspaceType === "property") {
-    workspaceInstructions = `
-2. Extract key-value metadata specific to PROPERTY:
-   - Identification of Insured and Insurer
-   - Risk Location(s)
-   - Policy Period
-   - Sum Insured / Total Insured Value
-   - Deductibles / Retentions
-   - Governing Law`;
-  } else {
-    workspaceInstructions = `
-2. Extract key-value metadata: Identification of Parties, Effective/Expiry Dates, Governing Law, and Liability/Indemnity Caps (if identifiable).`;
-  }
-
-  const summaryPrompt = `You are a high-level contract intelligence engine. Provide an executive summary for the contract: "${contractRecord.contractName}".
+  const summaryPrompt = `You are a senior reinsurance wording analyst reviewing the contract "${contractRecord.contractName}".
 
 CONTRACT TEXT (EXCERPT):
 ${contractRecord.fileContent.slice(0, 12000)}
 
-YOUR TASK:
-1. Write a professional, two-paragraph summary of the document's purpose, scope, key commercial terms, and any notable provisions. Be concise but informative.
-${workspaceInstructions}
-3. Provide a one-sentence 'risk consensus' statement based on a first-pass reading.
-4. List the top 3-5 key highlights or notable features of this contract.
-`;
+TASK — return strict JSON for the schema. Quality bar: a treaty underwriter should find every field immediately useful.
+1. summary: two tight paragraphs covering purpose, structure, the key commercial terms (limits, priorities/retentions, period), and any notable or unusual provisions. No filler, no hedging.
+2. metadata: fill EVERY field from the text. If a value genuinely is not present, use the exact string "Not specified" — never leave a field blank or omit it.
+3. riskConsensus: ONE sentence naming the single most material risk or gap a reinsurer should note in THIS contract — e.g. a missing loss-date-order clause, aggregation/"each and every loss" ambiguity, an unbalanced priority ladder, an absent cyber or terrorism exclusion, unclear reinstatement terms. Name the specific provision. Do NOT write generic statements like "introduces complexity".
+4. keyHighlights: 3-5 concrete, factual highlights (structure, limits, exclusions, conditions). Each standalone.`;
 
   try {
     const result = await generateJSONTierAware({

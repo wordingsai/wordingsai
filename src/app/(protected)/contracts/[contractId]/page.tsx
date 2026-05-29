@@ -1100,7 +1100,10 @@ export default function ContractAnalysisPage() {
                                 <Info className="size-3.5" />
                               </div>
                               <span className="text-[10px] font-medium uppercase tracking-wider text-on-surface-variant/70">
-                                {key}
+                                {key
+                                  .replace(/([A-Z])/g, " $1")
+                                  .replace(/^./, (ch) => ch.toUpperCase())
+                                  .trim()}
                               </span>
                             </div>
                             <p className="text-xs font-bold text-on-surface truncate">
