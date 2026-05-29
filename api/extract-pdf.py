@@ -27,7 +27,7 @@ import time
 import urllib.request
 from http.server import BaseHTTPRequestHandler
 from typing import Any
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, quote
 
 import pdfplumber
 
@@ -179,11 +179,46 @@ class handler(BaseHTTPRequestHandler):
             pdf_bytes: bytes | None = None
             if content_type.startswith("application/json"):
                 payload = json.loads(raw.decode("utf-8"))
-                # Preferred: a (signed) URL we fetch server-side. Keeps the
-                # request body tiny so large PDFs don't hit the ~4.5 MB
-                # serverless request-body limit that base64 bodies blow past.
+                storage_path = payload.get("storage_path")
                 pdf_url = payload.get("pdf_url")
-                if pdf_url:
+                b64 = payload.get("pdf_base64")
+                if storage_path:
+                    # Preferred: download the object straight from Supabase
+                    # Storage with the service-role key (apikey auth). This avoids
+                    # signed URLs, which this project's key cannot mint -- it is
+                    # the new sb_secret_ format that downloads objects fine but
+                    # returns "Invalid Compact JWS" on createSignedUrl. The body
+                    # stays tiny, so large PDFs never hit the ~4.5 MB serverless
+                    # request-body limit that base64 bodies blow past.
+                    base = (os.environ.get("SUPABASE_URL") or "").rstrip("/")
+                    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or ""
+                    bucket = os.environ.get("SUPABASE_STORAGE_BUCKET") or "contracts"
+                    if not base or not key:
+                        return self._send_json(
+                            500, {"error": "Supabase storage env not configured"}
+                        )
+                    obj_url = (
+                        f"{base}/storage/v1/object/{bucket}/"
+                        f"{quote(storage_path, safe='/')}"
+                    )
+                    req = urllib.request.Request(
+                        obj_url,
+                        headers={
+                            "Authorization": f"Bearer {key}",
+                            "apikey": key,
+                            "User-Agent": "wordingsai-extract",
+                        },
+                    )
+                    with urllib.request.urlopen(req, timeout=45) as resp:
+                        pdf_bytes = resp.read(MAX_BYTES + 1)
+                    if pdf_bytes and len(pdf_bytes) > MAX_BYTES:
+                        return self._send_json(
+                            413,
+                            {"error": f"File too large (max {MAX_BYTES // 1024 // 1024} MB)"},
+                        )
+                elif pdf_url:
+                    # Fetch a pre-signed/public URL server-side. Same tiny-body
+                    # benefit as storage_path; kept as a fallback path.
                     req = urllib.request.Request(
                         pdf_url, headers={"User-Agent": "wordingsai-extract"}
                     )
@@ -194,13 +229,13 @@ class handler(BaseHTTPRequestHandler):
                             413,
                             {"error": f"File too large (max {MAX_BYTES // 1024 // 1024} MB)"},
                         )
-                else:
-                    b64 = payload.get("pdf_base64")
-                    if not b64:
-                        return self._send_json(
-                            400, {"error": "Missing pdf_url or pdf_base64"}
-                        )
+                elif b64:
                     pdf_bytes = base64.b64decode(b64)
+                else:
+                    return self._send_json(
+                        400,
+                        {"error": "Missing storage_path, pdf_url or pdf_base64"},
+                    )
             elif content_type.startswith("multipart/form-data"):
                 pdf_bytes = _parse_multipart(raw, content_type)
                 if not pdf_bytes:

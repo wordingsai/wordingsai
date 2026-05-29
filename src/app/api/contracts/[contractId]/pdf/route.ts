@@ -56,45 +56,31 @@ export async function GET(
 
     console.log(`[PDF API] Retrieving PDF for contract ${contractId}`);
 
-    // Check if it's a Supabase URL and stream it through (don't buffer the
-    // whole file in memory — for a 60+ page PDF that delays first paint and
-    // bloats function memory). A signed URL lets us pipe the upstream body
-    // straight to the client; same-origin so no CORS concerns for react-pdf.
+    // Supabase-stored PDFs: download with the service-role key (apikey auth).
+    // We don't use signed URLs here — this project's key is the new sb_secret_
+    // format that downloads objects fine but cannot mint signed URLs
+    // ("Invalid Compact JWS"), so a signed-URL stream would just fail and fall
+    // back anyway. The download is cached hard (immutable) so the buffering
+    // cost is paid only once per contract per client.
     if (contract.fileURL.includes("supabase.co")) {
-      const {
-        getSupabaseSignedReadUrl,
-        downloadFromSupabase,
-        extractPathFromSupabaseUrl,
-      } = await import("@/lib/supabase/storage");
+      const { downloadFromSupabase, extractPathFromSupabaseUrl } = await import(
+        "@/lib/supabase/storage"
+      );
       const filePath = extractPathFromSupabaseUrl(contract.fileURL);
 
       if (filePath) {
-        const pdfHeaders = {
-          "Content-Type": "application/pdf",
-          "Content-Disposition": `inline; filename="${contract.contractName || "contract"}.pdf"`,
-          "Cache-Control": "public, max-age=31536000, immutable",
-        };
-        // Preferred: stream via signed URL (no server-side buffering).
-        try {
-          const signedUrl = await getSupabaseSignedReadUrl(filePath, 3600);
-          if (signedUrl) {
-            const upstream = await fetch(signedUrl);
-            if (upstream.ok && upstream.body) {
-              return new NextResponse(upstream.body, { headers: pdfHeaders });
-            }
-          }
-        } catch (streamErr) {
-          console.error("[PDF API] Signed-URL stream failed:", streamErr);
-        }
-        // Fallback: buffered download.
         try {
           const buffer = await downloadFromSupabase(filePath);
           return new NextResponse(new Blob([new Uint8Array(buffer)]), {
-            headers: pdfHeaders,
+            headers: {
+              "Content-Type": "application/pdf",
+              "Content-Disposition": `inline; filename="${contract.contractName || "contract"}.pdf"`,
+              "Cache-Control": "public, max-age=31536000, immutable",
+            },
           });
         } catch (downloadErr) {
           console.error("[PDF API] Supabase download failed:", downloadErr);
-          // Fallback to fetch if download fails
+          // Fall through to the generic proxy fetch below.
         }
       }
     }
