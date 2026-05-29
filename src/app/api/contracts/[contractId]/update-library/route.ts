@@ -10,6 +10,7 @@ import {
   resolveActiveWorkspaceContext,
 } from "@/server/workspace-resolver";
 import { embedSingleClause } from "@/lib/chunk";
+import { generateNextClauseCode } from "@/app/api/clauses/auto-code/route";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 async function runClauseEnrichment(clauseId: string) {
@@ -134,6 +135,20 @@ export async function POST(
       const ownerUserId =
         !isGlobalClause && isPrivate ? sessionData.user.id : null;
 
+      // Every clause needs a reference. Core (global) clauses carry their
+      // real market code; a clause saved from a contract is bespoke, so it
+      // gets the next auto WAI-NNN reference for the org (matching the
+      // custom-library convention). Best-effort: never block the save if
+      // code generation fails.
+      let code: string | undefined;
+      if (!isGlobalClause) {
+        try {
+          code = await generateNextClauseCode(context.organizationId);
+        } catch (e) {
+          console.warn("[UpdateLibrary] code generation failed:", e);
+        }
+      }
+
       const [newClause] = await db
         .insert(clauses)
         .values({
@@ -147,6 +162,7 @@ export async function POST(
           status: "Approved",
           approvalStatus: "Approved",
           isGlobal: isGlobalClause,
+          code: code || null,
         })
         .returning();
 

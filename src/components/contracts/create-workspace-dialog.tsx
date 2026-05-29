@@ -23,7 +23,6 @@ import { createWorkspace } from "@/server/workspaces-actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import {
-  LayoutGrid,
   Sparkles,
   Copy,
   Trash2,
@@ -140,19 +139,15 @@ export function CreateWorkspaceDialog({
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
+                    {/* Property workspace removed per Richard (2026-05): it was
+                        empty and only added confusion. Reinsurance is the sole
+                        line for now; new lines can be reintroduced when there's
+                        real content to scale into. */}
                     <SelectItem value="reinsurance">
                       <div className="flex items-center gap-2">
                         <Sparkles className="size-3 text-primary" /> Reinsurance
                       </div>
                     </SelectItem>
-                    {activeOrgId === "c7BkNsHuGpIKHyEcrmgbySSP76uExuwf" && (
-                      <SelectItem value="property">
-                        <div className="flex items-center gap-2">
-                          <LayoutGrid className="size-3 text-primary" />{" "}
-                          Property
-                        </div>
-                      </SelectItem>
-                    )}
                   </SelectContent>
                 </Select>
               </div>

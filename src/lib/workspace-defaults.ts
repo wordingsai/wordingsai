@@ -71,55 +71,10 @@ export const DEFAULT_WORKSPACES: DefaultWorkspaceSeed[] = [
       },
     ],
   },
-  {
-    name: "Property",
-    type: "property",
-    isGlobal: false,
-    mandatoryRegistry: [
-      {
-        key: "insured-property",
-        name: "Insured Property",
-        category: "Parties & Definitions",
-        regex: "insured\\s+property",
-        keywords: ["insured property", "property insured"],
-      },
-      {
-        key: "business-interruption",
-        name: "Business Interruption",
-        category: "Claims",
-        regex: "business\\s+interruption",
-        keywords: ["business interruption", "loss of gross profit"],
-      },
-      {
-        key: "deductible",
-        name: "Deductible",
-        category: "Premium & Payments",
-        regex: "deductible",
-        keywords: ["deductible", "retention"],
-      },
-      {
-        key: "force-majeure",
-        name: "Force Majeure",
-        category: "General Provision",
-        regex: "force\\s+majeure",
-        keywords: ["force majeure", "act of god"],
-      },
-      {
-        key: "subrogation",
-        name: "Subrogation",
-        category: "Claims",
-        regex: "subrogation",
-        keywords: ["subrogation", "waiver of subrogation"],
-      },
-      {
-        key: "notice-of-loss",
-        name: "Notice of Loss",
-        category: "Claims",
-        regex: "notice\\s+of\\s+loss",
-        keywords: ["notice of loss", "claims notification"],
-      },
-    ],
-  },
+  // Property workspace removed per Richard (2026-05): it was empty and only
+  // added confusion. Reinsurance is the sole line for now. The scaffolding
+  // (type-driven seeds, mandatoryRegistry) stays so a new line can be added
+  // here when there's real content to scale into.
 ];
 
 export function getControlledGlobalWorkspaceSeeds(): DefaultWorkspaceSeed[] {

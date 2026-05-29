@@ -5,24 +5,23 @@ import { clauses } from "@/db/schema";
 import { eq, and, like, isNotNull, sql } from "drizzle-orm";
 import { resolveActiveWorkspaceContext } from "@/server/workspace-resolver";
 
-const WORKSPACE_SUFFIX: Record<string, string> = {
-  property: "PR",
-  reinsurance: "RI",
-  general: "GN",
-};
-
 /**
- * Generates the next available WAI code for a given workspace type and org.
- * Format: WAI-001-PR
+ * Generates the next available custom-clause reference for an org.
+ *
+ * Format: WAI-NNN (e.g. WAI-081), zero-padded to 3 digits, sequential per
+ * organization. This matches the convention Richard already uses in his
+ * custom library (WAI-001 .. WAI-080), so newly added custom clauses simply
+ * continue the sequence. The market-standard core clauses keep their real
+ * references (LSW, LMA, IUA, NMA) and never go through this generator.
+ *
+ * `workspaceType` is accepted for backwards-compatibility with existing
+ * callers but no longer affects the code (we dropped the -RI/-PR suffix).
  */
 export async function generateNextClauseCode(
   organizationId: string,
-  workspaceType: string,
+  _workspaceType?: string,
 ): Promise<string> {
-  const suffix = WORKSPACE_SUFFIX[workspaceType?.toLowerCase()] ?? "GN";
-  const pattern = `WAI-%-${suffix}`;
-
-  // Find the highest existing number for this suffix in this org
+  // Highest existing WAI-NNN number in this org.
   const existing = await db
     .select({ code: clauses.code })
     .from(clauses)
@@ -30,14 +29,14 @@ export async function generateNextClauseCode(
       and(
         eq(clauses.organizationId, organizationId),
         isNotNull(clauses.code),
-        like(clauses.code, pattern),
+        like(clauses.code, "WAI-%"),
       ),
     );
 
   let maxNum = 0;
   for (const row of existing) {
     if (!row.code) continue;
-    const match = row.code.match(/^WAI-(\d+)-/);
+    const match = row.code.match(/^WAI-(\d+)/);
     if (match) {
       const num = parseInt(match[1], 10);
       if (num > maxNum) maxNum = num;
@@ -45,7 +44,7 @@ export async function generateNextClauseCode(
   }
 
   const nextNum = String(maxNum + 1).padStart(3, "0");
-  return `WAI-${nextNum}-${suffix}`;
+  return `WAI-${nextNum}`;
 }
 
 export async function GET(req: NextRequest) {
