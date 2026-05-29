@@ -1305,6 +1305,23 @@ export default function ContractAnalysisPage() {
                                     ? "Custom"
                                     : selectedEvent.status}
                                 </Badge>
+                                {/* Library reference/code of the matched clause
+                                    — the client's core requirement that every
+                                    match shows which library clause it is. */}
+                                {selectedEvent.metadata?.clauseCode && (
+                                  <Badge
+                                    variant="outline"
+                                    className="text-[10px] font-mono px-1.5 py-0 rounded border bg-primary/10 text-primary border-primary/30"
+                                    title={
+                                      selectedEvent.metadata?.matchType ===
+                                      "code"
+                                        ? "Matched by library code (incorporated by reference)"
+                                        : "Closest library clause by similarity"
+                                    }
+                                  >
+                                    {selectedEvent.metadata.clauseCode}
+                                  </Badge>
+                                )}
                                 <span className="text-[11px] text-on-surface-variant/60 truncate">
                                   {selectedEvent.metadata?.category ||
                                     "General provision"}
@@ -1347,6 +1364,11 @@ export default function ContractAnalysisPage() {
                               }
                               libraryText={
                                 selectedEvent.metadata?.libraryStandard
+                              }
+                              libraryLabel={
+                                selectedEvent.metadata?.clauseCode
+                                  ? `Library standard · ${selectedEvent.metadata.clauseCode}`
+                                  : undefined
                               }
                             />
                           </div>

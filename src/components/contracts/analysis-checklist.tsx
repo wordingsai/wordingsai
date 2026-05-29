@@ -205,6 +205,23 @@ export function AnalysisChecklist({
                         <h4 className="font-medium text-sm text-on-surface truncate max-w-full">
                           {clauseName}
                         </h4>
+                        {/* Library reference/code — the identifying code of the
+                            matched library clause (e.g. LSW307A). This is the
+                            client's core requirement: every match shows which
+                            library clause was detected. */}
+                        {event.metadata.clauseCode && (
+                          <Badge
+                            variant="outline"
+                            className="text-[10px] font-mono px-1.5 py-0 border rounded shrink-0 bg-primary/10 text-primary border-primary/30"
+                            title={
+                              event.metadata.matchType === "code"
+                                ? "Matched by library code (incorporated by reference)"
+                                : "Closest library clause by similarity"
+                            }
+                          >
+                            {event.metadata.clauseCode}
+                          </Badge>
+                        )}
                         <Badge
                           variant="outline"
                           className={cn(
@@ -282,11 +299,23 @@ export function AnalysisChecklist({
                         </div>
                       </div>
                       <div className="space-y-1.5 min-w-0">
-                        <div className="flex items-center gap-1.5 text-primary">
+                        <div className="flex items-center gap-1.5 text-primary flex-wrap">
                           <BookOpen className="size-3 shrink-0" />
                           <span className="text-[10px] font-medium uppercase tracking-wider">
                             Library standard
                           </span>
+                          {event.metadata.clauseCode && (
+                            <span className="text-[10px] font-mono text-primary/80">
+                              · {event.metadata.clauseCode}
+                            </span>
+                          )}
+                          {event.metadata.matchType && (
+                            <span className="text-[9px] uppercase tracking-wider text-on-surface-variant/60">
+                              {event.metadata.matchType === "code"
+                                ? "· by code"
+                                : "· by similarity"}
+                            </span>
+                          )}
                         </div>
                         <div className="p-3 bg-primary/5 rounded-md border border-primary/20 min-w-0">
                           <TruncatedText
