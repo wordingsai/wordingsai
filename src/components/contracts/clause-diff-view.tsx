@@ -183,18 +183,20 @@ function Column({
 }) {
   const isLibrary = tone === "library";
   return (
-    <div className="space-y-2 min-w-0">
+    <div className="space-y-1.5 min-w-0">
       <div className="flex items-center justify-between gap-2 px-0.5">
         <h5
           className={cn(
             "text-[10px] font-semibold uppercase tracking-[0.18em] flex items-center gap-1.5 min-w-0 flex-1",
-            isLibrary ? "text-primary" : "text-on-surface",
+            isLibrary ? "text-primary" : "text-on-surface-variant",
           )}
         >
           <span
             className={cn(
-              "size-5 rounded-md flex items-center justify-center shrink-0",
-              "bg-primary/10 text-primary",
+              "size-5 rounded-md flex items-center justify-center shrink-0 border",
+              isLibrary
+                ? "bg-primary/10 text-primary border-primary/20"
+                : "bg-surface-container-high text-on-surface-variant border-outline-variant/40",
             )}
           >
             {icon}
@@ -218,10 +220,10 @@ function Column({
       </div>
       <div
         className={cn(
-          "p-4 rounded-xl text-[13px] leading-relaxed",
+          "p-3 rounded-md text-[13px] leading-relaxed",
           "whitespace-pre-wrap break-words [overflow-wrap:anywhere]",
           "overflow-y-auto overflow-x-hidden min-w-0",
-          "min-h-[140px]",
+          "min-h-[120px]",
           maxHeightClassName,
           isLibrary
             ? "bg-primary/5 border border-primary/20"

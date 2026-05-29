@@ -132,33 +132,33 @@ export default function ClauseLibraryClient({
 
   const getCategoryBadgeClasses = (category: string) => {
     const base =
-      "inline-flex items-center px-3 py-1 text-[10px] lg:text-xs font-bold rounded-full border uppercase tracking-widest";
+      "inline-flex items-center max-w-full truncate px-2 py-0.5 text-[10px] font-medium rounded-md border uppercase tracking-wide";
 
     if (category === "Exclusions")
-      return cn(base, "bg-red-500/10 text-red-500 border-red-500/20");
+      return cn(base, "bg-red-500/10 text-red-400 border-red-500/20");
     if (category === "Claims")
-      return cn(base, "bg-orange-500/10 text-orange-500 border-orange-500/20");
+      return cn(base, "bg-orange-500/10 text-orange-400 border-orange-500/20");
     if (category === "Premium & Payments")
       return cn(
         base,
-        "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+        "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
       );
     if (category === "Placement & Subscription")
-      return cn(base, "bg-violet-500/10 text-violet-500 border-violet-500/20");
+      return cn(base, "bg-violet-500/10 text-violet-400 border-violet-500/20");
     if (category === "Compliance")
-      return cn(base, "bg-amber-500/10 text-amber-500 border-amber-500/20");
+      return cn(base, "bg-amber-500/10 text-amber-400 border-amber-500/20");
     if (category === "Information & Records")
-      return cn(base, "bg-yellow-500/10 text-yellow-500 border-yellow-500/20");
+      return cn(base, "bg-yellow-500/10 text-yellow-400 border-yellow-500/20");
     if (category === "Disputes")
-      return cn(base, "bg-blue-500/10 text-blue-500 border-blue-500/20");
+      return cn(base, "bg-blue-500/10 text-blue-400 border-blue-500/20");
     if (category === "Parties & Definitions")
-      return cn(base, "bg-slate-500/10 text-slate-500 border-slate-500/20");
+      return cn(base, "bg-slate-500/10 text-slate-300 border-slate-500/20");
     if (category === "Termination")
-      return cn(base, "bg-rose-500/10 text-rose-500 border-rose-500/20");
+      return cn(base, "bg-rose-500/10 text-rose-400 border-rose-500/20");
     if (category === "Other")
-      return cn(base, "bg-zinc-500/10 text-zinc-500 border-zinc-500/20");
+      return cn(base, "bg-zinc-500/10 text-zinc-300 border-zinc-500/20");
 
-    return cn(base, "bg-gray-500/10 text-gray-500 border-gray-500/20");
+    return cn(base, "bg-gray-500/10 text-gray-300 border-gray-500/20");
   };
 
   const availableLibraries = useMemo(() => {
@@ -456,7 +456,7 @@ export default function ClauseLibraryClient({
                                     </Badge>
                                   )}
                                   {clause.code && (
-                                    <Badge className="h-4 px-1.5 text-[8px] font-semibold uppercase tracking-tighter bg-violet-500/10 text-violet-500 border-violet-500/20 rounded-sm">
+                                    <Badge className="h-4 px-1.5 max-w-[7rem] truncate text-[8px] font-semibold uppercase tracking-tighter bg-violet-500/10 text-violet-400 border-violet-500/20 rounded-sm">
                                       {clause.code}
                                     </Badge>
                                   )}
@@ -538,8 +538,8 @@ export default function ClauseLibraryClient({
                                 className={cn(
                                   "text-[10px] font-medium uppercase tracking-wider py-1.5 px-3 rounded-full border",
                                   clause.status === "Approved"
-                                    ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                                    : "bg-red-500/10 text-red-500 border-red-500/20",
+                                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                                    : "bg-red-500/10 text-red-400 border-red-500/20",
                                 )}
                               >
                                 {clause.status === "Approved"
@@ -625,22 +625,22 @@ export default function ClauseLibraryClient({
 
         {/* Desktop View: Table */}
         <div className="hidden lg:block overflow-x-hidden">
-          <Table>
+          <Table className="table-fixed w-full">
             <TableHeader className="bg-surface-container-highest/20">
               <TableRow className="hover:bg-transparent border-outline-variant/40">
-                <TableHead className="h-9 px-4 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[280px]">
+                <TableHead className="h-9 px-4 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant w-[48%] xl:w-[42%]">
                   Clause
                 </TableHead>
-                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[140px]">
+                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant w-[22%] xl:w-[18%]">
                   Category
                 </TableHead>
-                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[100px]">
+                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant w-[16%] xl:w-[14%]">
                   Status
                 </TableHead>
-                <TableHead className="h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant min-w-[140px]">
+                <TableHead className="hidden xl:table-cell h-9 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant w-[18%]">
                   Library
                 </TableHead>
-                <TableHead className="h-9 text-right px-4 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant w-[80px]">
+                <TableHead className="h-9 text-right px-4 text-[11px] font-medium uppercase tracking-wider text-on-surface-variant w-[14%] xl:w-[8%]">
                   Action
                 </TableHead>
               </TableRow>
@@ -650,22 +650,22 @@ export default function ClauseLibraryClient({
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i} className="border-outline-variant/30">
-                    <TableCell className="px-4 py-2.5">
+                    <TableCell className="px-4 py-2">
                       <div className="flex items-center gap-2">
-                        <Skeleton className="size-7 rounded-md" />
-                        <Skeleton className="h-4 w-48 rounded" />
+                        <Skeleton className="size-7 rounded-md shrink-0" />
+                        <Skeleton className="h-4 w-48 max-w-full rounded" />
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-5 w-20 rounded" />
+                    <TableCell className="py-2">
+                      <Skeleton className="h-5 w-20 max-w-full rounded" />
                     </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-5 w-20 rounded" />
+                    <TableCell className="py-2">
+                      <Skeleton className="h-5 w-20 max-w-full rounded" />
                     </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-32 rounded" />
+                    <TableCell className="hidden xl:table-cell py-2">
+                      <Skeleton className="h-4 w-32 max-w-full rounded" />
                     </TableCell>
-                    <TableCell className="px-4 text-right">
+                    <TableCell className="px-4 py-2 text-right">
                       <Skeleton className="size-7 ml-auto rounded" />
                     </TableCell>
                   </TableRow>
@@ -783,8 +783,8 @@ function ClauseRow({
             )}
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            <TableCell className="px-4 py-2.5">
-              <div className="flex items-center gap-3">
+            <TableCell className="px-4 py-2">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <div
                   className={cn(
                     "size-7 rounded-md flex items-center justify-center shrink-0 transition-colors",
@@ -795,60 +795,57 @@ function ClauseRow({
                 >
                   <BookOpen className="size-3.5" />
                 </div>
-                <div className="flex flex-col min-w-0">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-sm font-medium text-on-surface group-hover:text-primary transition-colors truncate">
+                <div className="flex flex-col min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="text-sm font-medium text-on-surface group-hover:text-primary transition-colors truncate min-w-0">
                       {clause.clauseName}
                     </span>
                     {clause.isGlobal && (
-                      <Badge className="h-4 px-1.5 text-[9px] font-medium bg-primary/10 text-primary border border-primary/20 rounded">
+                      <Badge className="h-4 px-1.5 text-[9px] font-medium bg-primary/10 text-primary border border-primary/20 rounded shrink-0">
                         Global
                       </Badge>
                     )}
                     {clause.code && (
-                      <Badge className="h-4 px-1.5 text-[9px] font-mono font-normal bg-violet-500/10 text-violet-500 border border-violet-500/20 rounded">
+                      <Badge className="h-4 px-1.5 max-w-[7rem] truncate text-[9px] font-mono font-normal bg-violet-500/10 text-violet-400 border border-violet-500/20 rounded shrink-0">
                         {clause.code}
                       </Badge>
                     )}
                   </div>
-                  <span className="text-[11px] text-on-surface-variant font-mono">
+                  <span className="text-[11px] text-on-surface-variant font-mono truncate">
                     CL-{clause.id.slice(0, 8).toUpperCase()}
                   </span>
                 </div>
               </div>
             </TableCell>
 
-            <TableCell className="py-2.5">
+            <TableCell className="py-2 min-w-0">
               <Badge
                 variant="outline"
-                className={cn(
-                  "text-[11px] font-medium px-2 py-0.5 rounded-md",
-                  getCategoryBadgeClasses(clause.category),
-                )}
+                className={getCategoryBadgeClasses(clause.category)}
               >
                 {clause.category}
               </Badge>
             </TableCell>
 
-            <TableCell className="py-2.5">
+            <TableCell className="py-2">
               <Badge
                 variant="outline"
                 className={cn(
-                  "text-[11px] font-medium py-0.5 px-2 rounded-md border",
+                  "text-[11px] font-medium py-0.5 px-2 rounded-md border whitespace-nowrap",
                   clause.status === "Approved"
-                    ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
-                    : "bg-red-500/10 text-red-500 border-red-500/20",
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                    : "bg-red-500/10 text-red-400 border-red-500/20",
                 )}
               >
                 {clause.status}
               </Badge>
             </TableCell>
 
-            <TableCell className="py-2.5 text-on-surface-variant text-xs">
-              {clause.library}
+            <TableCell className="hidden xl:table-cell py-2 text-on-surface-variant text-xs">
+              <span className="block truncate">{clause.library}</span>
             </TableCell>
 
-            <TableCell className="px-4 py-2.5 text-right">
+            <TableCell className="px-4 py-2 text-right">
               <div className="flex items-center justify-end gap-0.5">
                 <Button
                   variant="ghost"

@@ -181,23 +181,23 @@ export function AnalysisChecklist({
                       : "bg-surface-container-low border-outline-variant/40 hover:border-primary/40",
                   )}
                 >
-                  <div className="flex items-start gap-2 min-w-0">
+                  <div className="flex items-start gap-2.5 min-w-0">
                     <div
                       className={cn(
-                        "size-6 rounded-md flex items-center justify-center shrink-0 mt-0.5",
+                        "size-5 rounded-md flex items-center justify-center shrink-0 mt-0.5 border",
                         isGreen
-                          ? "bg-emerald-500/10 text-emerald-500"
+                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                           : isAmber
-                            ? "bg-amber-500/10 text-amber-500"
-                            : "bg-red-500/10 text-red-500",
+                            ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                            : "bg-red-500/10 text-red-400 border-red-500/20",
                       )}
                     >
                       {isGreen ? (
-                        <CheckCircle2 className="size-3.5" />
+                        <CheckCircle2 className="size-3" />
                       ) : isAmber ? (
-                        <Scale className="size-3.5" />
+                        <Scale className="size-3" />
                       ) : (
-                        <XCircle className="size-3.5" />
+                        <XCircle className="size-3" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0 overflow-hidden">
@@ -210,10 +210,10 @@ export function AnalysisChecklist({
                           className={cn(
                             "text-[10px] font-medium px-1.5 py-0 border rounded shrink-0",
                             isGreen
-                              ? "bg-emerald-500/15 text-emerald-500 border-emerald-500/30"
+                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                               : isAmber
-                                ? "bg-amber-500/15 text-amber-500 border-amber-500/30"
-                                : "bg-red-500/15 text-red-500 border-red-500/30",
+                                ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                                : "bg-red-500/10 text-red-400 border-red-500/20",
                           )}
                         >
                           {isGreen
@@ -243,10 +243,10 @@ export function AnalysisChecklist({
                         className={cn(
                           "text-[11px] font-semibold tabular-nums",
                           isGreen
-                            ? "text-emerald-500"
+                            ? "text-emerald-400"
                             : isAmber
-                              ? "text-amber-500"
-                              : "text-red-500",
+                              ? "text-amber-400"
+                              : "text-red-400",
                         )}
                       >
                         {matchPercentage}%
@@ -264,39 +264,37 @@ export function AnalysisChecklist({
 
                   {!isListMode && isActive && (
                     <div
-                      className="mt-4 pt-4 border-t border-outline-variant/30 space-y-4"
+                      className="mt-3 pt-3 border-t border-outline-variant/30 grid grid-cols-1 gap-3"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <div className="grid grid-cols-1 gap-4">
-                        <div className="space-y-2 min-w-0">
-                          <div className="flex items-center gap-2 text-primary">
-                            <FileText className="size-3 shrink-0" />
-                            <span className="text-[10px] font-medium uppercase tracking-wider">
-                              Contract provision
-                            </span>
-                          </div>
-                          <div className="p-3 sm:p-4 bg-surface-container-low rounded-xl border border-outline-variant/20 min-w-0">
-                            <TruncatedText
-                              text={event.metadata.documentText}
-                              maxLines={6}
-                            />
-                          </div>
+                      <div className="space-y-1.5 min-w-0">
+                        <div className="flex items-center gap-1.5 text-on-surface-variant">
+                          <FileText className="size-3 shrink-0" />
+                          <span className="text-[10px] font-medium uppercase tracking-wider">
+                            Contract provision
+                          </span>
                         </div>
-                        <div className="space-y-2 min-w-0">
-                          <div className="flex items-center gap-2 text-emerald-600">
-                            <BookOpen className="size-3 shrink-0" />
-                            <span className="text-[10px] font-medium uppercase tracking-wider">
-                              Library standard
-                            </span>
-                          </div>
-                          <div className="p-3 sm:p-4 bg-emerald-500/5 rounded-xl border border-emerald-500/20 min-w-0">
-                            <TruncatedText
-                              text={event.metadata.libraryStandard}
-                              maxLines={6}
-                              emptyLabel="No baseline standard for this provision."
-                              className="italic"
-                            />
-                          </div>
+                        <div className="p-3 bg-surface-container-low rounded-md border border-outline-variant/40 min-w-0">
+                          <TruncatedText
+                            text={event.metadata.documentText}
+                            maxLines={6}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1.5 min-w-0">
+                        <div className="flex items-center gap-1.5 text-primary">
+                          <BookOpen className="size-3 shrink-0" />
+                          <span className="text-[10px] font-medium uppercase tracking-wider">
+                            Library standard
+                          </span>
+                        </div>
+                        <div className="p-3 bg-primary/5 rounded-md border border-primary/20 min-w-0">
+                          <TruncatedText
+                            text={event.metadata.libraryStandard}
+                            maxLines={6}
+                            emptyLabel="No baseline standard for this provision."
+                            className="italic"
+                          />
                         </div>
                       </div>
                     </div>

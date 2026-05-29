@@ -109,7 +109,9 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.21 0.006 285.885);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.488 0.243 264.376);
+  /* Softened: chroma 0.243 -> 0.19 and lifted lightness for a calmer, more
+     legible accent on the dark theme (same hue) */
+  --primary: oklch(0.55 0.19 264.376);
   --primary-foreground: oklch(0.97 0.014 254.604);
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);
@@ -117,7 +119,8 @@
   --muted-foreground: oklch(0.705 0.015 286.067);
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
+  /* Softened: chroma 0.191 -> 0.16 so destructive reads calm, not neon, on dark */
+  --destructive: oklch(0.704 0.16 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
@@ -183,8 +186,8 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: oklch(0.468 0.243 264.376);
-  /* slightly darker on hover */
+  background-color: oklch(0.5 0.19 264.376);
+  /* slightly darker on hover, chroma matched to the softened --primary */
 }
 
 @media print {

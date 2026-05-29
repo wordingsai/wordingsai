@@ -1275,10 +1275,10 @@ export default function ContractAnalysisPage() {
                         }}
                         className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border border-primary/20 rounded-lg overflow-hidden flex flex-col shadow-sm z-20"
                       >
-                        <div className="bg-primary/5 px-4 py-3 border-b border-outline-variant/50 flex items-center justify-between gap-3 shrink-0">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div className="size-8 rounded-md bg-primary flex items-center justify-center text-white shrink-0">
-                              <Sparkles className="size-4" />
+                        <div className="bg-surface-container-high px-4 py-2.5 border-b border-outline-variant/50 flex items-center justify-between gap-3 shrink-0">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <div className="size-7 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
+                              <Sparkles className="size-3.5" />
                             </div>
                             <div className="min-w-0">
                               <h3 className="text-sm font-semibold text-on-surface leading-tight truncate">
@@ -1288,15 +1288,15 @@ export default function ContractAnalysisPage() {
                               <div className="flex items-center gap-2 mt-0.5">
                                 <Badge
                                   className={cn(
-                                    "text-[10px] font-medium px-1.5 py-0 rounded border-none",
+                                    "text-[10px] font-medium px-1.5 py-0 rounded border",
                                     selectedEvent.status === "Matched" ||
                                       selectedEvent.status === "Green"
-                                      ? "bg-emerald-500/15 text-emerald-500"
+                                      ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                                       : selectedEvent.status === "Variation" ||
                                           selectedEvent.status === "Amber" ||
                                           selectedEvent.status === "Custom"
-                                        ? "bg-amber-500/15 text-amber-500"
-                                        : "bg-red-500/15 text-red-500",
+                                        ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
+                                        : "bg-red-500/10 text-red-400 border-red-500/20",
                                   )}
                                 >
                                   {selectedEvent.status === "Variation" ||
@@ -1322,7 +1322,7 @@ export default function ContractAnalysisPage() {
                           </Button>
                         </div>
 
-                        <div className="p-4 md:p-5 space-y-5 overflow-y-auto no-scrollbar flex-1 bg-background/50">
+                        <div className="p-4 space-y-4 overflow-y-auto no-scrollbar flex-1 bg-background/50">
                           {/* Side-by-side comparison: contract vs library
                               with inline word-level diff. The Save-to-library
                               action sits in this section's toolbar since it
@@ -1332,7 +1332,7 @@ export default function ContractAnalysisPage() {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="h-8 rounded-lg font-semibold uppercase text-[9px] tracking-widest text-on-surface-variant hover:text-primary"
+                                className="h-8 rounded-md font-medium uppercase text-[10px] tracking-wider text-on-surface-variant hover:text-primary"
                                 disabled={!selectedEvent.metadata?.documentText}
                                 onClick={() => setSaveDialogOpen(true)}
                                 title="Save this clause to your library so you can reuse it later"
@@ -1352,8 +1352,8 @@ export default function ContractAnalysisPage() {
                           </div>
 
                           {/* AI verdict */}
-                          <div className="bg-primary/5 p-4 rounded-lg border border-primary/20 space-y-3">
-                            <div className="flex items-center gap-2">
+                          <div className="bg-surface-container-low p-3 rounded-md border border-outline-variant/40 space-y-2.5">
+                            <div className="flex items-center gap-1.5">
                               <Zap className="size-3.5 text-primary" />
                               <h4 className="text-[11px] font-semibold uppercase tracking-wider text-primary">
                                 AI verdict
