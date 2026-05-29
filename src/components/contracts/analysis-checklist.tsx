@@ -116,7 +116,7 @@ export function AnalysisChecklist({
 
   return (
     <div className="space-y-4 md:space-y-6 animate-in fade-in duration-500 w-full min-w-0">
-      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <FilterStat
           label="Matched"
           count={matchedCount}
@@ -330,48 +330,43 @@ function FilterStat({
   onClick: () => void;
   tone: "emerald" | "amber" | "red";
 }) {
-  const styles = {
-    emerald: {
-      active: "bg-emerald-500/10 border-emerald-500/50",
-      text: "text-emerald-600",
-      sub: "text-emerald-500/40",
-    },
-    amber: {
-      active: "bg-amber-500/10 border-amber-500/50",
-      text: "text-amber-600",
-      sub: "text-amber-500/40",
-    },
-    red: {
-      active: "bg-red-500/10 border-red-500/50",
-      text: "text-red-600",
-      sub: "text-red-500/40",
-    },
+  const dot = {
+    emerald: "bg-emerald-500",
+    amber: "bg-amber-500",
+    red: "bg-red-500",
+  }[tone];
+  const activeStyle = {
+    emerald: "border-emerald-500/40 bg-emerald-500/5 text-on-surface",
+    amber: "border-amber-500/40 bg-amber-500/5 text-on-surface",
+    red: "border-red-500/40 bg-red-500/5 text-on-surface",
   }[tone];
 
+  // Compact filter pill: status dot + label + count. Reads as a clean
+  // filter bar rather than three oversized stat boxes.
   return (
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={cn(
-        "border p-2.5 sm:p-3 rounded-xl sm:rounded-2xl shadow-sm transition-all text-left min-w-0",
+        "inline-flex items-center gap-2 h-8 pl-2.5 pr-3 rounded-md border text-sm transition-colors",
         active
-          ? styles.active
-          : "bg-surface-container-low border-outline-variant/50 opacity-60 hover:opacity-100",
+          ? activeStyle
+          : "border-outline-variant/40 bg-surface-container-low text-on-surface-variant/60 hover:text-on-surface-variant hover:border-outline-variant",
       )}
     >
       <span
         className={cn(
-          "text-[8px] sm:text-[10px] font-medium uppercase tracking-wider block mb-0.5 truncate",
-          styles.text,
-          "opacity-70",
+          "size-1.5 rounded-full shrink-0",
+          dot,
+          !active && "opacity-40",
         )}
-      >
-        {label}
-      </span>
+      />
+      <span className="font-medium">{label}</span>
       <span
         className={cn(
-          "text-base sm:text-xl font-semibold tracking-tighter",
-          styles.text,
+          "tabular-nums font-semibold",
+          active ? "" : "opacity-70",
         )}
       >
         {count}
