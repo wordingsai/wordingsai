@@ -553,6 +553,14 @@ export default function ContractAnalysisPage() {
   // button next to the Extracted-from-Contract panel header.
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
 
+  // Keep-alive flag for the PDF tab: once the Document view is opened we keep
+  // the (expensive) PdfViewer mounted and just toggle its visibility, so
+  // switching tabs doesn't re-download/re-parse the PDF.
+  const [pdfEverOpened, setPdfEverOpened] = useState(false);
+  useEffect(() => {
+    if (activeTab === "document-view") setPdfEverOpened(true);
+  }, [activeTab]);
+
   const filteredEvents = useMemo(() => {
     if (showUnidentifiedClauses) return checklistEvents;
     return checklistEvents.filter(
@@ -2037,20 +2045,20 @@ export default function ContractAnalysisPage() {
               </motion.div>
             )}
 
-            {activeTab === "document-view" && (
-              <motion.div
-                key="document-view-tab"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-              >
-                <PdfViewer
-                  fileUrl={contract.fileURL || ""}
-                  contractId={contractId}
-                />
-              </motion.div>
-            )}
           </AnimatePresence>
+
+          {/* PERF: the PDF is expensive to fetch + parse, so we mount it once
+              (on first open of the Document view) and then keep it alive,
+              toggling visibility with CSS rather than unmounting. Switching
+              tabs no longer re-downloads or re-parses the document. */}
+          {pdfEverOpened ? (
+            <div className={activeTab === "document-view" ? "block" : "hidden"}>
+              <PdfViewer
+                fileUrl={contract.fileURL || ""}
+                contractId={contractId}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
 

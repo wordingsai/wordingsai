@@ -18,11 +18,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-// Configure pdfjs worker — use CDN to avoid Turbopack module resolution issues
-// Version must match the pdfjs-dist bundled with react-pdf@10.4.1
+// Configure pdfjs worker. Served same-origin from /public (copied from the
+// installed pdfjs-dist 5.4.296 that react-pdf@10.4.1 bundles) instead of the
+// unpkg CDN — removes a cross-origin round-trip on every first render and
+// avoids depending on unpkg uptime. Keep the file in sync with the dep
+// version on upgrades.
 if (typeof window !== "undefined") {
-  pdfjs.GlobalWorkerOptions.workerSrc =
-    "https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs";
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 }
 
 interface PdfViewerProps {
