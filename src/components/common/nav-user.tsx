@@ -65,7 +65,7 @@ export function NavUser({
   const [sessions, setSessions] = React.useState<any[]>([]);
   const { data: sessionData } = authClient.useSession();
   // Role is not in the Better Auth session payload — fetch it from /api/me
-  // so we can conditionally surface the Admin panel link to psa/su users.
+  // so we can conditionally surface the Admin panel link to psa users only.
   // The /admin layout enforces the gate server-side; this is purely UX.
   const [role, setRole] = React.useState<string | null>(null);
   React.useEffect(() => {
@@ -287,7 +287,7 @@ export function NavUser({
                     Billing & usage
                   </DropdownMenuItem>
                 </Link>
-                {role === "psa" || role === "su" ? (
+                {role === "psa" ? (
                   <Link href="/admin">
                     <DropdownMenuItem className="cursor-pointer text-primary hover:bg-primary/5 focus:bg-primary/5 focus:text-primary">
                       <Shield className="mr-2 size-4" />

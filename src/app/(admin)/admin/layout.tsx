@@ -1,7 +1,9 @@
 /**
  * Admin route layout.
  *
- * Server-side role gate: any non `psa` / `su` user is redirected to /dashboard.
+ * Server-side role gate: ONLY the `psa` (platform super-admin) role may enter.
+ * Every other role — including org-owner `su` — is redirected to /dashboard.
+ * Org owners manage their own members from Settings, not from this panel.
  * Renders the admin chrome (sidebar + top bar). All pages under /admin/* live here.
  *
  * The admin panel reads CROSS-ORG data (every organisation, every user, every
@@ -48,8 +50,9 @@ export default async function AdminLayout({
     .limit(1);
 
   const role = userRow?.role ?? null;
-  const allowed = role === "psa" || role === "su";
-  if (!allowed) {
+  // PSA-only: the admin panel exposes cross-organisation data, so only the
+  // platform super-admin may reach it. Org owners (`su`) stay org-scoped.
+  if (role !== "psa") {
     redirect("/dashboard");
   }
 
