@@ -50,8 +50,53 @@ const genAI = process.env.GEMINI_API_KEY
 export type GCPExtractionResult = {
   rawText: string;
   structuredJSON?: any;
-  method: "GEMINI_MULTIMODAL" | "GEMINI_MULTIMODAL_CHUNKED";
+  method:
+    | "GEMINI_MULTIMODAL"
+    | "GEMINI_MULTIMODAL_CHUNKED"
+    | "PDFPLUMBER_LAYOUT";
 };
+
+/**
+ * Layout-aware extraction for machine-readable PDFs via the pdfplumber
+ * Python serverless function (api/extract-pdf.py). For digital PDFs this is
+ * exact, layout-preserving, near-instant and effectively free — we only need
+ * the (slower, paid) Gemini multimodal OCR for scanned/image PDFs where
+ * pdfplumber finds little or no text. Returns null on any failure so the
+ * caller transparently falls back to Gemini.
+ */
+async function extractWithPdfplumber(
+  fileBuffer: Buffer,
+): Promise<{ text: string; charCount: number; pageCount: number } | null> {
+  const base =
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+  if (!base) return null;
+  try {
+    const res = await fetch(`${base}/api/extract-pdf`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pdf_base64: fileBuffer.toString("base64"),
+        filename: "contract.pdf",
+      }),
+    });
+    if (!res.ok) {
+      console.warn(`[Extract] pdfplumber HTTP ${res.status}`);
+      return null;
+    }
+    const data = await res.json();
+    const text = String(data?.text || "").trim();
+    if (!text) return null;
+    return {
+      text,
+      charCount: Number(data?.meta?.char_count ?? text.length),
+      pageCount: Number(data?.meta?.page_count ?? 0),
+    };
+  } catch (e) {
+    console.warn("[Extract] pdfplumber call failed:", (e as Error)?.message);
+    return null;
+  }
+}
 
 /**
  * Split a PDF buffer into <= MAX_PAGES_PER_CHUNK page sub-PDFs.
@@ -202,11 +247,29 @@ export async function extractDocumentGCP(
   const sizeMB = (fileBuffer.byteLength / 1024 / 1024).toFixed(2);
   console.log(`[Extract] Downloaded ${sizeMB}MB`);
 
-  // Images: single multimodal call
+  // Images: single multimodal call (no text layer to extract)
   if (mimetype.startsWith("image/")) {
     if (onProgress) await onProgress(1, 1).catch(() => {});
     const text = await extractWithGemini(fileBuffer, mimetype, "image");
     return { rawText: text, method: "GEMINI_MULTIMODAL" };
+  }
+
+  // Machine-readable PDFs: try pdfplumber first (exact, layout-preserved,
+  // cheap). Only fall back to Gemini OCR for scanned PDFs where pdfplumber
+  // finds little text (avg < ~100 chars/page is the scanned signal).
+  const plumber = await extractWithPdfplumber(fileBuffer);
+  if (plumber) {
+    const avgPerPage = plumber.charCount / Math.max(1, plumber.pageCount);
+    if (avgPerPage >= 100) {
+      console.log(
+        `[Extract] pdfplumber: ${plumber.pageCount}p, ${plumber.charCount} chars (avg ${Math.round(avgPerPage)}/pg) — machine-readable, skipping Gemini OCR`,
+      );
+      if (onProgress) await onProgress(1, 1).catch(() => {});
+      return { rawText: plumber.text, method: "PDFPLUMBER_LAYOUT" };
+    }
+    console.log(
+      `[Extract] pdfplumber avg ${Math.round(avgPerPage)} chars/pg — looks scanned, using Gemini OCR`,
+    );
   }
 
   // Single-page or small PDFs: one call
