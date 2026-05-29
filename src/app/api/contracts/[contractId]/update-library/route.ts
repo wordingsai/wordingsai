@@ -11,6 +11,7 @@ import {
 } from "@/server/workspace-resolver";
 import { embedSingleClause } from "@/lib/chunk";
 import { generateNextClauseCode } from "@/app/api/clauses/auto-code/route";
+import { requireCustomizationPlan } from "@/server/subscription";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 async function runClauseEnrichment(clauseId: string) {
@@ -64,6 +65,19 @@ export async function POST(
     const sessionData = await auth.api.getSession({ headers: await headers() });
     if (!sessionData?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Saving a clause to the library is a customization feature: Intelligence
+    // or Plus only, Fast is read-only.
+    const access = await requireCustomizationPlan(sessionData.user.id);
+    if (!access.ok) {
+      return NextResponse.json(
+        {
+          error:
+            "Access Denied: saving clauses requires the Intelligence or Plus plan.",
+        },
+        { status: 403 },
+      );
     }
 
     const body = await req.json();

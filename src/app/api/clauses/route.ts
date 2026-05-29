@@ -12,7 +12,7 @@ import {
   getOrCreateOrgMutableWorkspace,
   resolveActiveWorkspaceContext,
 } from "@/server/workspace-resolver";
-import { requirePlusPlan } from "@/server/subscription";
+import { requireCustomizationPlan } from "@/server/subscription";
 import { logActivity, createNotification } from "@/lib/activity-utils";
 import { fetchVisibleClausesForWorkspace } from "@/lib/clause-library-access";
 import { generateNextClauseCode } from "@/app/api/clauses/auto-code/route";
@@ -85,10 +85,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const plus = await requirePlusPlan(sessionData.user.id);
-    if (!plus.ok) {
+    // Custom clauses are available from the Intelligence tier upward
+    // (Intelligence + Plus). Only the read-only Fast tier is blocked.
+    // Rules remain Plus-only (see /api/rules).
+    const access = await requireCustomizationPlan(sessionData.user.id);
+    if (!access.ok) {
       return NextResponse.json(
-        { error: "Access Denied: Adding clauses requires a Plus plan." },
+        {
+          error:
+            "Access Denied: adding clauses requires the Intelligence or Plus plan.",
+        },
         { status: 403 },
       );
     }
