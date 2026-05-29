@@ -2024,6 +2024,20 @@ function normalizeCodeToken(s: string): string {
   return (s || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
+/**
+ * Index key for a library code. Library codes often carry an edition /
+ * variant suffix in parentheses, e.g. "LSW307A (05/00)" or
+ * "LSW1001 (Reinsurance) (08/94)". A contract references only the base code
+ * ("LSW 307A"), so we drop the parenthetical groups before normalizing.
+ * The result ("LSW307A") substring-matches the normalized contract text.
+ */
+function baseCodeKey(s: string): string {
+  return (s || "")
+    .toUpperCase()
+    .replace(/\([^)]*\)/g, "")
+    .replace(/[^A-Z0-9]/g, "");
+}
+
 /** Build a normalized-code -> clause index for all coded clauses in scope. */
 async function buildWorkspaceCodeIndex(
   organizationId: string,
@@ -2051,7 +2065,7 @@ async function buildWorkspaceCodeIndex(
   const index = new Map<string, CodeIndexRow>();
   for (const r of rows) {
     if (!r.code) continue;
-    const norm = normalizeCodeToken(r.code);
+    const norm = baseCodeKey(r.code);
     // Codes shorter than 5 normalized chars are too ambiguous to substring-match.
     if (norm.length < 5) continue;
     // First writer wins; core (global) rows are returned first by default.
