@@ -24,6 +24,7 @@ import io
 import json
 import os
 import time
+import urllib.request
 from http.server import BaseHTTPRequestHandler
 from typing import Any
 from urllib.parse import parse_qs
@@ -153,10 +154,28 @@ class handler(BaseHTTPRequestHandler):
             pdf_bytes: bytes | None = None
             if content_type.startswith("application/json"):
                 payload = json.loads(raw.decode("utf-8"))
-                b64 = payload.get("pdf_base64")
-                if not b64:
-                    return self._send_json(400, {"error": "Missing pdf_base64"})
-                pdf_bytes = base64.b64decode(b64)
+                # Preferred: a (signed) URL we fetch server-side. Keeps the
+                # request body tiny so large PDFs don't hit the ~4.5 MB
+                # serverless request-body limit that base64 bodies blow past.
+                pdf_url = payload.get("pdf_url")
+                if pdf_url:
+                    req = urllib.request.Request(
+                        pdf_url, headers={"User-Agent": "wordingsai-extract"}
+                    )
+                    with urllib.request.urlopen(req, timeout=45) as resp:
+                        pdf_bytes = resp.read(MAX_BYTES + 1)
+                    if pdf_bytes and len(pdf_bytes) > MAX_BYTES:
+                        return self._send_json(
+                            413,
+                            {"error": f"File too large (max {MAX_BYTES // 1024 // 1024} MB)"},
+                        )
+                else:
+                    b64 = payload.get("pdf_base64")
+                    if not b64:
+                        return self._send_json(
+                            400, {"error": "Missing pdf_url or pdf_base64"}
+                        )
+                    pdf_bytes = base64.b64decode(b64)
             elif content_type.startswith("multipart/form-data"):
                 pdf_bytes = _parse_multipart(raw, content_type)
                 if not pdf_bytes:

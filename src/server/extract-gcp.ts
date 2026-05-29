@@ -23,6 +23,7 @@ import { PDFDocument } from "pdf-lib";
 import {
   downloadFromSupabase,
   extractPathFromSupabaseUrl,
+  getSupabaseSignedReadUrl,
 } from "@/lib/supabase/storage";
 
 const MAX_PAGES_PER_CHUNK = 5;
@@ -65,20 +66,20 @@ export type GCPExtractionResult = {
  * caller transparently falls back to Gemini.
  */
 async function extractWithPdfplumber(
-  fileBuffer: Buffer,
+  pdfUrl: string,
 ): Promise<{ text: string; charCount: number; pageCount: number } | null> {
   const base =
     process.env.NEXT_PUBLIC_APP_URL ||
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
   if (!base) return null;
   try {
+    // Pass the (signed) URL, not the bytes — the Python function fetches it.
+    // A base64 body would blow past the ~4.5 MB serverless request-body cap
+    // for large PDFs and silently fall back to Gemini.
     const res = await fetch(`${base}/api/extract-pdf`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pdf_base64: fileBuffer.toString("base64"),
-        filename: "contract.pdf",
-      }),
+      body: JSON.stringify({ pdf_url: pdfUrl, filename: "contract.pdf" }),
     });
     if (!res.ok) {
       console.warn(`[Extract] pdfplumber HTTP ${res.status}`);
@@ -255,9 +256,16 @@ export async function extractDocumentGCP(
   }
 
   // Machine-readable PDFs: try pdfplumber first (exact, layout-preserved,
-  // cheap). Only fall back to Gemini OCR for scanned PDFs where pdfplumber
-  // finds little text (avg < ~100 chars/page is the scanned signal).
-  const plumber = await extractWithPdfplumber(fileBuffer);
+  // cheap). The Python function fetches the PDF from a short-lived signed
+  // URL, so large files don't hit the serverless request-body limit. Only
+  // fall back to Gemini OCR for scanned PDFs where pdfplumber finds little
+  // text (avg < ~100 chars/page is the scanned signal).
+  const plumberUrl = supabasePath
+    ? await getSupabaseSignedReadUrl(supabasePath, 600).catch(() => null)
+    : null;
+  const plumber = plumberUrl
+    ? await extractWithPdfplumber(plumberUrl)
+    : null;
   if (plumber) {
     const avgPerPage = plumber.charCount / Math.max(1, plumber.pageCount);
     if (avgPerPage >= 100) {
