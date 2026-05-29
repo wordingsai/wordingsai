@@ -6,12 +6,17 @@ import { sql, eq, count, isNotNull } from "drizzle-orm";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { RateLimiter } from "../src/lib/rate-limiter";
 import { withResilience } from "../src/lib/resilience";
-import { CLAUSE_INSIGHT_PROMPT, CLAUSE_INSIGHT_SYSTEM } from "../src/lib/ai";
+import { buildClauseInsightPrompt, CLAUSE_INSIGHT_SYSTEM } from "../src/lib/ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY!);
+const genAI = new GoogleGenerativeAI(
+  (process.env.GEMINI_API_KEY ??
+    process.env.GEMINI_FAST_API_KEY ??
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY)!,
+);
 const model = genAI.getGenerativeModel({
-  model: "gemini-3.1-flash-lite-preview",
-  // Same reinsurance-specialist system prompt as the runtime path.
+  // Upgraded from flash-lite to gemini-2.5-flash for stronger reasoning on
+  // reinsurance wordings, sharing the runtime system prompt.
+  model: "gemini-2.5-flash",
   systemInstruction: CLAUSE_INSIGHT_SYSTEM,
   generationConfig: {
     responseMimeType: "application/json",
@@ -21,20 +26,22 @@ const model = genAI.getGenerativeModel({
 // User Requirements: RPM 15, TPM 250k
 const aiLimiter = new RateLimiter({ rpm: 15, tpm: 250000 }, "GeminiAI");
 
-// Shared with the runtime path (src/lib/ai.ts) so insights never drift.
-const PROMPT = CLAUSE_INSIGHT_PROMPT;
-
-async function generateLocalClauseAI(text: string) {
+async function generateLocalClauseAI(clause: {
+  clauseText: string;
+  clauseName?: string | null;
+  code?: string | null;
+  category?: string | null;
+}) {
+  // Anchor the prompt on the clause's name/code/category for accuracy.
+  const prompt = buildClauseInsightPrompt(clause);
   // Estimate tokens (roughly 3 chars per token for safety)
-  const estimatedTokens = Math.ceil((PROMPT.length + text.length) / 3) + 500;
+  const estimatedTokens = Math.ceil(prompt.length / 3) + 500;
 
   await aiLimiter.acquire(estimatedTokens);
 
   const result = await withResilience(
     async () => {
-      const res = await model.generateContent(
-        PROMPT.replace("{{CLAUSE_TEXT}}", text),
-      );
+      const res = await model.generateContent(prompt);
       const response = await res.response;
       return response.text();
     },
@@ -56,8 +63,12 @@ async function generateLocalClauseAI(text: string) {
 async function main() {
   console.log("Starting Clause Enrichment (Direct Gemini + HuggingFace)...");
 
-  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-    throw new Error("GOOGLE_GENERATIVE_AI_API_KEY is missing");
+  if (
+    !process.env.GEMINI_API_KEY &&
+    !process.env.GEMINI_FAST_API_KEY &&
+    !process.env.GOOGLE_GENERATIVE_AI_API_KEY
+  ) {
+    throw new Error("No Gemini API key is set (GEMINI_API_KEY)");
   }
 
   // 1. Fetch only clauses that haven't been chunked/enriched yet
@@ -83,7 +94,7 @@ async function main() {
           console.log(`  Processing: ${clause.clauseName}`);
 
           // 1. Generate AI Details via Direct Gemini
-          const aiDetails = await generateLocalClauseAI(clause.clauseText);
+          const aiDetails = await generateLocalClauseAI(clause);
 
           // 2. Generate Embedding via HuggingFace (with resilience)
           const [embedding] = await withResilience(
