@@ -68,6 +68,21 @@ import { matchClauseToLibrary } from "./clause-matching";
 export const CHECKLIST_SEMANTIC_FLOOR = 0.65;
 /** Raw cosine similarity at or above this value => Matched–Approved (Green); below => Variation (Amber). */
 export const CHECKLIST_MATCHED_APPROVED_THRESHOLD = 0.85;
+/**
+ * Document-map checklist: similarity at/above this (but below Matched) => Variation
+ * (Amber). Deliberately higher than CHECKLIST_SEMANTIC_FLOOR: the embedding model
+ * (NV-Embed-QA) compresses cosine high, so even unrelated sections land at
+ * ~0.65–0.80. Below this floor a section is treated as bespoke (Custom) rather
+ * than force-matched to an arbitrary nearest neighbour.
+ */
+export const CHECKLIST_VARIATION_FLOOR = 0.78;
+/**
+ * Document-map checklist: a sub-Matched top hit must beat the runner-up by at
+ * least this cosine margin to be asserted as a Variation. If several library
+ * clauses are nearly equidistant, the nearest neighbour is too arbitrary to
+ * trust, so the section is treated as bespoke (Custom).
+ */
+export const CHECKLIST_MATCH_MARGIN = 0.04;
 
 /**
  * Maps raw library cosine similarity to checklist status. Used by fast analysis;
@@ -2241,26 +2256,39 @@ export async function runDocumentMapChecklistBatch(
     }
 
     // ── Rule B: no code reference, fall back to semantic similarity ──
-    const matches = matchesBatch[idx] || [];
-    const bestMatch =
-      matches.length > 0
-        ? matches.reduce((best: any, m: any) =>
-            (m.similarity ?? 0) > (best.similarity ?? 0) ? m : best,
-          )
-        : null;
-
+    // Sort descending so we can compare the top hit against the runner-up.
+    const matches = (matchesBatch[idx] || [])
+      .slice()
+      .sort((a: any, b: any) => (b.similarity ?? 0) - (a.similarity ?? 0));
+    const bestMatch = matches[0] ?? null;
     const similarity = bestMatch ? Number(bestMatch.similarity) : 0;
+    const runnerUpSim = matches[1] ? Number(matches[1].similarity) : 0;
+
+    // Ambiguity guard: a sub-Matched hit that barely beats the runner-up is an
+    // arbitrary nearest neighbour, not a real equivalence — treat as bespoke.
+    const ambiguous =
+      similarity < CHECKLIST_MATCHED_APPROVED_THRESHOLD &&
+      runnerUpSim > 0 &&
+      similarity - runnerUpSim < CHECKLIST_MATCH_MARGIN;
+
     let status: "Matched" | "Variation" | "Custom" = "Custom";
     if (similarity >= CHECKLIST_MATCHED_APPROVED_THRESHOLD) {
       status = "Matched";
-    } else if (similarity >= CHECKLIST_SEMANTIC_FLOOR) {
+    } else if (similarity >= CHECKLIST_VARIATION_FLOOR && !ambiguous) {
       status = "Variation";
     }
 
+    // Only carry a library reference when we actually asserted a match. A
+    // Custom (bespoke) provision must NOT inherit the weak nearest-neighbour's
+    // code/standard — that was the source of misleading "Variation" noise.
+    const hasLibraryRef = status !== "Custom";
+    const pct = Math.round(similarity * 100);
     const reasoning =
-      status === "Custom"
-        ? "Unique provision identified without library direct match."
-        : `${status} at ${Math.round(similarity * 100)}% cosine similarity to "${bestMatch?.clauseName}".`;
+      status === "Matched"
+        ? `Closely matches library clause "${bestMatch?.clauseName}" (${pct}% similarity) — treat as the company standard wording.`
+        : status === "Variation"
+          ? `Resembles library clause "${bestMatch?.clauseName}" (${pct}% similarity) — review for departures from the standard wording.`
+          : "Bespoke provision with no close library equivalent — review on its own terms.";
 
     return {
       workspaceId,
@@ -2270,13 +2298,17 @@ export async function runDocumentMapChecklistBatch(
       status,
       metadata: {
         clauseName: candidate.heading,
-        category: bestMatch?.category || "Contract Provision",
+        category: hasLibraryRef
+          ? bestMatch?.category || "Contract Provision"
+          : "Contract Provision",
         documentText: candidate.fullText,
         documentTextSnippet: candidate.fullText.substring(0, 300),
-        libraryStandard: bestMatch?.clauseText || "No library standard found.",
+        libraryStandard: hasLibraryRef
+          ? bestMatch?.clauseText || "No library standard found."
+          : "No close library equivalent.",
         reasoning,
         confidence: similarity,
-        clauseCode: bestMatch?.code || null,
+        clauseCode: hasLibraryRef ? bestMatch?.code || null : null,
         matchType: "semantic" as const,
         libraryPlusContext: false,
         isGlobal: true,
