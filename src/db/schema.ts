@@ -564,9 +564,15 @@ export const clauses = pgTable(
     heading: text("heading"),
     source: text("source"),
     library: text("library").notNull(),
+    // `status` is the single source of truth for clause approval. The filter,
+    // badges and analytics all read `clauses.status`.
     status: text("status", { enum: ["Approved", "Not Approved"] })
       .default("Approved")
       .notNull(),
+    // DEPRECATED duplicate of `status` (kept in sync by every write path). Not
+    // read anywhere meaningful anymore; retained only so we don't run a
+    // destructive column-drop migration in prod. Do NOT add new reads of this —
+    // use `status`. Safe to drop in a future planned migration.
     approvalStatus: text("approval_status", {
       enum: ["Approved", "Not Approved"],
     })

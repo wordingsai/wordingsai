@@ -20,7 +20,6 @@ async function loadClauses() {
       c.clause_name,
       c.clause_category,
       c.status,
-      c.approval_status,
       c.library,
       c.code,
       c.is_global,
@@ -42,7 +41,7 @@ async function loadClauses() {
     name: r.clause_name,
     category: r.clause_category,
     status: r.status,
-    approvalStatus: r.approval_status,
+    approvalStatus: r.status,
     library: r.library,
     code: r.code as string | null,
     scope: r.is_global

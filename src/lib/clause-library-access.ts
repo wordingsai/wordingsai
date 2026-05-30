@@ -121,7 +121,9 @@ export async function fetchVisibleClausesForWorkspace(
           clauseName: clauses.clauseName,
           category: clauses.category,
           status: clauses.status,
-          approvalStatus: clauses.approvalStatus,
+          // Mirror `status` (the canonical approval column); approval_status is
+          // a deprecated duplicate kept only for the column's existence.
+          approvalStatus: clauses.status,
           library: clauses.library,
           code: clauses.code,
           source: clauses.source,
@@ -157,7 +159,9 @@ export async function fetchVisibleClausesForWorkspace(
           clauseName: clauses.clauseName,
           category: clauses.category,
           status: clauses.status,
-          approvalStatus: clauses.approvalStatus,
+          // Mirror `status` (the canonical approval column); approval_status is
+          // a deprecated duplicate kept only for the column's existence.
+          approvalStatus: clauses.status,
           library: clauses.library,
           code: clauses.code,
           source: clauses.source,
