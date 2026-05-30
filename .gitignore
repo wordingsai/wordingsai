@@ -68,3 +68,7 @@ scripts/_*.ts
 # Prod env pulled via `vercel env pull` (secrets — never commit)
 _prod.env
 *.prod.env
+
+# Python bytecode
+__pycache__/
+*.pyc

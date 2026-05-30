@@ -15,6 +15,7 @@ import {
 import {
   downloadFromSupabase,
   extractPathFromSupabaseUrl,
+  getSupabasePublicUrl,
   deleteFromSupabase,
 } from "@/lib/supabase/storage";
 import { db } from "@/db/drizzle";
@@ -31,6 +32,7 @@ import {
   ruleVersions,
 } from "@/db/schema";
 import { extractDocumentGCP } from "@/server/extract-gcp";
+import { compressContractPdf } from "@/server/compress-pdf";
 import type { OrganizationPlan } from "@/lib/ai-router";
 import {
   isQualityStructuredMap,
@@ -362,6 +364,46 @@ export const evaluateContractRulesJob = inngest.createFunction(
           textLength: rawText.length,
           layoutSaved: isQualityStructuredMap(cleanLayout),
         };
+      });
+
+      // STEP 1b: Compress a served working copy (best-effort). Re-rasters the
+      // big scan + re-inserts an invisible text layer; the original fileURL is
+      // left untouched as the audit/source copy. Must NEVER fail the run.
+      await step.run("compress-working-copy", async () => {
+        try {
+          const [c] = await db
+            .select({
+              fileURL: contracts.fileURL,
+              fileSize: contracts.fileSize,
+              compressedFileUrl: contracts.compressedFileUrl,
+            })
+            .from(contracts)
+            .where(eq(contracts.id, contractId))
+            .limit(1);
+
+          if (!c?.fileURL || c.compressedFileUrl) return; // none, or already done
+          if (c.fileSize && c.fileSize < 3 * 1024 * 1024) return; // not worth it
+
+          const storagePath = extractPathFromSupabaseUrl(c.fileURL);
+          if (!storagePath) return;
+
+          const result = await compressContractPdf(storagePath);
+          if (!result) return;
+
+          await db
+            .update(contracts)
+            .set({
+              compressedFileUrl: getSupabasePublicUrl(result.compressedPath),
+              compressedFileSize: result.compBytes,
+            })
+            .where(eq(contracts.id, contractId));
+
+          console.log(
+            `[compress] ${contractId}: ${result.origBytes} -> ${result.compBytes} bytes (${Math.round(result.ratio * 100)}% saved)`,
+          );
+        } catch (err) {
+          console.error(`[compress] non-fatal for ${contractId}:`, err);
+        }
       });
 
       // Document map: heuristic baseline (from OCR) + one Inngest step per AI window (60s each)

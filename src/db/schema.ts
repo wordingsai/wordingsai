@@ -418,6 +418,10 @@ export const contracts: any = pgTable(
     fileURL: text("file_url"),
     fileHash: text("file_hash"),
     fileContent: text("file_content"),
+    // Compressed rendition (re-rastered, keeps text layer). Original fileURL is
+    // never modified — it stays the audit/source copy; this is served to viewers.
+    compressedFileUrl: text("compressed_file_url"),
+    compressedFileSize: integer("compressed_file_size"),
     structuredContent: jsonb("structured_content"),
     analysis: jsonb("analysis"),
     riskScore: integer("risk_score"),

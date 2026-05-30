@@ -680,7 +680,7 @@ export default function ContractAnalysisPage() {
           {pdfEverOpened ? (
             <div className={activeTab === "document-view" ? "block" : "hidden"}>
               <PdfViewer
-                fileUrl={contract.fileURL || ""}
+                fileUrl={contract.compressedFileUrl || contract.fileURL || ""}
                 contractId={contractId}
               />
             </div>

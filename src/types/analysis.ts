@@ -22,6 +22,7 @@ export type Contract = {
   updatedAt?: string;
   lastAnalyzedAt?: string;
   fileURL?: string | null;
+  compressedFileUrl?: string | null;
   structuredContent?: StructuredContract | null;
   currentRuleCount?: number;
   analysis?: any;

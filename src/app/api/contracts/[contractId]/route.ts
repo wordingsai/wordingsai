@@ -142,6 +142,7 @@ export async function GET(
             totalRules: contracts.totalRules,
             riskScore: contracts.riskScore,
             fileURL: contracts.fileURL,
+            compressedFileUrl: contracts.compressedFileUrl,
             structuredContent: contracts.structuredContent,
             contractStatus: contracts.contractStatus,
           })
