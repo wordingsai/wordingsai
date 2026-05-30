@@ -8,6 +8,7 @@ import { db } from "@/db/drizzle";
 import { eq } from "drizzle-orm";
 import { evidenceItems, evidenceClauseMatches } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { resolveActiveWorkspaceContext } from "@/server/workspace-resolver";
 import { z } from "zod";
 
 const matchOverrideSchema = z.object({
@@ -55,7 +56,19 @@ export async function POST(
       );
     }
 
-    // TODO: Verify user has permission to edit this evidence
+    // Org-ownership guard: only allow editing evidence that belongs to the
+    // caller's active organization. Without this, any logged-in user could
+    // re-point any evidence item's match by guessing an evidenceId (IDOR).
+    const workspaceContext = await resolveActiveWorkspaceContext();
+    if (!workspaceContext.ok) {
+      return NextResponse.json(
+        { error: workspaceContext.error },
+        { status: workspaceContext.status },
+      );
+    }
+    if (evidence.organizationId !== workspaceContext.context.organizationId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     // Create or update the match
     const now = new Date();

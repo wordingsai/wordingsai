@@ -9,6 +9,7 @@ import { db } from "@/db/drizzle";
 import { eq, and } from "drizzle-orm";
 import { ruleResults, evidenceItems, contracts } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { resolveActiveWorkspaceContext } from "@/server/workspace-resolver";
 import type { StructuredEvidenceResult } from "@/types/evidence";
 
 export async function GET(
@@ -42,7 +43,19 @@ export async function GET(
       );
     }
 
-    // TODO: Add workspace/organization permission check
+    // Org-ownership guard: a logged-in user may only read evidence for a
+    // contract in their active organization. Without this, anyone could read
+    // any contract's evidence by guessing a contractId (IDOR).
+    const workspaceContext = await resolveActiveWorkspaceContext();
+    if (!workspaceContext.ok) {
+      return NextResponse.json(
+        { error: workspaceContext.error },
+        { status: workspaceContext.status },
+      );
+    }
+    if (contract.organizationId !== workspaceContext.context.organizationId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     // Fetch rule results with evidence
     const conditions = [eq(ruleResults.contractId, contractId)];
