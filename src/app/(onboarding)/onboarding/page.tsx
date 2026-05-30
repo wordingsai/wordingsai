@@ -157,7 +157,7 @@ const OnBoardingPage = (props: {
         </div>
 
         <p className="text-[12px] text-muted-foreground tracking-wider uppercase opacity-60">
-          You must leave your current organization to join or create a new one.
+          You can create a new organization or use an invite code to join an existing one.
         </p>
       </div>
     </main>

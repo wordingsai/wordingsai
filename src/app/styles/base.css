@@ -1,0 +1,23 @@
+/**
+ * Base layer rules.
+ *
+ * - Applies the border-border default to all elements (shadcn convention).
+ * - Sets body background/foreground.
+ * - Sets font-sans on html root.
+ *
+ * Keep this file minimal: only @layer base overrides belong here.
+ */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}

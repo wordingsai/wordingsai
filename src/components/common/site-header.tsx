@@ -192,9 +192,9 @@ export function SiteHeader() {
         />
 
         {activeOrg?.name && (
-          <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-surface-container-low border border-outline-variant/40 shadow-sm shrink-0">
-            <div className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-on-surface truncate max-w-[160px]">
+          <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-surface-container-low border border-outline-variant shadow-sm shrink-0">
+            <div className="size-1.5 rounded-full bg-emerald-500" />
+            <span className="text-xs font-medium text-on-surface truncate max-w-[160px]">
               {activeOrg.name}
             </span>
           </div>
@@ -212,9 +212,9 @@ export function SiteHeader() {
               <Button
                 variant="outline"
                 size="icon"
-                className="shrink-0 relative rounded-xl border-outline-variant hover:bg-surface-container-highest transition-all duration-300"
+                className="shrink-0 relative"
               >
-                <Bell className="h-5 w-5 text-on-surface-variant" />
+                <Bell className="h-4 w-4 text-on-surface-variant" />
                 {totalNotifs > 0 && (
                   <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[8px] font-semibold text-primary-foreground shadow-lg shadow-primary/20">
                     {totalNotifs}
@@ -223,50 +223,47 @@ export function SiteHeader() {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[380px] p-0 rounded-lg overflow-hidden border-outline-variant shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] bg-popover"
+              className="w-[360px] p-0 rounded-xl overflow-hidden border-outline-variant shadow-xl shadow-black/20 dark:shadow-black/50 bg-popover"
               align="end"
               sideOffset={12}
             >
-              <div className="bg-surface-container-highest/10 p-6 border-b border-outline-variant flex justify-between items-center">
+              <div className="bg-surface-container-highest/10 px-4 py-3 border-b border-outline-variant flex justify-between items-center">
                 <div className="space-y-0.5">
-                  <h3 className="font-semibold uppercase tracking-[0.25em] text-[10px] text-on-surface-variant/60">
-                    Neural Updates
-                  </h3>
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-on-surface uppercase tracking-tight">
-                      System Feed
+                    <p className="text-sm font-semibold text-on-surface">
+                      Notifications
                     </p>
                     {totalNotifs > 0 && (
                       <button
                         onClick={handleClearAll}
-                        className="text-[9px] font-semibold text-primary uppercase tracking-widest hover:underline ml-2"
+                        className="text-[10px] font-medium text-on-surface-variant hover:text-destructive transition-colors ml-1"
                       >
-                        Clear All
+                        Clear all
                       </button>
                     )}
                   </div>
                 </div>
                 {(notifications.length > 0 ||
                   generalNotifications.length > 0) && (
-                  <Badge className="bg-primary/10 text-primary border-none rounded-lg font-semibold text-[9px] uppercase tracking-widest">
-                    {notifications.length + generalNotifications.length} New
+                  <Badge variant="default">
+                    {notifications.length + generalNotifications.length} new
                   </Badge>
                 )}
               </div>
 
               <div className="max-h-[450px] overflow-y-auto no-scrollbar">
                 {loading ? (
-                  <div className="p-6 space-y-4">
-                    <Skeleton className="h-20 w-full rounded-2xl" />
-                    <Skeleton className="h-20 w-full rounded-2xl" />
+                  <div className="p-4 space-y-3">
+                    <Skeleton className="h-16 w-full rounded-lg" />
+                    <Skeleton className="h-16 w-full rounded-lg" />
                   </div>
                 ) : totalNotifs === 0 ? (
-                  <div className="p-12 text-center">
-                    <div className="size-16 bg-surface-container rounded-[1.5rem] flex items-center justify-center mx-auto mb-4 opacity-20">
-                      <Bell className="w-8 h-8 text-on-surface-variant" />
+                  <div className="py-10 px-4 text-center">
+                    <div className="size-12 bg-surface-container rounded-xl flex items-center justify-center mx-auto mb-3 opacity-30">
+                      <Bell className="w-5 h-5 text-on-surface-variant" />
                     </div>
-                    <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant/50">
-                      No new transmissions detected.
+                    <p className="text-xs text-on-surface-variant">
+                      No new notifications
                     </p>
                   </div>
                 ) : (
@@ -276,36 +273,36 @@ export function SiteHeader() {
                       generalNotifications.map((notif) => (
                         <div
                           key={notif.id}
-                          className="p-6 hover:bg-surface-container/50 transition-colors group"
+                          className="px-4 py-3 hover:bg-surface-container/50 transition-colors group"
                         >
-                          <div className="flex gap-4">
+                          <div className="flex gap-3">
                             <div
                               className={cn(
-                                "size-12 rounded-2xl flex items-center justify-center shrink-0 shadow-md transition-colors",
+                                "size-8 rounded-lg flex items-center justify-center shrink-0 transition-colors",
                                 notif.type === "error"
-                                  ? "bg-red-500/10 text-red-500"
+                                  ? "bg-red-500/10 text-red-500 dark:text-red-400"
                                   : notif.type === "warning"
-                                    ? "bg-amber-500/10 text-amber-500"
+                                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
                                     : notif.type === "success"
-                                      ? "bg-emerald-500/10 text-emerald-500"
+                                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                                       : "bg-primary/10 text-primary",
                               )}
                             >
-                              <Bell className="w-6 h-6" />
+                              <Bell className="w-4 h-4" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex justify-between items-start mb-1">
-                                <p className="text-[11px] font-semibold text-on-surface uppercase tracking-tight truncate">
+                              <div className="flex justify-between items-start gap-2">
+                                <p className="text-xs font-medium text-on-surface truncate">
                                   {notif.title}
                                 </p>
-                                <span className="text-[9px] font-bold text-on-surface-variant/40 uppercase whitespace-nowrap ml-2">
+                                <span className="text-[10px] text-on-surface-variant shrink-0">
                                   {formatDistanceToNow(
                                     new Date(notif.createdAt),
                                     { addSuffix: false },
                                   )}
                                 </span>
                               </div>
-                              <p className="text-xs font-medium text-on-surface-variant leading-relaxed">
+                              <p className="text-xs text-on-surface-variant leading-relaxed mt-0.5">
                                 {notif.message}
                               </p>
                             </div>
@@ -318,49 +315,46 @@ export function SiteHeader() {
                       notifications.map((notif) => (
                         <div
                           key={notif.id}
-                          className="p-6 hover:bg-surface-container/50 transition-colors group"
+                          className="px-4 py-3 hover:bg-surface-container/50 transition-colors group"
                         >
-                          <div className="flex gap-4">
-                            <Avatar className="h-12 w-12 rounded-2xl shadow-md">
+                          <div className="flex gap-3">
+                            <Avatar className="h-8 w-8 rounded-lg shrink-0">
                               <AvatarImage
                                 src={notif.user.image ?? undefined}
                               />
-                              <AvatarFallback className="font-semibold bg-primary/10 text-primary uppercase">
+                              <AvatarFallback className="font-semibold bg-primary/10 text-primary text-xs">
                                 {notif.user.name?.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1 min-w-0">
-                              <div className="flex justify-between items-start mb-1">
-                                <p className="text-[11px] font-semibold text-on-surface uppercase tracking-tight truncate">
+                              <div className="flex justify-between items-start gap-2">
+                                <p className="text-xs font-medium text-on-surface truncate">
                                   {notif.user.name}
                                 </p>
-                                <span className="text-[9px] font-bold text-on-surface-variant/40 uppercase">
-                                  Request
+                                <span className="text-[10px] text-on-surface-variant shrink-0">
+                                  Join request
                                 </span>
                               </div>
-                              <p className="text-xs font-medium text-on-surface-variant mb-4 leading-relaxed">
-                                Join request for {activeOrg?.name} organization.
+                              <p className="text-xs text-on-surface-variant mt-0.5 mb-2 leading-relaxed">
+                                Requesting access to {activeOrg?.name}.
                               </p>
-                              <div className="flex gap-2">
+                              <div className="flex gap-1.5">
                                 <Button
-                                  size="sm"
-                                  className="h-9 px-4 rounded-xl bg-primary text-xs font-medium uppercase tracking-wider shadow-lg shadow-primary/10"
+                                  size="xs"
                                   onClick={() =>
                                     handleRequestAction(notif.id, "accepted")
                                   }
                                 >
-                                  <Check className="w-3 h-3 mr-1.5" /> Approve
+                                  <Check className="size-3" /> Approve
                                 </Button>
                                 <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="h-9 px-4 rounded-xl text-xs font-medium uppercase tracking-wider border-outline-variant hover:bg-destructive hover:text-white hover:border-destructive transition-all"
+                                  size="xs"
+                                  variant="destructive"
                                   onClick={() =>
                                     handleRequestAction(notif.id, "rejected")
                                   }
                                 >
-                                  <CloseIcon className="w-3 h-3 mr-1.5" />{" "}
-                                  Decline
+                                  <CloseIcon className="size-3" /> Decline
                                 </Button>
                               </div>
                             </div>
@@ -372,7 +366,7 @@ export function SiteHeader() {
                     {activities.slice(0, 8).map((activity) => (
                       <div
                         key={activity.id}
-                        className="p-6 hover:bg-surface-container/50 transition-colors group cursor-pointer"
+                        className="px-4 py-3 hover:bg-surface-container/50 transition-colors group cursor-pointer"
                         onClick={() => {
                           const url =
                             activity.type === "contract"
@@ -383,43 +377,42 @@ export function SiteHeader() {
                           window.location.href = url;
                         }}
                       >
-                        <div className="flex gap-4">
+                        <div className="flex gap-3 items-start">
                           <div
                             className={cn(
-                              "h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105",
+                              "size-8 rounded-lg flex items-center justify-center shrink-0 transition-colors",
                               activity.type === "contract"
-                                ? "bg-emerald-500/10 text-emerald-500"
+                                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                                 : activity.type === "rule"
                                   ? "bg-primary/10 text-primary"
-                                  : "bg-amber-500/10 text-amber-500",
+                                  : "bg-amber-500/10 text-amber-600 dark:text-amber-400",
                             )}
                           >
                             {activity.type === "contract" ? (
-                              <FileText className="w-6 h-6" />
+                              <FileText className="w-4 h-4" />
                             ) : activity.type === "rule" ? (
-                              <BrainCircuit className="w-6 h-6" />
+                              <BrainCircuit className="w-4 h-4" />
                             ) : (
-                              <Sparkles className="w-6 h-6" />
+                              <Sparkles className="w-4 h-4" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-start mb-1">
-                              <p className="text-[11px] font-semibold text-on-surface uppercase tracking-tight truncate">
+                            <div className="flex justify-between items-start gap-2">
+                              <p className="text-xs font-medium text-on-surface truncate">
                                 {activity.title}
                               </p>
-                              <span className="text-[9px] font-bold text-on-surface-variant/40 uppercase whitespace-nowrap ml-2">
+                              <span className="text-[10px] text-on-surface-variant shrink-0">
                                 {formatDistanceToNow(
                                   new Date(activity.updatedAt),
                                   { addSuffix: false },
                                 )}
                               </span>
                             </div>
-                            <p className="text-xs font-medium text-on-surface-variant leading-relaxed">
-                              {activity.action} {activity.type} detection
-                              complete.
+                            <p className="text-xs text-on-surface-variant leading-relaxed mt-0.5 capitalize">
+                              {activity.action} — {activity.type}
                             </p>
                           </div>
-                          <ArrowUpRight className="size-4 text-on-surface-variant/20 group-hover:text-primary transition-colors mt-1" />
+                          <ArrowUpRight className="size-3.5 text-on-surface-variant/40 group-hover:text-primary transition-colors mt-0.5 shrink-0" />
                         </div>
                       </div>
                     ))}
@@ -427,12 +420,12 @@ export function SiteHeader() {
                 )}
               </div>
 
-              <div className="p-4 bg-surface-container-highest/10 border-t border-outline-variant text-center">
+              <div className="px-4 py-2.5 bg-surface-container-highest/10 border-t border-outline-variant text-center">
                 <Link
                   href="/dashboard"
-                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary hover:underline flex items-center justify-center gap-2"
+                  className="text-xs text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center gap-1.5"
                 >
-                  Access Neural Hub <ArrowUpRight className="size-3" />
+                  View dashboard <ArrowUpRight className="size-3" />
                 </Link>
               </div>
             </PopoverContent>
@@ -448,8 +441,8 @@ export function SiteHeader() {
             <DropdownMenu>
               <DropdownMenuTrigger
                 className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "relative h-11 w-11 shrink-0 rounded-2xl border border-outline-variant p-0 overflow-hidden hover:border-primary/50 transition-all",
+                  buttonVariants({ variant: "ghost", size: "icon" }),
+                  "relative shrink-0 rounded-lg border border-outline-variant p-0 overflow-hidden hover:border-primary/50 transition-colors",
                 )}
               >
                 <Avatar className="h-full w-full rounded-none">
@@ -463,28 +456,28 @@ export function SiteHeader() {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-64 rounded-[1.5rem] p-2 mt-2"
+                className="w-56 rounded-xl p-1.5 mt-2"
                 align="end"
                 sideOffset={8}
               >
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="p-0 font-normal">
-                    <div className="flex items-center gap-3 px-3 py-3 bg-surface-container-highest/10 rounded-xl mb-2">
-                      <Avatar className="h-10 w-10 rounded-lg">
+                    <div className="flex items-center gap-2.5 px-2 py-2 mb-1">
+                      <Avatar className="h-8 w-8 rounded-lg shrink-0">
                         <AvatarImage src={session.user.image ?? undefined} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                        <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                           {session.user.name?.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col min-w-0">
-                        <p className="text-[11px] font-semibold uppercase tracking-tight text-on-surface truncate">
+                        <p className="text-xs font-semibold text-on-surface truncate">
                           {session.user.name}
                         </p>
-                        <p className="text-[10px] font-medium text-on-surface-variant/70 truncate">
+                        <p className="text-[10px] text-on-surface-variant truncate">
                           {session.user.email}
                         </p>
                         {activeOrg?.name && (
-                          <p className="text-[10px] font-medium uppercase tracking-wider text-primary truncate mt-1">
+                          <p className="text-[10px] text-primary truncate mt-0.5">
                             {activeOrg.name}
                           </p>
                         )}
@@ -493,31 +486,31 @@ export function SiteHeader() {
                   </DropdownMenuLabel>
                 </DropdownMenuGroup>
                 {sessions.length > 0 && (
-                  <DropdownMenuGroup className="space-y-1">
-                    <DropdownMenuLabel className="px-2 py-1.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/40">
-                      Switch Account
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="px-2 py-1 text-[10px] font-medium text-on-surface-variant">
+                      Switch account
                     </DropdownMenuLabel>
                     {sessions.map((s) => (
                       <DropdownMenuItem
                         key={s.session.id}
-                        className="cursor-pointer rounded-xl h-12 text-xs font-medium uppercase tracking-wider flex items-center gap-3"
+                        className="cursor-pointer flex items-center gap-2"
                         onClick={() =>
                           handleSwitchSession(
                             s.session.token || s.session.sessionToken,
                           )
                         }
                       >
-                        <Avatar className="h-6 w-6 rounded-lg">
+                        <Avatar className="h-5 w-5 rounded-md shrink-0">
                           <AvatarImage src={s.user.image} />
-                          <AvatarFallback className="text-[10px] font-semibold bg-primary/10 text-primary">
+                          <AvatarFallback className="text-[9px] font-semibold bg-primary/10 text-primary">
                             {s.user.name?.charAt(0).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col min-w-0 flex-1">
-                          <span className="font-semibold text-on-surface truncate normal-case">
+                          <span className="text-xs font-medium text-on-surface truncate">
                             {s.user.name || "User"}
                           </span>
-                          <span className="text-[9px] text-on-surface-variant/70 truncate lowercase tracking-normal font-medium">
+                          <span className="text-[10px] text-on-surface-variant truncate">
                             {s.user.email}
                           </span>
                         </div>
@@ -525,13 +518,13 @@ export function SiteHeader() {
                     ))}
                   </DropdownMenuGroup>
                 )}
-                <DropdownMenuSeparator className="my-2 opacity-30" />
+                <DropdownMenuSeparator className="my-1" />
                 <DropdownMenuItem
-                  className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10 rounded-xl h-12 text-xs font-medium uppercase tracking-wider"
+                  className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                   onClick={handleLogout}
                 >
-                  <LogOut className="mr-3 h-4 w-4" />
-                  <span>Terminate Session</span>
+                  <LogOut className="mr-2 h-3.5 w-3.5" />
+                  <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -54,3 +54,17 @@ resources/
 scripts/upload-test-contract.mjs
 .env.vercel-import
 scripts/_pp.mjs
+# Throwaway scratch scripts (underscore-prefixed). Real scripts keep their name.
+scripts/_*.mjs
+scripts/_*.cjs
+scripts/_*.ts
+
+# Large binaries must never be committed (sample contracts, exports, snapshots)
+*.pdf
+*.zip
+*.bak
+*.sql
+
+# Prod env pulled via `vercel env pull` (secrets — never commit)
+_prod.env
+*.prod.env

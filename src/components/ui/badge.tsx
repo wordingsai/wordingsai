@@ -20,6 +20,18 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        // Semantic status variants — dual-themed, no naked Tailwind palette shades.
+        // Use these everywhere a status/category color is needed so light & dark stay in sync.
+        success:
+          "border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 [a]:hover:bg-emerald-500/20",
+        warning:
+          "border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-400 [a]:hover:bg-amber-500/20",
+        danger:
+          "border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-400 [a]:hover:bg-red-500/20",
+        info:
+          "border-sky-500/20 bg-sky-500/10 text-sky-700 dark:text-sky-400 [a]:hover:bg-sky-500/20",
+        muted:
+          "border-outline-variant bg-surface-container text-on-surface-variant [a]:hover:bg-surface-container-high",
       },
     },
     defaultVariants: {

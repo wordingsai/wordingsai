@@ -125,7 +125,7 @@ export function AnalysisChecklist({
           tone="emerald"
         />
         <FilterStat
-          label="Custom"
+          label="Variation / Custom"
           count={variationCount}
           active={activeFilters.has("variation")}
           onClick={() => toggleFilter("variation")}
@@ -159,13 +159,14 @@ export function AnalysisChecklist({
                 status === "Custom" ||
                 status === "Variation";
 
-              const matchPercentage = isGreen
-                ? 100
-                : event.metadata.confidence
-                  ? Math.round(event.metadata.confidence * 100)
-                  : isAmber
-                    ? 85
-                    : 0;
+              // Show real confidence when present; never fabricate a fallback.
+              // Matched rows may have confidence < 1.0 (e.g. 0.93 → "93%").
+              // Rows with no confidence value show "—" rather than inventing 85%.
+              const rawConfidence = event.metadata.confidence;
+              const matchPercentage =
+                rawConfidence !== undefined && rawConfidence !== null
+                  ? Math.round(rawConfidence * 100)
+                  : null;
 
               const snippet = (event.metadata.documentText || "").trim();
 
@@ -201,10 +202,13 @@ export function AnalysisChecklist({
                       )}
                     </div>
                     <div className="flex-1 min-w-0 overflow-hidden">
-                      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
-                        <h4 className="font-medium text-sm text-on-surface truncate max-w-full">
-                          {clauseName}
-                        </h4>
+                      {/* Clause name on its own full-width line so it wins
+                          against the badges in the narrow 360px rail (F6). */}
+                      <h4 className="font-medium text-sm text-on-surface truncate w-full">
+                        {clauseName}
+                      </h4>
+                      {/* Badges on the second line — never crowd the name. */}
+                      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mt-0.5">
                         {/* Library reference/code — the identifying code of the
                             matched library clause (e.g. LSW307A). This is the
                             client's core requirement: every match shows which
@@ -212,7 +216,12 @@ export function AnalysisChecklist({
                         {event.metadata.clauseCode && (
                           <Badge
                             variant="outline"
-                            className="text-[10px] font-mono px-1.5 py-0 border rounded shrink-0 bg-primary/10 text-primary border-primary/30"
+                            className={cn(
+                              "text-[10px] font-mono px-1.5 py-0 border rounded shrink-0",
+                              event.metadata.matchType === "code"
+                                ? "bg-primary/10 text-primary border-primary/30"
+                                : "bg-surface-container text-on-surface-variant border-outline-variant/50",
+                            )}
                             title={
                               event.metadata.matchType === "code"
                                 ? "Matched by library code (incorporated by reference)"
@@ -239,7 +248,7 @@ export function AnalysisChecklist({
                               ? "Variation"
                               : isAmber
                                 ? "Custom"
-                                : "Missing"}
+                                : "Unidentified"}
                         </Badge>
                       </div>
                       <p className="text-[11px] text-on-surface-variant/70 truncate mt-0.5">
@@ -268,7 +277,7 @@ export function AnalysisChecklist({
                               : "text-red-400",
                         )}
                       >
-                        {matchPercentage}%
+                        {matchPercentage !== null ? `${matchPercentage}%` : "—"}
                       </span>
                       {isListMode && (
                         <ChevronRight

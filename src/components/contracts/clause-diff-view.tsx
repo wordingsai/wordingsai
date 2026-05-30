@@ -115,7 +115,10 @@ export function ClauseDiffView({
         // stack to 1 column. This works for *container* width (not viewport)
         // so it adapts correctly inside the narrow PANEL 3 of the contract
         // page as well as inside the wide AmendmentDiffDialog.
-        className="grid gap-3 md:gap-4 min-w-0 [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]"
+        // Lowered threshold from 280px to 240px so the two-column layout is
+        // maintained on xl/1280 viewports after the checklist rail was
+        // narrowed from 360px to 300px (fixes F1 — diff silently stacking).
+        className="grid gap-3 md:gap-4 min-w-0 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]"
       >
         <Column
           tone="contract"
@@ -250,20 +253,24 @@ function DiffSide({
           return <span key={i}>{chunk}</span>;
         }
         if (op === 1 && side === "contract") {
+          // Raised to /25 (was /15) to match the legend swatches.
+          // Underline added as a non-color cue so insertions are distinct
+          // even for color-blind users (complement to deletion line-through).
           return (
             <span
               key={i}
-              className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 rounded-sm px-0.5"
+              className="bg-emerald-500/25 text-emerald-700 dark:text-emerald-200 underline decoration-emerald-500/60 rounded-sm px-0.5"
             >
               {chunk}
             </span>
           );
         }
         if (op === -1 && side === "library") {
+          // Raised to /25 (was /15); text contrast raised to -200 in dark mode.
           return (
             <span
               key={i}
-              className="bg-rose-500/15 text-rose-700 dark:text-rose-300 line-through decoration-rose-500/60 rounded-sm px-0.5"
+              className="bg-rose-500/25 text-rose-700 dark:text-rose-200 line-through decoration-rose-500/70 rounded-sm px-0.5"
             >
               {chunk}
             </span>

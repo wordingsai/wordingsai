@@ -136,7 +136,7 @@ export default function NewClausePage() {
         toast.error(error.error || "Failed to create clause");
       }
     } catch (err) {
-      toast.error("Connection failure to neural engine");
+      toast.error("Could not save. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -145,44 +145,43 @@ export default function NewClausePage() {
   return (
     <main className="flex-1 p-6 lg:p-10 bg-background transition-colors duration-300">
       <div className="mb-10">
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-2 mb-4">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/clause-library"
-                  className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors"
+                  className="text-xs text-on-surface-variant hover:text-primary transition-colors"
                 >
-                  Regulatory Framework
+                  Clause library
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="text-on-surface-variant" />
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface">
-                  Initialize New Wording
+                <BreadcrumbPage className="text-xs text-on-surface">
+                  New clause
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
-              New Clause Entry
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div className="space-y-1">
+            <h1 className="text-xl lg:text-2xl font-semibold tracking-tight text-on-surface">
+              New clause
             </h1>
-            <p className="text-on-surface-variant text-lg font-medium max-w-2xl">
-              Register a standardized treaty wording for automated recognition
-              and deployment.
+            <p className="text-on-surface-variant text-sm max-w-2xl">
+              Add a standardized treaty wording to your organization's library.
             </p>
           </div>
 
           <Button
             variant="ghost"
-            className="rounded-2xl text-xs font-medium uppercase tracking-wider py-6 px-8 hover:bg-surface-container-highest"
+            size="sm"
             onClick={() => router.back()}
           >
-            <ArrowLeft className="w-4 h-4 mr-2" /> DISCARD ENTRY
+            <ArrowLeft className="size-3.5" /> Back
           </Button>
         </div>
       </div>
@@ -194,7 +193,7 @@ export default function NewClausePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
-                  Clause Identification (Name)
+                  Clause name
                 </Label>
                 <Input
                   value={clauseName}
@@ -206,15 +205,15 @@ export default function NewClausePage() {
               </div>
               <div className="space-y-3">
                 <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1">
-                  Regulatory Domain (Category)
+                  Category
                 </Label>
                 <Select
                   value={category}
                   onValueChange={(val) => setCategory(val || "")}
                   required
                 >
-                  <SelectTrigger className="h-14 bg-background border-outline-variant rounded-2xl font-semibold uppercase tracking-widest text-[11px]">
-                    <SelectValue placeholder="Select Domain" />
+                  <SelectTrigger className="h-10 bg-background border-outline-variant rounded-lg text-sm">
+                    <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
                     {categories.map((c) => (
@@ -228,124 +227,124 @@ export default function NewClausePage() {
             </div>
 
             {/* Content */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div className="flex items-center justify-between ml-1">
                 <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
-                  Semantic Wording (Actual Text)
+                  Clause text
                 </Label>
-                <Badge className="bg-primary/5 text-primary border-primary/20 text-[9px] font-semibold uppercase px-2 py-0.5">
-                  High Precision Required
+                <Badge variant="default" className="text-[9px]">
+                  Required
                 </Badge>
               </div>
               <Textarea
                 value={clauseText}
                 onChange={(e) => setClauseText(e.target.value)}
-                placeholder="Paste the definitive treaty wording here..."
-                className="min-h-[250px] bg-background border-outline-variant rounded-lg font-medium p-6 transition-all focus:ring-4 focus:ring-primary/10 leading-relaxed"
+                placeholder="Paste the treaty wording here..."
+                className="min-h-[250px] bg-background border-outline-variant rounded-lg text-sm p-4 transition-all focus:ring-4 focus:ring-primary/10 leading-relaxed"
                 required
               />
             </div>
 
             {/* Metadata */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pt-6 border-t border-outline-variant/30">
-              <div className="space-y-3">
-                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
-                  <FileText className="w-3 h-3" /> Heading Classification
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 border-t border-outline-variant/30">
+              <div className="space-y-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-1.5">
+                  <FileText className="w-3 h-3" /> Heading
                 </Label>
                 <Input
                   value={heading}
                   onChange={(e) => setHeading(e.target.value)}
                   placeholder="e.g. Accounts and Reports"
-                  className="h-12 bg-background border-outline-variant rounded-xl font-bold text-sm"
+                  className="h-10 bg-background border-outline-variant rounded-lg text-sm"
                 />
               </div>
-              <div className="space-y-3">
-                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
-                  <Archive className="w-3 h-3" /> Source Archive
+              <div className="space-y-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-1.5">
+                  <Archive className="w-3 h-3" /> Source
                 </Label>
                 <Input
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
                   placeholder="e.g. LMA 3100"
-                  className="h-12 bg-background border-outline-variant rounded-xl font-bold text-sm"
+                  className="h-10 bg-background border-outline-variant rounded-lg text-sm"
                 />
               </div>
-              <div className="space-y-3">
-                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
-                  <Tag className="w-3 h-3" /> Library Origin
+              <div className="space-y-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-1.5">
+                  <Tag className="w-3 h-3" /> Library
                 </Label>
                 <Input
                   value={library}
                   onChange={(e) => setLibrary(e.target.value)}
                   placeholder="e.g. Custom, Core, Lloyd's"
-                  className="h-12 bg-background border-outline-variant rounded-xl font-bold text-sm"
+                  className="h-10 bg-background border-outline-variant rounded-lg text-sm"
                   required
                 />
               </div>
-              <div className="space-y-3">
-                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-2">
-                  <ShieldCheck className="w-3 h-3" /> Approval Status
+              <div className="space-y-2">
+                <Label className="text-xs font-medium uppercase tracking-wider text-on-surface-variant ml-1 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3 h-3" /> Status
                 </Label>
                 <Select
                   value={status}
                   onValueChange={(val) => setStatus(val || "Approved")}
                   required
                 >
-                  <SelectTrigger className="h-12 bg-background border-outline-variant rounded-xl font-bold text-sm">
-                    <SelectValue placeholder="Select Status" />
+                  <SelectTrigger className="h-10 bg-background border-outline-variant rounded-lg text-sm">
+                    <SelectValue placeholder="Select status" />
                   </SelectTrigger>
-                  <SelectContent className="rounded-xl">
+                  <SelectContent>
                     <SelectItem value="Approved">Approved</SelectItem>
-                    <SelectItem value="Not Approved">Not Approved</SelectItem>
+                    <SelectItem value="Not Approved">Unapproved</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             {isPSA && (
-              <div className="flex items-center gap-3 p-6 bg-primary/5 rounded-2xl border border-primary/10">
-                <Globe className="w-5 h-5 text-primary" />
-                <div className="flex-1">
-                  <Label className="text-xs font-medium uppercase tracking-wider text-primary block">
-                    Global Distribution
+              <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg border border-primary/10">
+                <Globe className="w-4 h-4 text-primary shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <Label className="text-xs font-medium text-primary block">
+                    Global distribution
                   </Label>
-                  <p className="text-[10px] font-bold text-on-surface-variant">
-                    Make this wording available to all organizations across the
-                    platform.
+                  <p className="text-[10px] text-on-surface-variant mt-0.5">
+                    Make this wording available to all organizations.
                   </p>
                 </div>
                 <Button
                   type="button"
+                  size="sm"
                   variant={isGlobal ? "default" : "outline"}
+                  role="switch"
+                  aria-checked={isGlobal}
                   onClick={() => setIsGlobal(!isGlobal)}
-                  className="rounded-xl text-xs font-medium uppercase h-10 px-4 transition-all"
                 >
-                  {isGlobal ? "GLOBAL ACTIVE" : "CUSTOM ONLY"}
+                  {isGlobal ? "Global" : "Custom only"}
                 </Button>
               </div>
             )}
           </div>
 
-          <div className="pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3 text-on-surface-variant">
-              <ShieldCheck className="w-5 h-5 text-emerald-500" />
-              <p className="text-xs font-bold uppercase tracking-widest">
-                Authorized Neural Encoding
+          <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2 text-on-surface-variant">
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+              <p className="text-xs text-on-surface-variant">
+                Changes are saved to your organization's library
               </p>
             </div>
             <Button
               type="submit"
               size="lg"
               disabled={loading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-5 py-2 rounded-md flex items-center gap-3 text-lg transition-all "
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-5 h-5 animate-spin" /> SYNCHRONIZING...
+                  <Loader2 className="size-4 animate-spin" /> Saving…
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-5 h-5" /> REGISTER CLAUSE
+                  <Sparkles className="size-4" /> Create clause
                 </>
               )}
             </Button>

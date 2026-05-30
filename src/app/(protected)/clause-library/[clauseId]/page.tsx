@@ -335,8 +335,8 @@ export default function IndividualClausePage() {
                     className={cn(
                       "rounded-md font-medium px-2 py-0.5",
                       clause.status === "Approved"
-                        ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
-                        : "bg-red-500/10 text-red-600 border-red-500/20",
+                        ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20"
+                        : "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
                     )}
                   >
                     {clause.status === "Approved" ? "Approved" : "Unapproved"}

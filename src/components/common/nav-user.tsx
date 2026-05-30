@@ -299,7 +299,7 @@ export function NavUser({
               <DropdownMenuSeparator className="my-2 opacity-50" />
               <DropdownMenuGroup className="space-y-1">
                 <DropdownMenuLabel className="px-2 py-1 text-[10px] font-medium uppercase tracking-wider text-on-surface-variant/50">
-                  Accounts
+                  Switch Login
                 </DropdownMenuLabel>
                 {sessions.map((s) => (
                   <DropdownMenuItem
@@ -332,7 +332,7 @@ export function NavUser({
                 <Link href="/add-account">
                   <DropdownMenuItem className="cursor-pointer text-primary hover:bg-primary/5 focus:bg-primary/5 focus:text-primary">
                     <Plus className="mr-2 size-4" />
-                    Add account
+                    Sign in with another account
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>

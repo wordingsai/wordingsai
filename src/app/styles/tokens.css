@@ -1,0 +1,107 @@
+/**
+ * Design token definitions.
+ *
+ * Two sections:
+ *   :root   — light-mode tokens
+ *   .dark   — dark-mode overrides (applied via next-themes class strategy)
+ *
+ * Token philosophy:
+ *   - Never use raw Tailwind palette shades (emerald-700, slate-500, etc.) as
+ *     text on dynamic surfaces. Always declare a semantic token here and
+ *     reference it in components via `text-on-surface-variant` etc.
+ *   - Status colors (success / warning / danger / info) should come from the
+ *     Badge `variant` prop, not hand-rolled inline classes.
+ *   - Borders: the dark --border / --outline-variant tokens are solid-ish so
+ *     they register at ≥3:1 on card surfaces. Do not drop them below /20
+ *     alpha in component overrides.
+ */
+
+:root {
+  --radius: 0.65rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(0.967 0.001 286.375);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  --surface-container: oklch(0.96 0.01 264);
+  --surface-container-low: oklch(0.98 0.005 264);
+  --surface-container-high: oklch(0.92 0.015 264);
+  --surface-container-highest: oklch(0.88 0.02 264);
+  --surface-dim: oklch(0.85 0.01 264);
+  --on-surface: oklch(0.141 0.005 285.823);
+  --on-surface-variant: oklch(0.4 0.01 285.823);
+  --outline: oklch(0.92 0.004 286.32);
+  --outline-variant: oklch(0.95 0.004 286.32);
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  /* Softened: chroma 0.243 -> 0.19 and lifted lightness for a calmer, more
+     legible accent on the dark theme (same hue) */
+  --primary: oklch(0.55 0.19 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.78 0.013 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  /* Softened: chroma 0.191 -> 0.16 so destructive reads calm, not neon, on dark */
+  --destructive: oklch(0.704 0.16 22.216);
+  --border: oklch(1 0 0 / 20%);
+  --input: oklch(1 0 0 / 24%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.623 0.214 259.815);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.439 0 0);
+
+  --surface-container: oklch(0.12 0.01 264);
+  --surface-container-low: oklch(0.1 0.01 264);
+  --surface-container-high: oklch(0.15 0.01 264);
+  --surface-container-highest: oklch(0.2 0.01 264);
+  --surface-dim: oklch(0.08 0.01 264);
+  --on-surface: oklch(0.985 0 0);
+  --on-surface-variant: oklch(0.78 0.013 286);
+  --outline: oklch(1 0 0 / 28%);
+  --outline-variant: oklch(0.42 0.008 286);
+}

@@ -26,7 +26,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
       data-slot="table-header"
       suppressHydrationWarning
       className={cn(
-        "rounded-t-xl bg-white/5 px-6 py-4 text-slate-500 text-sm md:text-base font-semibold uppercase tracking-widest",
+        "rounded-t-xl bg-muted/50 text-muted-foreground text-xs font-medium uppercase tracking-wider",
         className,
       )}
       {...props}

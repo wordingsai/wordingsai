@@ -85,6 +85,8 @@ function OrganizationSettingsTab() {
   const [confirmOrgName, setConfirmOrgName] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [memberToDelete, setMemberToDelete] = useState<any>(null);
+  const [inviteByEmailInput, setInviteByEmailInput] = useState("");
+  const [invitingByEmail, setInvitingByEmail] = useState(false);
 
   const activeMember = activeOrg?.members?.find(
     (m: any) => m.userId === session?.user?.id,
@@ -183,6 +185,33 @@ function OrganizationSettingsTab() {
       }
     } catch (err) {
       toast.error("An error occurred");
+    }
+  };
+
+  const handleInviteByEmail = async () => {
+    const email = inviteByEmailInput.trim().toLowerCase();
+    if (!email) {
+      toast.error("Please enter an email address");
+      return;
+    }
+    setInvitingByEmail(true);
+    try {
+      const res = await fetch("/api/organization/invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(`Invitation sent to ${email}`);
+        setInviteByEmailInput("");
+      } else {
+        toast.error(data.error || "Failed to send invitation");
+      }
+    } catch (err) {
+      toast.error("An error occurred");
+    } finally {
+      setInvitingByEmail(false);
     }
   };
 
@@ -390,6 +419,48 @@ function OrganizationSettingsTab() {
                   </>
                 )}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Invite Member by Email */}
+          <Card className="bg-surface-container-low border-outline-variant rounded-xl shadow-sm overflow-hidden text-left border-2 border-primary/10">
+            <CardHeader className="p-8 border-b border-outline-variant bg-primary/5">
+              <CardTitle className="text-base font-semibold text-on-surface flex items-center gap-3">
+                <UserPlus className="w-5 h-5 text-primary" /> Invite Member by Email
+              </CardTitle>
+              <CardDescription className="font-medium text-on-surface-variant">
+                Send a direct invitation email with a unique invite code. The recipient goes to /onboarding/join and enters the code.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6 md:p-10">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative flex-1">
+                  <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-on-surface-variant" />
+                  <Input
+                    type="email"
+                    value={inviteByEmailInput}
+                    onChange={(e) => setInviteByEmailInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleInviteByEmail(); }}
+                    placeholder="teammate@company.com"
+                    className="pl-10 h-12 rounded-xl border-outline-variant font-medium"
+                  />
+                </div>
+                <Button
+                  size="lg"
+                  onClick={handleInviteByEmail}
+                  disabled={invitingByEmail || !inviteByEmailInput.trim()}
+                  className="shrink-0 gap-2 rounded-xl"
+                >
+                  {invitingByEmail ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <>
+                      <UserPlus className="size-4" />
+                      Send Invitation
+                    </>
+                  )}
+                </Button>
+              </div>
             </CardContent>
           </Card>
 

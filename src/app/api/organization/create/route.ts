@@ -66,6 +66,19 @@ export async function POST(request: Request) {
       );
     }
 
+    // Switch the active org on this session to the newly created one so the
+    // user lands in the new org after creation (important when they already
+    // belonged to another org — the session would otherwise keep the old org).
+    try {
+      await auth.api.setActiveOrganization({
+        body: { organizationId: orgResult.id },
+        headers: sessionHeaders,
+      });
+    } catch (switchErr) {
+      // Non-fatal: the org was created successfully; session can be refreshed client-side.
+      console.warn("Could not auto-switch active org after creation:", switchErr);
+    }
+
     // 2. Create Default Workspaces — only Reinsurance for new orgs
     //    (Property workspace is reserved for the admin profile only)
     const publicWorkspaceSeeds = DEFAULT_WORKSPACES.filter(

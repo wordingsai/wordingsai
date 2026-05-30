@@ -21,7 +21,10 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith(route),
   );
   const isOnboardingRoute = pathname.startsWith("/onboarding");
+  // These onboarding sub-routes are allowed even if the user already has an org:
+  // choose-plan is a post-create step; create lets users add a second org.
   const isOnboardingChoosePlan = pathname.startsWith("/onboarding/choose-plan");
+  const isOnboardingCreate = pathname.startsWith("/onboarding/create");
   const isAuthRoute =
     pathname.startsWith("/login") || pathname.startsWith("/signup");
 
@@ -72,8 +75,10 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/onboarding", request.url));
     }
 
-    // C. Prevent access to onboarding if they already have an active organization setup
-    if (hasOrg && isOnboardingRoute && !isOnboardingChoosePlan) {
+    // C. Prevent access to onboarding if they already have an active organization setup,
+    //    EXCEPT for /onboarding/create (users may create additional orgs) and
+    //    /onboarding/choose-plan (post-creation plan picker).
+    if (hasOrg && isOnboardingRoute && !isOnboardingChoosePlan && !isOnboardingCreate) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   } catch (error) {

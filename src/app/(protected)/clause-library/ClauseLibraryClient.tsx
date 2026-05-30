@@ -131,34 +131,36 @@ export default function ClauseLibraryClient({
   const isPSA = (session?.session as any)?.role === "psa";
 
   const getCategoryBadgeClasses = (category: string) => {
+    // Dual-themed: -700 text for light mode, -400 for dark mode.
+    // This avoids light -400 shades washing out on white backgrounds.
     const base =
       "inline-flex items-center max-w-full truncate px-2 py-0.5 text-[10px] font-medium rounded-md border uppercase tracking-wide";
 
     if (category === "Exclusions")
-      return cn(base, "bg-red-500/10 text-red-400 border-red-500/20");
+      return cn(base, "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20");
     if (category === "Claims")
-      return cn(base, "bg-orange-500/10 text-orange-400 border-orange-500/20");
+      return cn(base, "bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20");
     if (category === "Premium & Payments")
       return cn(
         base,
-        "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20",
       );
     if (category === "Placement & Subscription")
-      return cn(base, "bg-violet-500/10 text-violet-400 border-violet-500/20");
+      return cn(base, "bg-violet-500/10 text-violet-700 dark:text-violet-400 border-violet-500/20");
     if (category === "Compliance")
-      return cn(base, "bg-amber-500/10 text-amber-400 border-amber-500/20");
+      return cn(base, "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/20");
     if (category === "Information & Records")
-      return cn(base, "bg-yellow-500/10 text-yellow-400 border-yellow-500/20");
+      return cn(base, "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/20");
     if (category === "Disputes")
-      return cn(base, "bg-blue-500/10 text-blue-400 border-blue-500/20");
+      return cn(base, "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20");
     if (category === "Parties & Definitions")
-      return cn(base, "bg-slate-500/10 text-slate-300 border-slate-500/20");
+      return cn(base, "bg-slate-500/10 text-slate-600 dark:text-slate-300 border-slate-500/20");
     if (category === "Termination")
-      return cn(base, "bg-rose-500/10 text-rose-400 border-rose-500/20");
+      return cn(base, "bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-500/20");
     if (category === "Other")
-      return cn(base, "bg-zinc-500/10 text-zinc-300 border-zinc-500/20");
+      return cn(base, "bg-zinc-500/10 text-zinc-600 dark:text-zinc-300 border-zinc-500/20");
 
-    return cn(base, "bg-gray-500/10 text-gray-300 border-gray-500/20");
+    return cn(base, "bg-gray-500/10 text-gray-600 dark:text-gray-300 border-gray-500/20");
   };
 
   const availableLibraries = useMemo(() => {
@@ -476,9 +478,10 @@ export default function ClauseLibraryClient({
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="size-10 rounded-xl hover:bg-surface-container-highest transition-all shrink-0"
+                                  aria-label="Clause actions"
+                                  className="size-8 rounded-lg hover:bg-surface-container-highest transition-all shrink-0"
                                 >
-                                  <MoreHorizontal className="size-5 text-on-surface-variant" />
+                                  <MoreHorizontal className="size-4 text-on-surface-variant" />
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent
@@ -511,13 +514,13 @@ export default function ClauseLibraryClient({
                                     <DropdownMenuItem
                                       className="cursor-pointer text-xs text-destructive focus:text-destructive"
                                       onClick={async () => {
-                                        if (confirm("Are you sure?")) {
-                                          await fetch(
-                                            `/api/clauses/${clause.id}`,
-                                            { method: "DELETE" },
-                                          );
-                                          window.location.reload();
-                                        }
+                                        await fetch(
+                                          `/api/clauses/${clause.id}`,
+                                          { method: "DELETE" },
+                                        );
+                                        setClauses((cs) =>
+                                          cs.filter((c) => c.id !== clause.id),
+                                        );
                                       }}
                                     >
                                       Delete clause
@@ -540,10 +543,10 @@ export default function ClauseLibraryClient({
                               <Badge
                                 variant="outline"
                                 className={cn(
-                                  "text-[10px] font-medium uppercase tracking-wider py-1.5 px-3 rounded-full border",
+                                  "text-[10px] font-medium uppercase tracking-wider py-1 px-2.5 rounded-md border",
                                   clause.status === "Approved"
-                                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                                    : "bg-red-500/10 text-red-400 border-red-500/20",
+                                    ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20"
+                                    : "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
                                 )}
                               >
                                 {clause.status === "Approved"
@@ -552,7 +555,7 @@ export default function ClauseLibraryClient({
                               </Badge>
                               <Badge
                                 variant="outline"
-                                className="text-[10px] font-medium uppercase tracking-wider bg-surface-container py-1.5 px-3 border-outline-variant text-on-surface-variant rounded-full"
+                                className="text-[10px] font-medium uppercase tracking-wider bg-surface-container py-1 px-2.5 border-outline-variant text-on-surface-variant rounded-md"
                               >
                                 {clause.library}
                               </Badge>
@@ -606,16 +609,16 @@ export default function ClauseLibraryClient({
                           <ContextMenuItem
                             className="cursor-pointer text-xs text-destructive"
                             onClick={async () => {
-                              if (confirm("Are you sure?")) {
-                                await fetch(`/api/clauses/${clause.id}`, {
-                                  method: "DELETE",
-                                });
-                                window.location.reload();
-                              }
+                              await fetch(`/api/clauses/${clause.id}`, {
+                                method: "DELETE",
+                              });
+                              setClauses((cs) =>
+                                cs.filter((c) => c.id !== clause.id),
+                              );
                             }}
                           >
                             <Trash2 className="mr-2 size-4" />
-                            Delete Clause
+                            Delete clause
                           </ContextMenuItem>
                         )}
                       </ContextMenuContent>
@@ -694,6 +697,8 @@ export default function ClauseLibraryClient({
                     getCategoryBadgeClasses={getCategoryBadgeClasses}
                     router={router}
                     plan={plan}
+                    isPSA={isPSA}
+                    setClauses={setClauses}
                   />
                 ))
               )}
@@ -759,12 +764,16 @@ function ClauseRow({
   getCategoryBadgeClasses,
   router,
   plan,
+  isPSA,
+  setClauses,
 }: {
   clause: Clause;
   activeWorkspace: any;
   getCategoryBadgeClasses: any;
   router: any;
   plan?: string;
+  isPSA?: boolean;
+  setClauses: React.Dispatch<React.SetStateAction<Clause[]>>;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -837,11 +846,11 @@ function ClauseRow({
                 className={cn(
                   "text-[11px] font-medium py-0.5 px-2 rounded-md border whitespace-nowrap",
                   clause.status === "Approved"
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                    : "bg-red-500/10 text-red-400 border-red-500/20",
+                    ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20"
+                    : "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20",
                 )}
               >
-                {clause.status}
+                {clause.status === "Approved" ? "Approved" : "Unapproved"}
               </Badge>
             </TableCell>
 
@@ -854,6 +863,8 @@ function ClauseRow({
                 <Button
                   variant="ghost"
                   size="icon"
+                  aria-label="Toggle preview"
+                  aria-expanded={isExpanded}
                   className={cn(
                     "size-7 rounded-md transition-all",
                     isExpanded
@@ -875,6 +886,7 @@ function ClauseRow({
                     <Button
                       variant="ghost"
                       size="icon"
+                      aria-label="Clause actions"
                       className="size-7 rounded-md hover:bg-surface-container-highest"
                     >
                       <MoreHorizontal className="size-3.5" />
@@ -892,7 +904,7 @@ function ClauseRow({
                     >
                       View full
                     </DropdownMenuItem>
-                    {!clause.isGlobal && plan !== "fast" && (
+                    {(isPSA || !clause.isGlobal) && plan !== "fast" && (
                       <DropdownMenuItem
                         className="cursor-pointer text-xs"
                         onClick={() =>
@@ -916,7 +928,7 @@ function ClauseRow({
             <Eye className="mr-2 size-3.5 text-primary" />
             View full
           </ContextMenuItem>
-          {!clause.isGlobal && plan !== "fast" && (
+          {(isPSA || !clause.isGlobal) && plan !== "fast" && (
             <ContextMenuItem
               className="cursor-pointer text-xs"
               onClick={() => router.push(`/clause-library/${clause.id}/edit`)}
@@ -925,29 +937,25 @@ function ClauseRow({
               Edit
             </ContextMenuItem>
           )}
-          {!clause.isGlobal && plan !== "fast" && (
+          {(isPSA || !clause.isGlobal) && plan !== "fast" && (
             <ContextMenuItem
               className="cursor-pointer text-xs text-destructive focus:text-destructive"
               onClick={async () => {
-                if (confirm("Are you sure?")) {
-                  await fetch(`/api/clauses/${clause.id}`, {
-                    method: "DELETE",
-                  });
-                  window.location.reload();
-                }
+                await fetch(`/api/clauses/${clause.id}`, { method: "DELETE" });
+                setClauses((cs) => cs.filter((c) => c.id !== clause.id));
               }}
             >
               <Trash2 className="mr-2 size-3.5" />
               Delete
             </ContextMenuItem>
           )}
-          <ContextMenuSeparator className="my-2" />
+          <ContextMenuSeparator className="my-1" />
           <ContextMenuItem
             className="cursor-pointer text-xs"
             onClick={handleCopy}
           >
-            <Copy className="mr-2 size-4" />
-            Copy Clause Text
+            <Copy className="mr-2 size-3.5" />
+            Copy text
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>

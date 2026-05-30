@@ -5,6 +5,28 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * CANONICAL BUTTON CONVENTIONS (WordingsAI)
+ *
+ * Variants:
+ *   default    — primary fill (bg-primary / text-primary-foreground). Main CTA.
+ *   outline    — bordered transparent. Secondary action.
+ *   secondary  — muted fill. Tertiary / grouped action.
+ *   ghost      — no border/fill, hover tint only. Icon rows, table actions.
+ *   destructive — soft red. Delete / remove flows.
+ *   link       — text link style.
+ *
+ * Sizes (stick to these; never use inline h-12/h-14/py-6/px-8 overrides):
+ *   xs      h-6  (supplemental chips, pagination page buttons)
+ *   sm      h-7  (secondary actions, table row actions)
+ *   default h-8  (standard button — the most common)
+ *   lg      h-9  (primary CTA at form bottom)
+ *   icon    size-8  (square icon-only, e.g. kebab triggers)
+ *   icon-xs size-6  / icon-sm size-7  / icon-lg size-9
+ *
+ * Do NOT use uppercase / tracking-widest / text-lg on buttons — it makes them
+ * look oversized and sci-fi. Use normal case, text-sm (default) or text-xs.
+ */
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
@@ -26,7 +48,7 @@ const buttonVariants = cva(
           "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
         xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
+        lg: "h-9 gap-1.5 px-3 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3",
         icon: "size-8",
         "icon-xs":
           "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
