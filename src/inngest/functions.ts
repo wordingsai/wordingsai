@@ -491,7 +491,6 @@ export const evaluateContractRulesJob = inngest.createFunction(
             await upsertAstraAiGeneration({
               contractId,
               kind: "structured_content",
-              payload: finalMap,
               searchText,
             });
           }

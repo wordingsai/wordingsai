@@ -377,7 +377,6 @@ TASK — return strict JSON for the schema. Quality bar: a treaty underwriter sh
           kind: "fast_summary",
           organizationId: contractRecord.organizationId,
           workspaceId: contractRecord.workspaceId,
-          payload: result,
           searchText,
         });
       }
