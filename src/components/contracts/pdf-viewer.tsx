@@ -182,7 +182,7 @@ export const PdfViewer = memo(function PdfViewer({
             </div>
             <div className="flex flex-col items-center gap-1.5">
               <span className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Decoding Neural Engine
+                Loading document
               </span>
               <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant opacity-60">
                 Rendering PDF...

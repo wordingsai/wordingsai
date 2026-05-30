@@ -28,10 +28,10 @@ export default function Error({
       <div className="max-w-md space-y-6">
         <div className="space-y-2">
           <h2 className="text-xl font-semibold tracking-tight text-on-surface">
-            System Failure
+            Something went wrong
           </h2>
           <p className="text-on-surface-variant text-lg font-medium">
-            The cognitive engine encountered an unexpected error.
+            An unexpected error occurred. Our team has been notified.
             <br />
             <span className="text-xs font-mono opacity-50 mt-4 block">
               {error.digest || "Internal Logic Exception"}
@@ -45,7 +45,7 @@ export default function Error({
             className="w-full sm:w-auto bg-primary text-primary-foreground font-black px-10 py-7 rounded-2xl shadow-xl shadow-primary/20 flex items-center gap-3 hover:scale-[1.05] active:scale-95 transition-all text-sm uppercase tracking-widest"
           >
             <RotateCcw className="w-5 h-5" />
-            Recalibrate
+            Try again
           </Button>
 
           <Link href="/" className="w-full sm:w-auto">
@@ -54,7 +54,7 @@ export default function Error({
               className="w-full border-outline-variant text-on-surface-variant font-black px-10 py-7 rounded-2xl flex items-center gap-3 hover:bg-surface-container-high transition-all text-sm uppercase tracking-widest"
             >
               <Home className="w-5 h-5" />
-              Return Base
+              Back to home
             </Button>
           </Link>
         </div>
