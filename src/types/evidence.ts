@@ -155,6 +155,15 @@ export interface ClauseMatchingResult {
     /** Matching confidence (0-1) */
     confidence: number;
 
+    /** Library reference code (e.g. LSW307A, WAI-061) — the identifying code of
+     *  the matched library clause. Core requirement: every match shows which
+     *  library clause was detected. Null when the clause has no code. */
+    code?: string | null;
+
+    /** Library clause approval status ("Approved" | "Not Approved"). Surfaced in
+     *  the picker so the reviewer sees whether the matched standard is approved. */
+    approvalStatus?: string | null;
+
     /** Why this clause matches */
     reason?: string | null;
   }>;

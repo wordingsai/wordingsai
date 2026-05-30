@@ -70,7 +70,7 @@ function ContextMenuContent({
         <ContextMenuPrimitive.Popup
           data-slot="context-menu-content"
           className={cn(
-            "z-50 max-h-(--available-height) min-w-64 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-[2rem] bg-popover p-3 text-popover-foreground shadow-[0_32px_64px_-12px_rgba(0,0,0,0.4)] ring-1 ring-outline-variant duration-150 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+            "z-50 max-h-(--available-height) min-w-48 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-xl bg-popover p-1 text-popover-foreground shadow-[0_16px_40px_-12px_rgba(0,0,0,0.5)] ring-1 ring-outline-variant duration-150 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             className,
           )}
           {...props}
@@ -102,7 +102,7 @@ function ContextMenuLabel({
       data-slot="context-menu-label"
       data-inset={inset}
       className={cn(
-        "px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-on-surface-variant/60 data-inset:pl-10",
+        "px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface-variant/80 data-inset:pl-8",
         className,
       )}
       {...props}
@@ -125,13 +125,12 @@ function ContextMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "group/context-menu-item relative flex cursor-pointer items-center gap-4 rounded-2xl px-4 h-14 text-[12px] font-semibold uppercase tracking-[0.15em] outline-none select-none transition-all duration-200",
-        "hover:scale-[1.02] active:scale-[0.98]",
-        "focus:bg-primary focus:text-primary-foreground focus:shadow-lg focus:shadow-primary/20",
+        "group/context-menu-item relative flex cursor-pointer items-center gap-2 rounded-md px-2 h-9 text-sm font-normal outline-none select-none transition-colors",
+        "focus:bg-primary focus:text-primary-foreground",
         "data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive data-[variant=destructive]:focus:text-destructive-foreground",
         "data-disabled:pointer-events-none data-disabled:opacity-50",
-        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
-        "data-inset:pl-10",
+        "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "data-inset:pl-8",
         className,
       )}
       {...props}
@@ -158,7 +157,7 @@ function ContextMenuSubTrigger({
       data-slot="context-menu-sub-trigger"
       data-inset={inset}
       className={cn(
-        "flex cursor-default items-center rounded-2xl px-4 h-14 text-[12px] font-semibold uppercase tracking-[0.15em] outline-none select-none transition-all focus:bg-primary focus:text-primary-foreground data-open:bg-primary/10 data-open:text-primary [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
+        "flex cursor-default items-center rounded-md px-2 h-9 text-sm font-normal outline-none select-none transition-colors focus:bg-primary focus:text-primary-foreground data-open:bg-primary/10 data-open:text-primary [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -196,7 +195,7 @@ function ContextMenuCheckboxItem({
       data-slot="context-menu-checkbox-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-pointer items-center gap-4 rounded-2xl py-4 pr-10 pl-4 text-[12px] font-semibold uppercase tracking-[0.15em] outline-none select-none transition-all focus:bg-primary focus:text-primary-foreground data-inset:pl-10 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
+        "relative flex cursor-pointer items-center gap-2 rounded-md py-1.5 pr-8 pl-2 text-sm font-normal outline-none select-none transition-colors focus:bg-primary focus:text-primary-foreground data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       checked={checked}
@@ -236,7 +235,7 @@ function ContextMenuRadioItem({
       data-slot="context-menu-radio-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-pointer items-center gap-4 rounded-2xl py-4 pr-10 pl-4 text-[12px] font-semibold uppercase tracking-[0.15em] outline-none select-none transition-all focus:bg-primary focus:text-primary-foreground data-inset:pl-10 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
+        "relative flex cursor-pointer items-center gap-2 rounded-md py-1.5 pr-8 pl-2 text-sm font-normal outline-none select-none transition-colors focus:bg-primary focus:text-primary-foreground data-inset:pl-8 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -258,7 +257,7 @@ function ContextMenuSeparator({
   return (
     <ContextMenuPrimitive.Separator
       data-slot="context-menu-separator"
-      className={cn("-mx-1 my-3 h-px bg-outline-variant/30", className)}
+      className={cn("-mx-1 my-1 h-px bg-outline-variant/60", className)}
       {...props}
     />
   );
@@ -272,7 +271,7 @@ function ContextMenuShortcut({
     <span
       data-slot="context-menu-shortcut"
       className={cn(
-        "ml-auto text-[10px] font-semibold tracking-widest text-on-surface-variant/40 group-focus/context-menu-item:text-primary-foreground/60",
+        "ml-auto text-[10px] font-semibold tracking-widest text-on-surface-variant/70 group-focus/context-menu-item:text-primary-foreground/70",
         className,
       )}
       {...props}

@@ -111,6 +111,8 @@ export async function matchClauseToLibrary(
           name: m.clauseName,
           type: m.library || "General Provision",
           confidence: m.similarity ?? 0,
+          code: (m as { code?: string | null }).code ?? null,
+          approvalStatus: (m as { status?: string | null }).status ?? null,
           heading: null as string | null,
           text: m.clauseText,
           reason: `Semantic match (${Math.round((m.similarity ?? 0) * 100)}%)`,
@@ -221,6 +223,8 @@ export async function matchClauseToLibrary(
             name: exactMatch.clauseName,
             type: exactMatch.category || "General Provision",
             confidence: 1.0,
+            code: exactMatch.code ?? null,
+            approvalStatus: exactMatch.status ?? null,
             heading: exactMatch.heading,
             text: exactMatch.clauseText,
             reason: "Exact word-for-word match",
@@ -272,6 +276,8 @@ export async function matchClauseToLibrary(
             name: libClause.clauseName,
             type: libClause.category,
             confidence,
+            code: libClause.code ?? null,
+            approvalStatus: libClause.status ?? null,
             heading: libClause.heading,
             text: libClause.clauseText,
           };
@@ -285,6 +291,8 @@ export async function matchClauseToLibrary(
             name: libClause.clauseName,
             type: libClause.category,
             confidence: 0,
+            code: libClause.code ?? null,
+            approvalStatus: libClause.status ?? null,
             heading: libClause.heading,
             text: libClause.clauseText,
           };
@@ -302,6 +310,8 @@ export async function matchClauseToLibrary(
         name: m.name,
         type: m.type,
         confidence: parseFloat(m.confidence.toFixed(3)),
+        code: m.code ?? null,
+        approvalStatus: m.approvalStatus ?? null,
         reason: `Semantic similarity match${m.heading ? ` in section "${m.heading}"` : ""}`,
       }));
 

@@ -97,13 +97,13 @@ export function StructuredEvidenceView({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Green":
-        return "bg-emerald-500/10 border-emerald-500/30 text-emerald-700";
+        return "bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
       case "Amber":
-        return "bg-amber-500/10 border-amber-500/30 text-amber-700";
+        return "bg-amber-500/10 border-amber-500/30 text-amber-400";
       case "Red":
-        return "bg-red-500/10 border-red-500/30 text-red-700";
+        return "bg-red-500/10 border-red-500/30 text-red-400";
       default:
-        return "bg-slate-500/10 border-slate-500/30 text-slate-700";
+        return "bg-slate-500/10 border-slate-500/30 text-slate-300";
     }
   };
 
@@ -119,8 +119,8 @@ export function StructuredEvidenceView({
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return "text-emerald-600";
-    if (confidence >= 0.6) return "text-amber-600";
+    if (confidence >= 0.8) return "text-emerald-400";
+    if (confidence >= 0.6) return "text-amber-400";
     return "text-slate-400";
   };
 
@@ -160,7 +160,7 @@ export function StructuredEvidenceView({
             <div className="text-xs text-on-surface-variant/60 font-medium uppercase tracking-wide">
               Matched
             </div>
-            <div className="text-xl font-bold text-emerald-600 mt-1">
+            <div className="text-xl font-bold text-emerald-400 mt-1">
               {evidence.statistics.matchedToLibrary}
             </div>
           </div>
@@ -168,7 +168,7 @@ export function StructuredEvidenceView({
             <div className="text-xs text-on-surface-variant/60 font-medium uppercase tracking-wide">
               Sections
             </div>
-            <div className="text-xl font-bold text-amber-600 mt-1">
+            <div className="text-xl font-bold text-amber-400 mt-1">
               {evidence.statistics.totalSections}
             </div>
           </div>
@@ -207,7 +207,7 @@ export function StructuredEvidenceView({
               {/* Section Header */}
               <button
                 onClick={() => toggleSection(group.section)}
-                className="w-full px-4 py-3 bg-surface-variant/40 hover:bg-surface-variant/60 transition-colors flex items-center justify-between"
+                className="w-full px-4 py-3 bg-surface-container-high/60 hover:bg-surface-container-high transition-colors flex items-center justify-between"
               >
                 <div className="flex items-center gap-3 flex-1 text-left">
                   {expandedSections[group.section] ? (
@@ -265,7 +265,7 @@ export function StructuredEvidenceView({
                             {(item.matchConfidence * 100).toFixed(0)}% match
                           </span>
                           {item.libraryClauseId && (
-                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-500/10 text-slate-600 text-xs">
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-500/10 text-slate-300 text-xs">
                               <CheckCircle2 className="w-3 h-3" />
                               Linked to library
                             </span>
@@ -296,7 +296,7 @@ export function StructuredEvidenceView({
                                   <h5 className="text-xs font-semibold text-on-surface/60 uppercase tracking-wide mb-1">
                                     Original Source
                                   </h5>
-                                  <p className="text-xs text-on-surface-variant/80 bg-surface-variant/30 p-2 rounded rounded-lg font-mono">
+                                  <p className="text-xs text-on-surface-variant/80 bg-surface-container-high/50 p-2 rounded rounded-lg font-mono">
                                     {item.source.chunk}
                                   </p>
                                 </div>
@@ -308,7 +308,7 @@ export function StructuredEvidenceView({
                                   <h5 className="text-xs font-semibold text-on-surface/60 uppercase tracking-wide mb-1">
                                     Similarity Score
                                   </h5>
-                                  <div className="w-full bg-surface-variant/30 rounded-full h-2">
+                                  <div className="w-full bg-surface-container-high/50 rounded-full h-2">
                                     <div
                                       className="bg-primary h-2 rounded-full transition-all"
                                       style={{

@@ -116,13 +116,13 @@
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
+  --muted-foreground: oklch(0.78 0.013 286.067);
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
   /* Softened: chroma 0.191 -> 0.16 so destructive reads calm, not neon, on dark */
   --destructive: oklch(0.704 0.16 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --border: oklch(1 0 0 / 20%);
+  --input: oklch(1 0 0 / 24%);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.809 0.105 251.813);
   --chart-2: oklch(0.623 0.214 259.815);
@@ -143,9 +143,9 @@
   --surface-container-highest: oklch(0.2 0.01 264);
   --surface-dim: oklch(0.08 0.01 264);
   --on-surface: oklch(0.985 0 0);
-  --on-surface-variant: oklch(0.7 0.01 286);
-  --outline: oklch(1 0 0 / 20%);
-  --outline-variant: oklch(1 0 0 / 10%);
+  --on-surface-variant: oklch(0.78 0.013 286);
+  --outline: oklch(1 0 0 / 28%);
+  --outline-variant: oklch(0.42 0.008 286);
 }
 
 @layer base {

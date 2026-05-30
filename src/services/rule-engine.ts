@@ -2759,6 +2759,8 @@ export async function findClosestLibraryMatches(
       clauseName: clauses.clauseName,
       clauseText: clauses.clauseText,
       library: clauses.library,
+      code: clauses.code,
+      status: clauses.status,
       similarity: sql<number>`1.0`,
       keywords: clauses.keywords,
     })
@@ -2807,6 +2809,8 @@ export async function findClosestLibraryMatches(
         clauseName: clauses.clauseName,
         clauseText: clauses.clauseText,
         library: clauses.library,
+        code: clauses.code,
+        status: clauses.status,
         keywords: clauses.keywords,
       })
       .from(clauses)
@@ -2835,6 +2839,8 @@ export async function findClosestLibraryMatches(
       clauseName: clauses.clauseName,
       clauseText: clauses.clauseText,
       library: clauses.library,
+      code: clauses.code,
+      status: clauses.status,
       similarity: sql<number>`1 - (${clauseChunks.embedding} <=> ${vec})`,
       keywords: clauses.keywords,
     })

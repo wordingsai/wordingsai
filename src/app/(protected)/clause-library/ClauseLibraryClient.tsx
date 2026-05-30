@@ -483,10 +483,10 @@ export default function ClauseLibraryClient({
                               </DropdownMenuTrigger>
                               <DropdownMenuContent
                                 align="end"
-                                className="rounded-xl w-48 p-2 border-outline-variant shadow-xl"
+                                className="w-48 border-outline-variant/60"
                               >
                                 <DropdownMenuItem
-                                  className="rounded-xl font-bold h-12"
+                                  className="cursor-pointer text-xs"
                                   onClick={() =>
                                     router.push(`/clause-library/${clause.id}`)
                                   }
@@ -496,7 +496,7 @@ export default function ClauseLibraryClient({
                                 {(isPSA || !clause.isGlobal) &&
                                   plan !== "fast" && (
                                     <DropdownMenuItem
-                                      className="rounded-xl font-bold h-12"
+                                      className="cursor-pointer text-xs"
                                       onClick={() =>
                                         router.push(
                                           `/clause-library/${clause.id}/edit`,
@@ -509,7 +509,7 @@ export default function ClauseLibraryClient({
                                 {(isPSA || !clause.isGlobal) &&
                                   plan !== "fast" && (
                                     <DropdownMenuItem
-                                      className="rounded-xl font-bold h-12 text-destructive"
+                                      className="cursor-pointer text-xs text-destructive focus:text-destructive"
                                       onClick={async () => {
                                         if (confirm("Are you sure?")) {
                                           await fetch(
@@ -571,9 +571,9 @@ export default function ClauseLibraryClient({
                           </div>
                         </div>
                       </ContextMenuTrigger>
-                      <ContextMenuContent className="w-56 rounded-2xl p-2 shadow-2xl border-outline-variant">
+                      <ContextMenuContent className="w-52 border-outline-variant/60">
                         <ContextMenuItem
-                          className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer"
+                          className="cursor-pointer text-xs"
                           onClick={() =>
                             router.push(`/clause-library/${clause.id}`)
                           }
@@ -583,7 +583,7 @@ export default function ClauseLibraryClient({
                         </ContextMenuItem>
                         {(isPSA || !clause.isGlobal) && plan !== "fast" && (
                           <ContextMenuItem
-                            className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer"
+                            className="cursor-pointer text-xs"
                             onClick={() =>
                               router.push(`/clause-library/${clause.id}/edit`)
                             }
@@ -593,7 +593,7 @@ export default function ClauseLibraryClient({
                           </ContextMenuItem>
                         )}
                         <ContextMenuItem
-                          className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer"
+                          className="cursor-pointer text-xs"
                           onClick={() => {
                             navigator.clipboard.writeText(clause.clauseText);
                             toast.success("Clause text copied");
@@ -604,7 +604,7 @@ export default function ClauseLibraryClient({
                         </ContextMenuItem>
                         {(isPSA || !clause.isGlobal) && plan !== "fast" && (
                           <ContextMenuItem
-                            className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer text-destructive"
+                            className="cursor-pointer text-xs text-destructive"
                             onClick={async () => {
                               if (confirm("Are you sure?")) {
                                 await fetch(`/api/clauses/${clause.id}`, {
@@ -943,7 +943,7 @@ function ClauseRow({
           )}
           <ContextMenuSeparator className="my-2" />
           <ContextMenuItem
-            className="rounded-xl font-bold h-12 uppercase text-[11px] tracking-widest cursor-pointer"
+            className="cursor-pointer text-xs"
             onClick={handleCopy}
           >
             <Copy className="mr-2 size-4" />
@@ -955,7 +955,7 @@ function ClauseRow({
       <AnimatePresence>
         {isExpanded && (
           <TableRow className="bg-surface-container-low/50 hover:bg-surface-container-low/50 border-none">
-            <TableCell colSpan={6} className="p-0">
+            <TableCell colSpan={5} className="p-0">
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}

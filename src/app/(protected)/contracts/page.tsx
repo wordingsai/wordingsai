@@ -337,7 +337,7 @@ export default function ContractsPage() {
                 className={cn(
                   "h-7 text-xs gap-1",
                   viewMode === "archive"
-                    ? "bg-amber-500 text-white hover:bg-amber-500/90"
+                    ? "bg-amber-500 text-amber-950 hover:bg-amber-500/90"
                     : "",
                 )}
               >
@@ -621,7 +621,18 @@ export default function ContractsPage() {
                   <ContextMenuTrigger asChild>
                     <div className="group hover:bg-surface-container/50 transition-colors cursor-pointer">
                       {/* Desktop Row */}
-                      <div className="hidden lg:grid grid-cols-[2.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_1fr] gap-3 px-4 py-2.5 items-center">
+                      <div
+                        className="hidden lg:grid grid-cols-[2.5fr_1.5fr_1fr_1fr_1.2fr_1.2fr_1fr] gap-3 px-4 py-2.5 items-center"
+                        role="link"
+                        tabIndex={0}
+                        onClick={() => router.push(`/contracts/${contract.id}`)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            router.push(`/contracts/${contract.id}`);
+                          }
+                        }}
+                      >
                         <div className="flex items-center gap-2.5 min-w-0">
                           <div className="size-7 bg-surface-container-highest rounded-md flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
                             <FileText className="size-3.5 text-on-surface-variant group-hover:text-primary transition-colors" />
@@ -696,6 +707,7 @@ export default function ContractsPage() {
                                 variant="ghost"
                                 size="icon"
                                 className="size-7 rounded-md hover:bg-surface-container-highest"
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <MoreHorizontal className="size-3.5" />
                               </Button>

@@ -91,8 +91,8 @@ export function ClauseMatchingModal({
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return "text-emerald-600";
-    if (confidence >= 0.6) return "text-amber-600";
+    if (confidence >= 0.8) return "text-emerald-400";
+    if (confidence >= 0.6) return "text-amber-400";
     return "text-slate-400";
   };
 
@@ -114,7 +114,7 @@ export function ClauseMatchingModal({
 
         <div className="space-y-6">
           {/* Document Clause */}
-          <div className="bg-surface-variant/30 border border-outline/50 rounded-lg p-4 space-y-3">
+          <div className="bg-surface-container-high/50 border border-outline/50 rounded-lg p-4 space-y-3">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h4 className="font-semibold text-sm text-on-surface">
@@ -130,11 +130,11 @@ export function ClauseMatchingModal({
               </div>
               <button
                 onClick={copyToClipboard}
-                className="p-1.5 hover:bg-surface-variant/60 rounded transition-colors"
+                className="p-1.5 hover:bg-surface-container-high rounded transition-colors"
                 title="Copy text"
               >
                 {copied ? (
-                  <Check className="w-4 h-4 text-emerald-600" />
+                  <Check className="w-4 h-4 text-emerald-400" />
                 ) : (
                   <Copy className="w-4 h-4 text-on-surface-variant/60" />
                 )}
@@ -168,18 +168,47 @@ export function ClauseMatchingModal({
                       "w-full p-3 rounded-lg border-2 text-left transition-all",
                       selectedId === match.id
                         ? "bg-primary/10 border-primary"
-                        : "bg-surface hover:bg-surface-variant/50 border-outline/50",
+                        : "bg-surface hover:bg-surface-container-high/60 border-outline/50",
                     )}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex flex-wrap items-center gap-1.5 mb-1">
                           <h5 className="font-medium text-sm text-on-surface truncate">
                             {match.name}
                           </h5>
+                          {/* Library reference code (e.g. LSW307A / WAI-061) —
+                              the identifying code of the matched library clause.
+                              Core requirement: every match shows which library
+                              clause was detected. */}
+                          {match.code && (
+                            <span
+                              className="inline-flex items-center px-1.5 py-0 rounded text-[10px] font-mono font-medium bg-primary/10 text-primary border border-primary/30"
+                              title="Library reference code"
+                            >
+                              {match.code}
+                            </span>
+                          )}
+                          {/* Approval status of the matched library standard so
+                              the reviewer knows if it is an approved wording. */}
+                          {match.approvalStatus && (
+                            <span
+                              className={cn(
+                                "inline-flex items-center px-1.5 py-0 rounded text-[10px] font-medium border",
+                                match.approvalStatus === "Approved"
+                                  ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
+                                  : "bg-amber-500/10 text-amber-300 border-amber-500/30",
+                              )}
+                              title="Library clause approval status"
+                            >
+                              {match.approvalStatus === "Approved"
+                                ? "Approved"
+                                : "Unapproved"}
+                            </span>
+                          )}
                           {idx === 0 &&
                             matchResult.recommendedMatch?.id === match.id && (
-                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-700">
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-300">
                                 <CheckCircle2 className="w-3 h-3" />
                                 Recommended
                               </span>
