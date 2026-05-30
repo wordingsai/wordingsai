@@ -29,11 +29,13 @@ export const STRUCTURING_WINDOW_SIZE = 2_500;
 export const STRUCTURING_OVERLAP = 250;
 export const MAX_AI_MAP_WINDOWS = 8;
 
-/** Fast models only — one model per 60s step, ~15s each with fallbacks. */
+/** Fast models only — one model per 60s step, ~15s each with fallbacks.
+ * Gemini-only: we run on the free Gemini tier, so fallbacks stay within Gemini
+ * models (which have independent quotas) rather than keyless foreign providers
+ * that would only fail and waste an attempt. */
 const STRUCTURING_FAST_MODELS = [
   MODEL_FLASH,
   MODEL_FLASH_LITE_PREVIEW,
-  "direct-groq:llama-3.1-8b-instant",
 ];
 
 /**

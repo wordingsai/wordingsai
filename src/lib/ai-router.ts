@@ -9,23 +9,14 @@ import { z } from "zod";
 import { getGlobalCache, setGlobalCache } from "./cache";
 import { createHash } from "node:crypto";
 
-if (!process.env.OPENROUTER_API_KEY) {
-  console.warn("OPENROUTER_API_KEY is not set in .env");
-}
-if (!process.env.GROQ_API_KEY) {
-  console.warn("GROQ_API_KEY is not set in .env");
-}
+// We run Gemini-only, so only the Gemini keys are required. The other provider
+// clients below are kept for the explicit catch-all path but are not part of any
+// active fallback chain, so we don't warn about their (deliberately unset) keys.
 if (!process.env.GEMINI_FAST_API_KEY) {
   console.warn("GEMINI_FAST_API_KEY is not set in .env");
 }
 if (!process.env.GEMINI_DEEP_API_KEY) {
   console.warn("GEMINI_DEEP_API_KEY is not set in .env");
-}
-if (!process.env.MISTRAL_API_KEY) {
-  console.warn("MISTRAL_API_KEY is not set in .env");
-}
-if (!process.env.HUGGING_FACE_API_KEY) {
-  console.warn("HUGGING_FACE_API_KEY is not set in .env");
 }
 
 export const openrouter = createOpenRouter({
@@ -262,27 +253,32 @@ export function resolveTierAwareModels(
   return [...new Set([...explicit, ...planModels])];
 }
 
+/**
+ * Model fallback chains. Gemini-only by design: WordingsAI runs on the free
+ * Gemini tier (plus optional Vertex via GCP credits when GCP_PROJECT_ID is set),
+ * so resilience comes from spreading across multiple Gemini models — each with
+ * its own independent quota (2.5 Pro/Flash, 3.x Flash-lite, Gemma) — not from
+ * foreign vendors. The previous chains listed Groq/Mistral/OpenAI(OpenRouter)
+ * fallbacks whose keys are never set, so on a Gemini rate-limit they only failed
+ * and wasted an attempt before reaching the next Gemini model. If a foreign
+ * provider key is ever added, reintroduce it here intentionally.
+ */
 export function getPlanModels(plan: OrganizationPlan): string[] {
   if (plan === "plus") {
     return [
-      MODEL_PRO, // Vertex 2.5 Pro
-      MODEL_FLASH, // Vertex 2.5 Flash
-      "direct-groq:llama-3.3-70b-versatile", // Fast Groq fallback
-      "direct-mistral:mistral-large-latest", // Mistral fallback
-      MODEL_GEMMA_4_31B,
-      MODEL_GOOGLE_PRO,
-      MODEL_GEMINI_3_FLASH,
-      "openai/gpt-4o",
+      MODEL_PRO, // Gemini 2.5 Pro (Vertex if GCP creds, else direct Gemini)
+      MODEL_FLASH, // Gemini 2.5 Flash
+      MODEL_GOOGLE_PRO, // direct Gemini 2.5 Pro
+      MODEL_GEMINI_3_FLASH, // Gemini 3 Flash
+      MODEL_GEMMA_4_31B, // Gemma 4 31B
     ];
   }
-  // Cost-Efficient Tier
+  // Cost-Efficient Tier — Gemini fast models, independent quotas.
   return [
-    MODEL_FLASH, // Vertex 2.5 Flash
-    MODEL_GEMMA_4_31B,
-    "direct-groq:llama-3.1-8b-instant", // Quick Groq fallback
-    MODEL_FLASH_LITE_PREVIEW,
-    MODEL_GOOGLE_FLASH,
-    "direct-mistral:mistral-small-latest",
+    MODEL_FLASH, // Gemini 2.5 Flash
+    MODEL_FLASH_LITE_PREVIEW, // Gemini 3.1 Flash-lite
+    MODEL_GOOGLE_FLASH, // direct Gemini 2.5 Flash
+    MODEL_GEMMA_4_31B, // Gemma 4 31B
   ];
 }
 
