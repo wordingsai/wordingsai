@@ -282,11 +282,78 @@ function extractAsAttachedRefs(text: string): string[] {
   return out;
 }
 
+/**
+ * Matches an incorporated-by-reference row that carries a market code, e.g.
+ * "Non-Renewal Clause (LSW305).", "Notification of Claims Clause (LSW 316)",
+ * "War Hijacking and Other Perils Reinsurance Clause (AVN48B)". Captures the
+ * clause name and the code. Reinsurance slips list these under a single
+ * "Incorporated Clauses"/"Conditions" provision — one section body holding 15+
+ * coded references. Without splitting, the whole block collapses to one row
+ * matched to the FIRST code only (Richard's UMR001 report: ~17 clauses shown
+ * as a single "LSW305" match). Each captured pair becomes its own Tier-A row.
+ */
+const CODED_REF =
+  /([A-Z][A-Za-z0-9 ,/&'\-]{2,70}?)\s*\(\s*((?:LSW|LMA|NMA|JELC|JCC|JC|LPO|IUA|NMR|MAP|AVN|CL)\s?\d{2,4}[A-Z]?)\s*\)/g;
+
+/**
+ * Extracts coded "(LSWxxx)" by-name reference rows from contract text. Returns
+ * one entry per DISTINCT code (first occurrence wins, order preserved). Only
+ * names that read like a clause title qualify (contain "Clause" or ≥2 words),
+ * so inline prose citations are skipped — those still fall through unchanged.
+ */
+function extractCodedRefs(text: string): Array<{ name: string; code: string }> {
+  const out: Array<{ name: string; code: string }> = [];
+  const seen = new Set<string>();
+  CODED_REF.lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = CODED_REF.exec(text)) !== null) {
+    let name = m[1].replace(/\s+/g, " ").trim().replace(/^[,.\-]+|[,.\-]+$/g, "");
+    const code = m[2].replace(/\s+/g, " ").trim();
+    if (!name || !code) continue;
+    // Trim a leading ALL-CAPS column label that bled into the capture (e.g.
+    // "PERIOD Non-Renewal Clause" → "Non-Renewal Clause").
+    const trimmed = name.match(
+      /([A-Z][a-z][A-Za-z0-9 ,/&'\-]*?\bClause\b[A-Za-z0-9 ,/&'\-]*)$/,
+    );
+    if (trimmed) name = trimmed[1].trim();
+    // Collapse an immediate duplicate leading word from a wrapped column label
+    // ("Period Period Clause" → "Period Clause").
+    name = name.replace(/^(\b[\w']+\b)\s+\1\b/i, "$1");
+    // If the name capture got clipped to a bare generic "Clause" (the real name
+    // carried an inner parenthetical the char-class couldn't cross, e.g.
+    // "Aviation Date Recognition (Reinsurance) Clause"), recover the full name
+    // by reading back from just before the code in the source text.
+    if (/^clause$/i.test(name)) {
+      const lead = text.slice(Math.max(0, m.index - 80), m.index);
+      const recovered = lead.match(
+        /([A-Z][A-Za-z0-9 ,/&'()\-]*?\bClause\b)\s*$/,
+      );
+      if (recovered) name = recovered[1].replace(/\s+/g, " ").trim();
+    }
+    const looksLikeClause =
+      /\bClause\b/i.test(name) || name.split(/\s+/).length >= 2;
+    if (!looksLikeClause) continue;
+    if (name.length < 3 || name.length > 80) continue;
+    const codeKey = baseCodeKey(code);
+    if (!codeKey || codeKey.length < 5) continue;
+    if (seen.has(codeKey)) continue;
+    seen.add(codeKey);
+    out.push({ name, code });
+  }
+  return out;
+}
+
 function buildChecklistCandidates(
   docMap: StructuredContract,
 ): ChecklistCandidate[] {
   const candidates: ChecklistCandidate[] = [];
   const seenKeys = new Set<string>();
+  // Dedup signature (heading key + leading body text) to collapse a provision
+  // the document map repeats verbatim — e.g. a two-layer XoL that restates its
+  // whole Conditions list once per layer (the "131 items / 57 headings" case).
+  // Two genuinely different clauses that merely share a heading word keep
+  // different bodies, so they are NOT collapsed.
+  const seenDedup = new Set<string>();
   const buildSemanticQuery = (heading: string, body: string) => {
     const parts = [heading?.trim(), body?.trim()].filter(Boolean);
     return parts.join("\n\n").slice(0, 4000);
@@ -319,6 +386,15 @@ function buildChecklistCandidates(
     // lines and mid-clause list items — they belong in the document map, not
     // the clause checklist.
     if (isNonClauseHeading(heading, runningHeaderKeys)) return;
+    // Collapse a provision the document map repeats verbatim (heading + same
+    // leading body). A two-layer XoL slip restates its whole Conditions list
+    // once per layer, which was producing duplicate checklist rows (e.g.
+    // "PERIOD" / "Indemnification and Interpretation" appearing twice, and a
+    // "131 items / 57 headings" mismatch). Keying on heading + body means two
+    // genuinely different provisions that merely share a heading word are kept.
+    const dedupSig = `${normalizeHeadingKey(heading)}::${normalizeHeadingKey(bodyText).slice(0, 160)}`;
+    if (seenDedup.has(dedupSig)) return;
+    seenDedup.add(dedupSig);
     const sectionQuery = buildSemanticQuery(heading, bodyText);
     candidates.push({
       heading,
@@ -360,6 +436,27 @@ function buildChecklistCandidates(
       semanticQuery: sectionQuery,
       embeddingQuery: prepareEmbeddingText(sectionQuery),
       referenceName: refName,
+    });
+  }
+
+  // Richard's Category A: split an incorporated-clause list into one row per
+  // coded reference. A slip lists many "Name (LSWxxx)" entries inside a single
+  // "Incorporated Clauses"/"Conditions" provision body; left whole, the section
+  // collapses to one row matched to the first code only. Emit each distinct
+  // coded reference as its own heading-only candidate ("Name (CODE)") so the
+  // batch runner's code path resolves it to the exact library clause (100%).
+  for (const { name, code } of extractCodedRefs(fullText)) {
+    const heading = `${name} (${code})`;
+    const key = normalizeHeadingKey(name);
+    if (!key || seenKeys.has(key)) continue;
+    if (isNonClauseHeading(name, runningHeaderKeys)) continue;
+    seenKeys.add(key);
+    const sectionQuery = buildSemanticQuery(heading, "");
+    candidates.push({
+      heading,
+      fullText: heading,
+      semanticQuery: sectionQuery,
+      embeddingQuery: prepareEmbeddingText(sectionQuery),
     });
   }
 
