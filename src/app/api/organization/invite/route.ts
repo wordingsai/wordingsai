@@ -5,9 +5,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/db/drizzle";
 import { invitation } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY!);
+import { getResend } from "@/lib/resend";
 
 function generateInviteCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -56,7 +54,7 @@ export async function POST(request: Request) {
       const senderAddress =
         process.env.EMAIL_SENDER_ADDRESS || "onboarding@resend.dev";
 
-      const { data, error: emailError } = await resend.emails.send({
+      const { data, error: emailError } = await getResend().emails.send({
         from: `${senderName} <${senderAddress}>`,
         to: email.trim().toLowerCase(),
         subject: "You've been invited to join an organization on WordingsAI",

@@ -6,7 +6,7 @@ import { lastLoginMethod, organization } from "better-auth/plugins";
 import { stripe as stripePlugin } from "@better-auth/stripe";
 import { multiSession } from "better-auth/plugins/multi-session";
 import type { Subscription } from "@better-auth/stripe";
-import { Resend } from "resend";
+import { getResend } from "@/lib/resend";
 import ForgotPasswordEmail from "@/components/emails/reset-password";
 import VerifyEmail from "@/components/emails/verify-email";
 import { db } from "@/db/drizzle";
@@ -17,7 +17,6 @@ import { ac, psa, su, u } from "./auth/permissions";
 import { stripe as stripeInstance } from "./stripe";
 import { eq } from "drizzle-orm";
 
-const resend = new Resend(process.env.RESEND_API_KEY as string);
 const senderName = process.env.EMAIL_SENDER_NAME || "WordingsAI";
 const senderAddress =
   process.env.EMAIL_SENDER_ADDRESS || "onboarding@resend.dev";
@@ -38,7 +37,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
       try {
-        const { error } = await resend.emails.send({
+        const { error } = await getResend().emails.send({
           from: `${senderName} <${senderAddress}>`,
           to: user.email,
           subject: "Verify your email",
@@ -68,7 +67,7 @@ export const auth = betterAuth({
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
       try {
-        const { error } = await resend.emails.send({
+        const { error } = await getResend().emails.send({
           from: `${senderName} <${senderAddress}>`,
           to: user.email,
           subject: "Reset your password",
@@ -215,7 +214,7 @@ export const auth = betterAuth({
       sendInvitationEmail: async (data) => {
         try {
           const { invitation, organization, inviter } = data;
-          const { error } = await resend.emails.send({
+          const { error } = await getResend().emails.send({
             from: `${senderName} <${senderAddress}>`,
             to: invitation.email,
             subject: `You've been invited to join ${organization.name} on WordingsAI`,

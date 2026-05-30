@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import crypto from "node:crypto";
 import { and, eq } from "drizzle-orm";
-import { Resend } from "resend";
+import { getResend } from "@/lib/resend";
 import { db } from "@/db/drizzle";
 import {
   workspaces,
@@ -27,7 +27,6 @@ import { auth } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 const INVITE_TTL_DAYS = 7;
-const resend = new Resend(process.env.RESEND_API_KEY!);
 
 function newToken(): string {
   return crypto.randomBytes(24).toString("base64url");
@@ -163,7 +162,7 @@ export async function POST(
       const senderAddress =
         process.env.EMAIL_SENDER_ADDRESS || "onboarding@resend.dev";
 
-      const { error: emailError } = await resend.emails.send({
+      const { error: emailError } = await getResend().emails.send({
         from: `${senderName} <${senderAddress}>`,
         to: email,
         subject: `You've been invited to the "${auth_check.workspaceName}" workspace on WordingsAI`,

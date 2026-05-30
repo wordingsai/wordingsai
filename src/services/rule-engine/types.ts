@@ -98,7 +98,10 @@ export function sanitizeEvidenceItems(
   return sanitized;
 }
 
-export const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+// GoogleGenerativeAI does not throw on an undefined key at construction (unlike
+// Resend/Supabase), so a module-scope const is build-safe; we still default to
+// "" rather than a non-null assertion for cleanliness.
+export const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 
 export type KnownContractType =
   | "reinsurance"
