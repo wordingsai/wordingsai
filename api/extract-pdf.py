@@ -32,12 +32,7 @@ from urllib.parse import parse_qs, quote
 import pdfplumber
 
 
-# Must be >= the upload UI limit (100 MB, see contracts/upload/page.tsx MAX_SIZE).
-# When this was 50 MB, machine-readable contracts between 50-100 MB (e.g. the
-# 57 MB "02 - Lead Broker Willis Re" slip) were rejected here with 413, silently
-# falling back to the slow, quota-bound Gemini chunked OCR path and stalling.
-# pdfplumber handles these fine (02 extracts ~407k chars in ~11s).
-MAX_BYTES = 100 * 1024 * 1024  # 100 MB cap (matches the upload UI limit)
+MAX_BYTES = 50 * 1024 * 1024  # 50 MB cap (matches upload UI limit)
 
 
 def _table_to_markdown(table: list[list[str | None]]) -> str:
