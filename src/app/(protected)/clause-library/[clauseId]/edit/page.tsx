@@ -341,7 +341,7 @@ export default function EditClausePage() {
                   </SelectTrigger>
                   <SelectContent className="rounded-xl">
                     <SelectItem value="Approved">Approved</SelectItem>
-                    <SelectItem value="Not Approved">Not Approved</SelectItem>
+                    <SelectItem value="Not Approved">Unapproved</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

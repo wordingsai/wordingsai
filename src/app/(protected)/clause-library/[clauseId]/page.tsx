@@ -339,7 +339,7 @@ export default function IndividualClausePage() {
                         : "bg-red-500/10 text-red-600 border-red-500/20",
                     )}
                   >
-                    {clause.status}
+                    {clause.status === "Approved" ? "Approved" : "Unapproved"}
                   </Badge>
                 )}
                 {clause.code ? (
@@ -477,7 +477,9 @@ export default function IndividualClausePage() {
                 <MetaRow label="Library" value={clause.library} />
                 <MetaRow
                   label="Status"
-                  value={clause.status || "Approved"}
+                  value={
+                    clause.status === "Approved" ? "Approved" : "Unapproved"
+                  }
                   valueClassName={cn(
                     clause.status === "Approved"
                       ? "text-emerald-500"

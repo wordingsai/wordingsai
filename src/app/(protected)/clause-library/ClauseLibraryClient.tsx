@@ -388,7 +388,11 @@ export default function ClauseLibraryClient({
             <SelectContent>
               <SelectItem value="status">All statuses</SelectItem>
               <SelectItem value="Approved">Approved</SelectItem>
-              <SelectItem value="Unapproved">Unapproved</SelectItem>
+              {/* Value matches the stored enum ("Not Approved"); label shows
+                  "Unapproved" per the agreed terminology. Previously value was
+                  "Unapproved" which never matched the data, so the filter
+                  returned nothing. */}
+              <SelectItem value="Not Approved">Unapproved</SelectItem>
             </SelectContent>
           </Select>
         </div>
