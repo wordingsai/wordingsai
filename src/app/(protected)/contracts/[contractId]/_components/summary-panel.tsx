@@ -237,7 +237,7 @@ export function SummaryPanel({
           layout
           transition={{ duration: 0.15, ease: "easeOut" }}
           className={cn(
-            "flex-1 min-w-0 overflow-y-auto transition-all duration-500",
+            "flex-1 min-w-0 overflow-y-auto",
             selectedResultId
               ? "xl:flex-none xl:w-[300px] xl:max-w-[300px] xl:max-h-[min(70vh,640px)]"
               : "xl:flex-1",
