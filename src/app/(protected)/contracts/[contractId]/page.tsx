@@ -152,10 +152,6 @@ export default function ContractAnalysisPage() {
   }, [loading, showFastResults, isProcessing, contract, runAnalysis]);
 
   useEffect(() => {
-    // Redirect logic removed - automated pipeline handles deep analysis now
-  }, []);
-
-  useEffect(() => {
     if (hasAnalysis && contract) {
       const rulesChanged =
         contract.analysisResults?.some(

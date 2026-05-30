@@ -1171,9 +1171,7 @@ export async function storeRuleResultWithMatches({
   granularGuidance?: RuleEvaluationResult["granularGuidance"];
   coordinates?: any;
 }) {
-  console.log(`[RuleEngine] storeRuleResultWithMatches START for ${ruleId}`);
   try {
-    console.log("[Test Debug] Inside storeRuleResultWithMatches try block");
     const safeEvidence = sanitizeEvidenceItems(matchedContractChunks);
     console.log(`[RuleEngine] Safe evidence count: ${safeEvidence.length}`);
 

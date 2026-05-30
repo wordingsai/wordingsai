@@ -4,10 +4,6 @@ import { useEffect } from "react";
 
 export function InstrumentationClient() {
   useEffect(() => {
-    // Client-side instrumentation or monitoring initialization
-    // For example, setting up error tracking or performance monitoring
-    console.log("Cognitive Engine Client-Side Instrumentation Active");
-
     const handleError = (event: ErrorEvent) => {
       // Send error to monitoring service
       console.error("Client Error Captured:", event.error);
