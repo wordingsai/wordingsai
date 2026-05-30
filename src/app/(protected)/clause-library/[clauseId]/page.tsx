@@ -347,10 +347,12 @@ export default function IndividualClausePage() {
                     {clause.code}
                   </span>
                 ) : null}
-                <span className="text-on-surface-variant/60 flex items-center gap-1">
-                  <ShieldCheck className="size-3 text-primary" />
-                  Verified standard wording
-                </span>
+                {clause.status === "Approved" ? (
+                  <span className="text-on-surface-variant/60 flex items-center gap-1">
+                    <ShieldCheck className="size-3 text-primary" />
+                    Verified standard wording
+                  </span>
+                ) : null}
               </div>
             </div>
 
@@ -503,10 +505,14 @@ export default function IndividualClausePage() {
                   <UserCircle className="size-5 text-on-surface-variant shrink-0" />
                   <div className="min-w-0">
                     <p className="text-xs font-medium text-on-surface">
-                      Organization approved
+                      {clause.status === "Approved"
+                        ? "Organization approved"
+                        : "Awaiting approval"}
                     </p>
                     <p className="text-[11px] text-on-surface-variant">
-                      Validated by super user
+                      {clause.status === "Approved"
+                        ? "Validated by a super user"
+                        : "Not yet validated by a super user"}
                     </p>
                   </div>
                 </div>
