@@ -197,7 +197,7 @@ export default function NewRulePage() {
         toast.error(error.error || "Failed to create rule");
       }
     } catch (err) {
-      toast.error("Connection failure to neural engine");
+      toast.error("Could not save. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -584,7 +584,7 @@ export default function NewRulePage() {
             <div className="flex items-center gap-3 text-on-surface-variant">
               <ShieldCheck className="w-5 h-5 text-emerald-500" />
               <p className="text-xs font-bold uppercase tracking-widest">
-                Authorized Neural Encoding
+                Securely saved
               </p>
             </div>
             <Button

@@ -67,7 +67,7 @@ export function RulesEvaluationPanel({
         <h2 className="text-2xl md:text-lg font-semibold text-on-surface mb-4">
           {showFastResults
             ? "Rules evaluation ready"
-            : "Neural evaluation pending"}
+            : "Rule evaluation pending"}
         </h2>
         <p className="text-on-surface-variant text-base md:text-lg font-medium max-w-md mb-8 md:mb-10">
           {showFastResults

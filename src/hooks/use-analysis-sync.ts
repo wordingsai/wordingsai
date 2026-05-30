@@ -160,10 +160,10 @@ export function useAnalysisSync(contractId: string) {
             );
           }
         } else {
-          toast.error("Vetting sequence failed to initialize.");
+          toast.error("Could not start the analysis. Please try again.");
         }
       } catch (error) {
-        toast.error("Network connection compromised.");
+        toast.error("Network error. Please check your connection.");
       } finally {
         setAnalysisLoading(false);
       }

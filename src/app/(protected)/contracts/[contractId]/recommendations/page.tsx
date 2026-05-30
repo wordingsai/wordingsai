@@ -70,7 +70,7 @@ export default function RuleRecommendationsPage() {
   const [autoProceeding, setAutoProceeding] = useState(true);
   const pipelineHandledRef = useRef(false);
   const [analysisStatus, setAnalysisStatus] = useState<string>(
-    "Initializing Neural Intake...",
+    "Starting analysis…",
   );
   const [progress, setProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
@@ -250,7 +250,7 @@ export default function RuleRecommendationsPage() {
 
     toast.promise(promise, {
       loading:
-        "Configuring intelligence layers and initializing neural evaluation...",
+        "Preparing analysis and starting rule evaluation…",
       success: () => {
         router.push(`/contracts/${contractId}`);
         return "Intelligence modules authorized. Starting deep analysis...";
@@ -284,7 +284,7 @@ export default function RuleRecommendationsPage() {
               <h1 className="text-xl font-semibold tracking-tight text-on-surface mb-2">
                 {authorizing
                   ? "Authorizing Matched Rules"
-                  : "Neural Scan in Progress"}
+                  : "Analysis in progress"}
               </h1>
               <p className="text-on-surface-variant font-medium text-sm mb-6">
                 {authorizing
@@ -307,7 +307,7 @@ export default function RuleRecommendationsPage() {
 
           <div className="flex items-center justify-center gap-6 text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface-variant/40">
             <div className="flex items-center gap-2">
-              <Zap className="w-3 h-3" /> OCR Matrix
+              <Zap className="w-3 h-3" /> Text extraction
             </div>
             <div className="flex items-center gap-2">
               <Search className="w-3 h-3" /> Semantic Mapping
@@ -335,11 +335,11 @@ export default function RuleRecommendationsPage() {
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />
               </div>
               <span className="text-xs font-medium uppercase tracking-wider text-emerald-500">
-                Neural Scan Complete
+                Analysis complete
               </span>
             </div>
             <h1 className="text-2xl lg:text-3xl font-semibold tracking-tight text-on-surface">
-              Brain Configuration
+              Recommended rules
             </h1>
             <p className="text-on-surface-variant text-lg font-medium max-w-2xl">
               We&apos;ve identified the following clauses within{" "}
@@ -512,7 +512,7 @@ export default function RuleRecommendationsPage() {
                 </div>
                 <div>
                   <h4 className="font-semibold uppercase tracking-tight text-on-surface text-sm">
-                    Neural Efficiency
+                    Efficient analysis
                   </h4>
                   <p className="text-[10px] font-bold text-on-surface-variant uppercase">
                     Skipping {otherRules.length} redundant modules

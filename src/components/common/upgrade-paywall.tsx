@@ -27,7 +27,7 @@ export function UpgradePaywall({
   featureName,
 }: UpgradePaywallProps) {
   const plusFeatures = [
-    "Customizable Neural Rules",
+    "Customizable rules",
     "Comprehensive Clause Library",
     "Advanced Risk Vector Analysis",
     "Infinite Organization Scalability",

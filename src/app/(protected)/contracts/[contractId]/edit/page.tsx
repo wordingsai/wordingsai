@@ -247,7 +247,7 @@ export default function EditContractPage() {
         <div className="flex flex-col items-center gap-4 text-primary animate-pulse">
           <Loader2 className="w-12 h-12 animate-spin" />
           <span className="font-semibold uppercase tracking-widest text-xs">
-            Loading Neural Data...
+            Loading…
           </span>
         </div>
       </main>

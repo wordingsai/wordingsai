@@ -125,7 +125,7 @@ export function PlusAnalysisPanel({
         <div className="bg-surface-container-low border border-dashed border-outline-variant/30 rounded-xl p-32 flex flex-col items-center justify-center gap-6 animate-pulse">
           <Sparkles className="size-12 text-secondary/40" />
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-on-surface-variant/40">
-            Synthesizing Neural Insights...
+            Generating insights…
           </p>
         </div>
       )}

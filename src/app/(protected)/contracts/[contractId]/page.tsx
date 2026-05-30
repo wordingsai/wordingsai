@@ -246,7 +246,7 @@ export default function ContractAnalysisPage() {
         <div className="flex flex-col items-center gap-4 text-primary animate-pulse">
           <BrainCircuit className="w-12 h-12 animate-spin-slow" />
           <span className="font-semibold uppercase tracking-widest text-xs">
-            Accessing Neural Archive...
+            Loading contract…
           </span>
         </div>
       </main>
@@ -325,7 +325,7 @@ export default function ContractAnalysisPage() {
   const analysisStatusLabel =
     contract.analysisStatus ||
     contract.analysis?.status ||
-    "Cognitive Analysis in Progress";
+    "Analysis in progress";
 
   return (
     <main className="flex-1 p-4 md:p-6 lg:p-10 overflow-x-hidden">
