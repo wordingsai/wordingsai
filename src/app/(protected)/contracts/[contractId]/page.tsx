@@ -1300,10 +1300,11 @@ export default function ContractAnalysisPage() {
                                   )}
                                 >
                                   {selectedEvent.status === "Variation" ||
-                                  selectedEvent.status === "Amber" ||
-                                  selectedEvent.status === "Custom"
-                                    ? "Custom"
-                                    : selectedEvent.status}
+                                  selectedEvent.status === "Amber"
+                                    ? "Variation"
+                                    : selectedEvent.status === "Custom"
+                                      ? "Custom"
+                                      : selectedEvent.status}
                                 </Badge>
                                 {/* Library reference/code of the matched clause
                                     — the client's core requirement that every

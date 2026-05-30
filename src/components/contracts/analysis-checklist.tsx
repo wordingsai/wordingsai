@@ -235,9 +235,11 @@ export function AnalysisChecklist({
                         >
                           {isGreen
                             ? "Matched"
-                            : isAmber
-                              ? "Custom"
-                              : "Missing"}
+                            : status === "Variation" || status === "Amber"
+                              ? "Variation"
+                              : isAmber
+                                ? "Custom"
+                                : "Missing"}
                         </Badge>
                       </div>
                       <p className="text-[11px] text-on-surface-variant/70 truncate mt-0.5">
