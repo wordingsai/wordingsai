@@ -41,8 +41,9 @@ export interface AiGenerationDocument {
   contractId: string;
   organizationId?: string | null;
   workspaceId?: string | null;
-  /** Full JSON / text payload (large) */
-  payload: unknown;
+  /** Deprecated: the large payload is NOT stored in Astra (8 KB indexed-field
+   *  cap). It lives in Postgres (contracts.structuredContent / .analysis). */
+  payload?: unknown;
   /** Short text used for vectorize + preview search */
   content: string;
   $vectorize: string;

@@ -194,7 +194,15 @@ export async function upsertAstraAiGeneration(args: {
   kind: AiGenerationKind;
   organizationId?: string | null;
   workspaceId?: string | null;
-  payload: unknown;
+  /** Deprecated/ignored. The full payload (e.g. the document map) lives in
+   *  Postgres (contracts.structuredContent / contracts.analysis); it is the
+   *  source of truth and is read from there, never from Astra. We intentionally
+   *  do NOT store it here: Astra auto-indexes every field and caps an indexed
+   *  string at 8000 bytes, so a large `paragraphs` value (e.g. a 33 KB block on
+   *  contract UMR001) made the whole insert fail with "Document size limitation
+   *  violated", which failed analysis at 50%. Only the short, truncated
+   *  `searchText` is needed here for $vectorize search. */
+  payload?: unknown;
   /** Text excerpt for $vectorize (e.g. summary or section headings) */
   searchText: string;
 }): Promise<string> {
@@ -210,7 +218,7 @@ export async function upsertAstraAiGeneration(args: {
     contractId: args.contractId,
     organizationId: args.organizationId ?? null,
     workspaceId: args.workspaceId ?? null,
-    payload: args.payload,
+    // payload intentionally omitted — see note above (Astra 8 KB indexed-field cap).
     content,
     $vectorize: content,
     createdAt: now,
