@@ -135,7 +135,7 @@ export function CreateWorkspaceDialog({
                   value={type}
                   onValueChange={(val) => val && setType(val)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-8 w-full rounded-lg">
                     <SelectValue placeholder="Select type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -159,32 +159,32 @@ export function CreateWorkspaceDialog({
                 <Label className="text-xs font-medium text-on-surface-variant flex items-center gap-1.5">
                   <Sparkles className="size-3 text-primary" /> Start from
                 </Label>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setMode("scratch")}
                     className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-lg border transition-colors text-left",
+                      "flex h-8 w-full items-center justify-center gap-2 rounded-lg border bg-transparent px-3 text-sm font-medium transition-colors",
                       mode === "scratch"
-                        ? "bg-primary/10 border-primary text-primary"
-                        : "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary/40",
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-outline-variant text-on-surface-variant hover:border-primary/40",
                     )}
                   >
                     <Trash2 className="size-4 shrink-0" />
-                    <span className="text-sm font-medium">Scratch</span>
+                    <span>Scratch</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setMode("duplicate")}
                     className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-lg border transition-colors text-left",
+                      "flex h-8 w-full items-center justify-center gap-2 rounded-lg border bg-transparent px-3 text-sm font-medium transition-colors",
                       mode === "duplicate"
-                        ? "bg-primary/10 border-primary text-primary"
-                        : "bg-surface-container-low border-outline-variant text-on-surface-variant hover:border-primary/40",
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-outline-variant text-on-surface-variant hover:border-primary/40",
                     )}
                   >
                     <Copy className="size-4 shrink-0" />
-                    <span className="text-sm font-medium">Duplicate</span>
+                    <span>Duplicate</span>
                   </button>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export function CreateWorkspaceDialog({
                     value={sourceWorkspaceId}
                     onValueChange={(val) => val && setSourceWorkspaceId(val)}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="h-8 w-full rounded-lg">
                       <SelectValue placeholder="Select source workspace…" />
                     </SelectTrigger>
                     <SelectContent>

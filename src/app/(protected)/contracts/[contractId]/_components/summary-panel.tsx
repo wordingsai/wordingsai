@@ -235,7 +235,7 @@ export function SummaryPanel({
         {/* PANEL 2: Clause Navigation */}
         <motion.div
           layout
-          transition={{ type: "spring", bounce: 0, duration: 0.5 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
           className={cn(
             "flex-1 min-w-0 overflow-y-auto transition-all duration-500",
             selectedResultId
@@ -286,10 +286,10 @@ export function SummaryPanel({
         <AnimatePresence mode="wait">
           {selectedResultId && selectedEvent && (
             <motion.div
-              initial={{ x: 300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 300, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border border-primary/20 rounded-lg overflow-hidden flex flex-col shadow-sm z-20"
             >
               <ClauseDetailPanel

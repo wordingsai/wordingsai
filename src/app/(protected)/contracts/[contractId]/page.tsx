@@ -581,9 +581,10 @@ export default function ContractAnalysisPage() {
             {activeTab === "summary" && (
               <motion.div
                 key="summary-tab"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
                 className="w-full"
               >
                 <SummaryPanel
@@ -611,9 +612,10 @@ export default function ContractAnalysisPage() {
             {activeTab === "rules-evaluation" && (
               <motion.div
                 key="rules-evaluation-tab"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
                 className="space-y-8"
               >
                 <RulesEvaluationPanel
@@ -637,9 +639,10 @@ export default function ContractAnalysisPage() {
             {activeTab === "plus-analysis" && (
               <motion.div
                 key="plus-analysis-tab"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
                 className="space-y-8"
               >
                 <PlusAnalysisPanel
@@ -658,9 +661,10 @@ export default function ContractAnalysisPage() {
             {activeTab === "document-map" && (
               <motion.div
                 key="document-tab"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
               >
                 <DocumentMapPanel
                   structuredContent={contract.structuredContent}
