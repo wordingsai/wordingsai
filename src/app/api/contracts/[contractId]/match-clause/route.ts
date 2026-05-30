@@ -122,8 +122,9 @@ export async function POST(
       organizationId,
       eventType: "clause_detected",
       status: "Matched",
-      createdBy: session.user.id,
+      clauseId: libraryClause.id,
       metadata: {
+        matchedBy: session.user.id,
         clauseName,
         category: libraryClause.category || "Contract Provision",
         documentText,
