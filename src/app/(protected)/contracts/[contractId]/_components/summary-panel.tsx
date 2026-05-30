@@ -232,14 +232,16 @@ export function SummaryPanel({
           )}
         </AnimatePresence>
 
-        {/* PANEL 2: Clause Navigation */}
-        <motion.div
-          layout
-          transition={{ duration: 0.15, ease: "easeOut" }}
+        {/* PANEL 2: Clause Navigation.
+            Plain div on purpose: framer's `layout` here animates the resize by
+            transform-scaling the whole text-heavy list, which visibly warps
+            every clause card on open (the worse jank). We snap the width
+            instantly and let Panel 3 slide in to carry the motion. */}
+        <div
           className={cn(
             "flex-1 min-w-0 overflow-y-auto",
             selectedResultId
-              ? "xl:flex-none xl:w-[300px] xl:max-w-[300px] xl:max-h-[min(70vh,640px)]"
+              ? "xl:flex-none xl:w-[320px] xl:max-w-[320px] xl:max-h-[min(70vh,640px)]"
               : "xl:flex-1",
           )}
         >
@@ -280,16 +282,21 @@ export function SummaryPanel({
               }}
             />
           </div>
-        </motion.div>
+        </div>
 
-        {/* PANEL 3: Analysis Detail (Conditional) */}
-        <AnimatePresence mode="wait">
+        {/* PANEL 3: Analysis Detail (Conditional).
+            Slides in from the right with an easeOutQuint curve (fast in, gentle
+            settle, no bounce) — the standard master→detail enter motion. No
+            mode="wait": there's a single child, and waiting for the prior exit
+            first is what made opening feel laggy. */}
+        <AnimatePresence>
           {selectedResultId && selectedEvent && (
             <motion.div
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
+              key="clause-detail"
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 16 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border border-primary/20 rounded-lg overflow-hidden flex flex-col shadow-sm z-20"
             >
               <ClauseDetailPanel
