@@ -23,7 +23,7 @@ import {
   BookmarkPlus,
   Info,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -75,6 +75,10 @@ export function SummaryPanel({
   setActiveTab,
   expectedChecklistHeadings,
 }: SummaryPanelProps) {
+  // Respect the OS "reduce motion" setting — good apps drop slide/scale motion
+  // for users who request it and keep only a quick fade.
+  const prefersReducedMotion = useReducedMotion();
+
   // Auto-collapse brief when a clause is opened
   useEffect(() => {
     if (selectedResultId) setIsPanel1Open(false);
@@ -293,10 +297,27 @@ export function SummaryPanel({
           {selectedResultId && selectedEvent && (
             <motion.div
               key="clause-detail"
-              initial={{ opacity: 0, x: 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 16 }}
-              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              // Material 3 "emphasized" motion — asymmetric, like good native apps:
+              // ENTER decelerates (glides in then settles, 0.4s, emphasized-decelerate);
+              // EXIT accelerates (quick, decisive dismiss, 0.2s, emphasized-accelerate).
+              // Reduced-motion users get a plain fade with no slide.
+              initial={
+                prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 24 }
+              }
+              animate={{
+                opacity: 1,
+                x: 0,
+                transition: prefersReducedMotion
+                  ? { duration: 0.15 }
+                  : { duration: 0.4, ease: [0.05, 0.7, 0.1, 1] },
+              }}
+              exit={{
+                opacity: 0,
+                x: prefersReducedMotion ? 0 : 24,
+                transition: prefersReducedMotion
+                  ? { duration: 0.1 }
+                  : { duration: 0.2, ease: [0.3, 0, 0.8, 0.15] },
+              }}
               className="w-full xl:flex-1 xl:min-w-0 min-h-[320px] max-h-[min(85vh,720px)] xl:max-h-[min(70vh,640px)] bg-surface-container border border-primary/20 rounded-lg overflow-hidden flex flex-col shadow-sm z-20"
             >
               <ClauseDetailPanel
