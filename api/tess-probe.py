@@ -10,14 +10,34 @@ def _probe() -> dict:
     vend = os.path.join(here, "_tess")
     info["fn_dir"] = here
     info["vendor_dir_exists"] = os.path.isdir(vend)
+    info["cwd"] = os.getcwd()
     if not info["vendor_dir_exists"]:
-        # maybe bundled relative to cwd instead
-        alt = os.path.join(os.getcwd(), "api", "_tess")
-        info["alt_exists"] = os.path.isdir(alt)
-        if info.get("alt_exists"):
-            vend = alt
-        else:
-            info["verdict"] = "VENDOR NOT SHIPPED — includeFiles missing/incorrect"
+        # search the deployment for _tess anywhere, and show the layout
+        found = []
+        for base in ("/var/task", os.getcwd(), here, "/var/task/api", "/"):
+            try:
+                for root, dirs, files in os.walk(base):
+                    if root.count(os.sep) - base.count(os.sep) > 3:
+                        dirs[:] = []
+                        continue
+                    if "_tess" in os.path.basename(root) or "tesseract" in [f for f in files]:
+                        found.append(root)
+            except Exception:
+                pass
+        info["search_found_tess"] = found[:10]
+        try:
+            info["ls_var_task"] = sorted(os.listdir("/var/task"))[:30]
+            info["ls_fn_dir"] = sorted(os.listdir(here))[:30]
+            if os.path.isdir("/var/task/api"):
+                info["ls_var_task_api"] = sorted(os.listdir("/var/task/api"))[:30]
+        except Exception as e:
+            info["ls_err"] = str(e)
+        # try the first found path
+        for f in found:
+            if os.path.isdir(os.path.join(f, "bin")):
+                vend = f; info["vendor_dir_exists"] = True; break
+        if not info["vendor_dir_exists"]:
+            info["verdict"] = "VENDOR NOT SHIPPED — see search/ls above"
             return info
     for d in ("bin", "lib", "tessdata"):
         p = os.path.join(vend, d)
