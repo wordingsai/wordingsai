@@ -690,6 +690,7 @@ type CodeIndexRow = {
   library: string | null;
   category: string | null;
   code: string;
+  status: string | null;
 };
 
 /** Uppercase + strip everything but A-Z0-9 so "LSW 321", "lsw-321" all match. */
@@ -723,6 +724,7 @@ async function buildWorkspaceCodeIndex(
       library: clauses.library,
       category: clauses.category,
       code: clauses.code,
+      status: clauses.status,
     })
     .from(clauses)
     .where(
@@ -775,6 +777,7 @@ type NameIndexRow = {
   library: string | null;
   category: string | null;
   code: string | null;
+  status: string | null;
 };
 
 /**
@@ -812,6 +815,7 @@ async function buildWorkspaceNameIndex(
       library: clauses.library,
       category: clauses.category,
       code: clauses.code,
+      status: clauses.status,
     })
     .from(clauses)
     .where(
@@ -983,6 +987,7 @@ export async function runDocumentMapChecklistBatch(
             reasoning: `Incorporated by reference "(As attached)" — ${sourceNote}. The attached wording is authoritative (100% match).`,
             confidence: 1,
             clauseCode: nameHit?.code || null,
+            approvalStatus: nameHit?.status ?? null,
             matchType: "name-ref" as const,
             libraryPlusContext: Boolean(nameHit && appendixText),
             isGlobal: true,
@@ -1028,6 +1033,7 @@ export async function runDocumentMapChecklistBatch(
           reasoning,
           confidence: 1,
           clauseCode: codeHit.code,
+          approvalStatus: codeHit.status ?? null,
           matchType: "code" as const,
           libraryPlusContext: hasContext,
           isGlobal: true,
@@ -1089,6 +1095,7 @@ export async function runDocumentMapChecklistBatch(
         reasoning,
         confidence: similarity,
         clauseCode: hasLibraryRef ? bestMatch?.code || null : null,
+        approvalStatus: hasLibraryRef ? bestMatch?.status ?? null : null,
         matchType: "semantic" as const,
         libraryPlusContext: false,
         isGlobal: true,
