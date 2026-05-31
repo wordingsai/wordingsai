@@ -216,19 +216,35 @@ export function AnalysisChecklist({
                         {event.metadata.clauseCode && (
                           <Badge
                             variant="outline"
-                            className={cn(
-                              "text-[10px] font-mono px-1.5 py-0 border rounded shrink-0",
-                              event.metadata.matchType === "code"
-                                ? "bg-primary/10 text-primary border-primary/30"
-                                : "bg-surface-container text-on-surface-variant border-outline-variant/50",
-                            )}
+                            // Library reference code — ONE consistent style for
+                            // every match type. Previously code-matches were blue
+                            // and name/semantic matches grey, which read as
+                            // inconsistent formatting in the list.
+                            className="text-[10px] font-mono px-1.5 py-0 border rounded shrink-0 bg-primary/10 text-primary border-primary/30"
                             title={
                               event.metadata.matchType === "code"
                                 ? "Matched by library code (incorporated by reference)"
-                                : "Closest library clause by similarity"
+                                : "Matched library clause"
                             }
                           >
                             {event.metadata.clauseCode}
+                          </Badge>
+                        )}
+                        {event.metadata.approvalStatus && (
+                          <Badge
+                            variant="outline"
+                            className={cn(
+                              "text-[10px] font-medium px-1.5 py-0 border rounded shrink-0",
+                              String(event.metadata.approvalStatus) ===
+                                "Approved"
+                                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+                                : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+                            )}
+                            title="Library clause approval status"
+                          >
+                            {String(event.metadata.approvalStatus) === "Approved"
+                              ? "Approved"
+                              : "Unapproved"}
                           </Badge>
                         )}
                         <Badge

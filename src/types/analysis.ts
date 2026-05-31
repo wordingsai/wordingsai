@@ -79,9 +79,13 @@ export interface AnalysisEvent {
     status?: string;
     isGlobal?: boolean;
     clauseCode?: string | null;
+    /** Library clause approval status ("Approved" / "Not Approved"), surfaced
+     * on the match so the checklist can show an Approved/Unapproved chip. */
+    approvalStatus?: string | null;
     /** How this clause was matched: "code" = exact library-code reference
-     * (Rule A/C, 100%), "semantic" = vector similarity (Rule B). */
-    matchType?: "code" | "semantic";
+     * (Rule A/C, 100%), "name-ref" = incorporated "(As attached)" by-name
+     * reference, "semantic" = vector similarity (Rule B). */
+    matchType?: "code" | "semantic" | "name-ref";
     /** Rule C: the contract carries the coded library clause PLUS extra
      * contract-specific wording (vs pure incorporation-by-reference). */
     libraryPlusContext?: boolean;
