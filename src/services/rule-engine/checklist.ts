@@ -460,7 +460,59 @@ function buildChecklistCandidates(
     });
   }
 
-  return candidates;
+  // Final dedup pass (Richard 05-31): collapse near-duplicate provisions the
+  // document map emitted more than once. A layered XoL restates a clause per
+  // layer and OCR makes the repeats differ by a few characters, so the
+  // per-push heading+body[:160] signature above misses them (e.g. "Retentions"
+  // appearing twice with 655 vs 649-char bodies). Group by normalized name;
+  // within a group keep the longest body and drop another ONLY when it is a
+  // stub (<60 real chars) or its whitespace-stripped body is contained in / a
+  // >=92% prefix of the kept one. Two genuinely different same-named provisions
+  // (e.g. two distinct "General Provisions" sections, 757 vs 222 chars) are
+  // both kept. Document order is preserved. Validated on contract 11: 90 -> 82.
+  const squashBody = (s: string) =>
+    (s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const isRedundantBody = (a: string, b: string): boolean => {
+    const sa = squashBody(a);
+    const sb = squashBody(b);
+    if (sa.length < 60) return true; // stub / title-only
+    if (sb.includes(sa)) return true; // fully contained in the kept body
+    let i = 0;
+    while (i < sa.length && i < sb.length && sa[i] === sb[i]) i++;
+    return i >= Math.min(sa.length, sb.length) * 0.92; // OCR-variant near-dup
+  };
+  const dupKeyOf = (c: ChecklistCandidate) =>
+    nameKey(c.heading) || normalizeHeadingKey(c.heading);
+  const idxByName = new Map<string, number[]>();
+  candidates.forEach((cand, i) => {
+    const k = dupKeyOf(cand);
+    if (!k) return; // unkeyable (too generic) — never dedup, always keep
+    if (!idxByName.has(k)) idxByName.set(k, []);
+    idxByName.get(k)!.push(i);
+  });
+  const dropIdx = new Set<number>();
+  for (const idxs of idxByName.values()) {
+    if (idxs.length < 2) continue;
+    const sorted = [...idxs].sort(
+      (a, b) =>
+        (candidates[b].fullText || "").length -
+        (candidates[a].fullText || "").length,
+    );
+    const kept: number[] = [];
+    for (const i of sorted) {
+      if (
+        kept.some((k) =>
+          isRedundantBody(candidates[i].fullText, candidates[k].fullText),
+        )
+      ) {
+        dropIdx.add(i);
+      } else {
+        kept.push(i);
+      }
+    }
+  }
+  if (dropIdx.size === 0) return candidates;
+  return candidates.filter((_, i) => !dropIdx.has(i));
 }
 
 /** Load document map and flatten sections into checklist candidates. */
