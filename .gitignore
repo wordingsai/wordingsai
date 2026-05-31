@@ -58,6 +58,7 @@ scripts/_pp.mjs
 scripts/_*.mjs
 scripts/_*.cjs
 scripts/_*.ts
+scripts/_*.py
 
 # Large binaries must never be committed (sample contracts, exports, snapshots)
 *.pdf
