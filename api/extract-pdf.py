@@ -20,13 +20,18 @@ arrangement that flat text loses.
 from __future__ import annotations
 
 import base64
+import hashlib
 import io
 import json
 import os
 import re
+import subprocess
+import tempfile
+import threading
 import time
 import urllib.error
 import urllib.request
+import zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from http.server import BaseHTTPRequestHandler
 from typing import Any
@@ -118,6 +123,187 @@ def _ocr_page_gemma(png_bytes: bytes, tries: int = 3) -> str:
     return ""
 
 
+# ── Tesseract OCR (free, offline first pass for the hybrid engine) ────────────
+# Vercel's Python runtime = AWS Lambda Amazon Linux 2 (x86-64) with NO system
+# tesseract binary, and includeFiles is unreliable for @vercel/python. So we
+# fetch a prebuilt AL2-x86 tesseract bundle (bweigel/aws-lambda-tesseract-layer
+# v5.3.9 — verified ELF x86-64) into /tmp (exec-capable) on cold start, verify
+# its SHA256, and point the loader at the vendored .so libs + tessdata. The whole
+# path is fail-safe: any failure returns "" so the caller falls back to Gemma.
+OCR_ENGINE = os.environ.get("OCR_ENGINE", "gemma").lower()  # gemma|tesseract|hybrid
+TESS_BUNDLE_URL = os.environ.get(
+    "TESS_BUNDLE_URL",
+    "https://github.com/bweigel/aws-lambda-tesseract-layer/releases/download/"
+    "v5.3.9/tesseract-al2-x86.zip",
+)
+# SHA256 of the bytes we inspected — run exactly that binary, not whatever a URL
+# happens to serve later. Set TESS_BUNDLE_SHA256="" to skip the check.
+TESS_BUNDLE_SHA256 = os.environ.get(
+    "TESS_BUNDLE_SHA256",
+    "3a0db40839b7d83f16816a1d35b6daccd0a01713653eb21668c8c064b18a0eff",
+)
+TESS_DIR = os.environ.get("TESS_DIR", "/tmp/tess")
+TESS_LANG = os.environ.get("TESS_LANG", "eng")
+TESS_PSM = os.environ.get("TESS_PSM", "6")  # 6 = assume a uniform block of text
+_tess_lock = threading.Lock()
+_tess_bin: str | None = None  # resolved binary path; None once tried & failed
+_tess_tried = False
+
+
+def _tess_env() -> dict[str, str]:
+    """Process env with the vendored loader + tessdata paths prepended."""
+    env = dict(os.environ)
+    env["LD_LIBRARY_PATH"] = (
+        os.path.join(TESS_DIR, "lib") + ":" + env.get("LD_LIBRARY_PATH", "")
+    )
+    env["TESSDATA_PREFIX"] = os.path.join(TESS_DIR, "tesseract", "share", "tessdata")
+    return env
+
+
+def _ensure_tesseract() -> str | None:
+    """Download + unpack the AL2 tesseract bundle into /tmp on first use and
+    return the path to the binary. Cached across warm invocations (the container
+    keeps /tmp). Returns None on any failure so callers fall back to Gemma."""
+    global _tess_bin, _tess_tried
+    if _tess_tried:
+        return _tess_bin
+    with _tess_lock:
+        if _tess_tried:
+            return _tess_bin
+        _tess_tried = True
+        binpath = os.path.join(TESS_DIR, "bin", "tesseract")
+        try:
+            if not os.path.exists(binpath):
+                os.makedirs(TESS_DIR, exist_ok=True)
+                req = urllib.request.Request(
+                    TESS_BUNDLE_URL, headers={"User-Agent": "wordingsai-extract"}
+                )
+                with urllib.request.urlopen(req, timeout=90) as resp:
+                    data = resp.read()
+                if TESS_BUNDLE_SHA256:
+                    if hashlib.sha256(data).hexdigest() != TESS_BUNDLE_SHA256:
+                        _tess_bin = None
+                        return None
+                zpath = os.path.join(TESS_DIR, "bundle.zip")
+                with open(zpath, "wb") as f:
+                    f.write(data)
+                with zipfile.ZipFile(zpath) as z:
+                    z.extractall(TESS_DIR)
+                try:
+                    os.remove(zpath)
+                except Exception:
+                    pass
+            os.chmod(binpath, 0o755)
+            # Self-check: the binary must actually run on this runtime (glibc /
+            # libstdc++ resolution). If `--version` fails, disable tesseract.
+            chk = subprocess.run(
+                [binpath, "--version"], capture_output=True, timeout=20,
+                env=_tess_env(),
+            )
+            if chk.returncode != 0:
+                _tess_bin = None
+                return None
+            _tess_bin = binpath
+            return _tess_bin
+        except Exception:
+            _tess_bin = None
+            return None
+
+
+def _preprocess_for_tess(png_bytes: bytes) -> bytes:
+    """Pillow-only page-image cleanup (cv2/OpenCV is NOT available on Vercel):
+    grayscale → autocontrast → unsharp. Best-effort; returns input on failure."""
+    try:
+        from PIL import Image, ImageFilter, ImageOps
+
+        im = Image.open(io.BytesIO(png_bytes))
+        im = ImageOps.grayscale(im)
+        im = ImageOps.autocontrast(im, cutoff=1)
+        im = im.filter(ImageFilter.UnsharpMask(radius=1.5, percent=150, threshold=3))
+        buf = io.BytesIO()
+        im.save(buf, format="PNG")
+        return buf.getvalue()
+    except Exception:
+        return png_bytes
+
+
+# Reference-code repair: OCR confuses O/0, I/1, S/5, B/8 inside short codes like
+# LSW357A. Only applied to the code token, never to body prose.
+_CODE_FIX_RE = re.compile(
+    r"\b(LSW|LMA|NMA|AVN|JCC|JC|CL|IUA|LsW|Lsw)\s?([0-9OQISB]{2,4}[A-Za-z]?)\b"
+)
+_JUNK_LINE_RE = re.compile(r"(?m)^[\s|)\]}<>'\"`~^*_.]+$")
+
+
+def _postprocess_ocr(text: str) -> str:
+    """Code-aware repair + junk-line strip on raw tesseract output."""
+    def _mc(m: re.Match[str]) -> str:
+        pre = m.group(1).upper()
+        rest = (
+            m.group(2).upper().replace("O", "0").replace("Q", "0")
+            .replace("I", "1").replace("S", "5").replace("B", "8")
+        )
+        return f"{pre}{rest}"
+
+    text = _CODE_FIX_RE.sub(_mc, text)
+    text = _JUNK_LINE_RE.sub("", text)
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
+def _ocr_page_tesseract(png_bytes: bytes) -> str:
+    """OCR one rendered page image with the vendored tesseract binary. Returns ""
+    on any failure (caller falls back to Gemma / keeps the pdfplumber text)."""
+    binp = _ensure_tesseract()
+    if not binp:
+        return ""
+    imgpath = outbase = None
+    try:
+        img = _preprocess_for_tess(png_bytes)
+        with tempfile.NamedTemporaryFile(
+            suffix=".png", dir="/tmp", delete=False
+        ) as tf:
+            tf.write(img)
+            imgpath = tf.name
+        outbase = imgpath + "_out"
+        subprocess.run(
+            [binp, imgpath, outbase, "-l", TESS_LANG, "--oem", "1", "--psm", TESS_PSM],
+            capture_output=True, timeout=90, env=_tess_env(),
+        )
+        txtpath = outbase + ".txt"
+        if not os.path.exists(txtpath):
+            return ""
+        with open(txtpath, encoding="utf-8", errors="ignore") as f:
+            return _postprocess_ocr(f.read())
+    except Exception:
+        return ""
+    finally:
+        for p in (imgpath, (outbase + ".txt") if outbase else None):
+            if p:
+                try:
+                    os.remove(p)
+                except Exception:
+                    pass
+
+
+def _ocr_page(engine: str, png_bytes: bytes, current_text: str) -> tuple[str, str]:
+    """Dispatch one dirty page to the chosen OCR engine. Returns
+    (text, method_used). For hybrid: tesseract first (free); if its result is
+    weak, let Gemma heal and keep whichever is longer."""
+    if engine == "tesseract":
+        return _ocr_page_tesseract(png_bytes), "tesseract"
+    if engine == "hybrid":
+        t = _ocr_page_tesseract(png_bytes)
+        # Accept the free tesseract pass only if it's solid: decent length and
+        # not itself dirty. Otherwise fall through to Gemma.
+        if t and len(t) >= max(80, len(current_text)) and not _page_is_dirty(t):
+            return t, "tesseract"
+        g = _ocr_page_gemma(png_bytes)
+        if g and (not t or len(g) >= len(t)):
+            return g, "gemma"
+        return (t, "tesseract") if t else (g, "gemma")
+    return _ocr_page_gemma(png_bytes), "gemma"
+
+
 def _table_to_markdown(table: list[list[str | None]]) -> str:
     """Convert a pdfplumber-extracted table (list of rows) to GitHub markdown."""
     if not table:
@@ -159,8 +345,11 @@ _TABLE_SETTINGS = {
 }
 
 
-def _extract(pdf_bytes: bytes) -> dict[str, Any]:
+def _extract(pdf_bytes: bytes, engine: str | None = None) -> dict[str, Any]:
     t0 = time.time()
+    engine = (engine or OCR_ENGINE or "gemma").lower()
+    if engine not in ("gemma", "tesseract", "hybrid"):
+        engine = "gemma"
     out_pages: list[dict[str, Any]] = []
     out_tables: list[dict[str, Any]] = []
     full_text_parts: list[str] = []
@@ -198,19 +387,28 @@ def _extract(pdf_bytes: bytes) -> dict[str, Any]:
 
             full_text_parts.append(f"\n\n--- PAGE {idx} ---\n\n{page_text}")
 
-    # ── OCR self-heal: replace dirty/scanned pages with Gemma vision OCR ──
+    # ── OCR self-heal: re-OCR dirty/scanned pages from their rendered image ──
     # pdfplumber gave us each page's text above; pages whose text looks like a
-    # bad scanned layer get re-OCR'd from the rendered image. Clean digital
-    # pages are left exactly as-is (zero OCR calls, no cost).
+    # bad scanned layer get re-OCR'd. Clean digital pages are left exactly as-is
+    # (zero OCR calls, no cost). Engine: gemma (default), tesseract (free,
+    # offline), or hybrid (tesseract first, Gemma heals the weak pages).
     ocr_pages = 0
     ocr_method = ""
+    ocr_counts: dict[str, int] = {}
     page_texts = [p["text"] for p in out_pages]
-    if _GEMINI_KEY and fitz is not None:
+    # gemma needs an API key; tesseract/hybrid only need a renderer (tesseract
+    # bootstraps its own binary and degrades to Gemma/plumber if that fails).
+    can_run = fitz is not None and (engine != "gemma" or bool(_GEMINI_KEY))
+    if can_run:
         dirty_idx = [i for i, txt in enumerate(page_texts) if _page_is_dirty(txt)]
-        # safety cap: never fire more than OCR_MAX_PAGES calls in one invocation
+        # safety cap: never fire more than OCR_MAX_PAGES pages in one invocation
         dirty_idx = dirty_idx[:OCR_MAX_PAGES]
         if dirty_idx:
-            ocr_method = OCR_MODEL
+            ocr_method = engine
+            workers = (
+                OCR_MAX_WORKERS if engine == "gemma"
+                else int(os.environ.get("TESS_MAX_WORKERS", "2"))
+            )
             try:
                 doc = fitz.open(stream=pdf_bytes, filetype="pdf")
                 rendered: dict[int, bytes] = {}
@@ -221,26 +419,30 @@ def _extract(pdf_bytes: bytes) -> dict[str, Any]:
                     except Exception:
                         pass
                 doc.close()
-                with ThreadPoolExecutor(max_workers=OCR_MAX_WORKERS) as ex:
-                    futs = {ex.submit(_ocr_page_gemma, rendered[i]): i
-                            for i in rendered}
+                with ThreadPoolExecutor(max_workers=max(1, workers)) as ex:
+                    futs = {
+                        ex.submit(_ocr_page, engine, rendered[i], page_texts[i]): i
+                        for i in rendered
+                    }
                     for fut in as_completed(futs):
                         i = futs[fut]
                         try:
-                            txt = fut.result()
+                            txt, method = fut.result()
                         except Exception:
-                            txt = ""
-                        # Only adopt OCR text if it actually beats the dirty
-                        # layer (longer + non-empty), so a flaky call can't make
-                        # a page worse than pdfplumber already had it.
+                            txt, method = "", ""
+                        # Only adopt OCR text if it actually beats the dirty layer
+                        # (longer + non-empty), so a flaky call can't make a page
+                        # worse than pdfplumber already had it.
                         if txt and len(txt) > len(page_texts[i]):
                             page_texts[i] = txt
                             out_pages[i]["text"] = txt
                             out_pages[i]["ocr"] = True
+                            out_pages[i]["ocr_via"] = method
                             ocr_pages += 1
+                            ocr_counts[method] = ocr_counts.get(method, 0) + 1
             except Exception as e:
                 # OCR is best-effort: on any failure keep the pdfplumber text.
-                ocr_method = f"{OCR_MODEL} (error: {type(e).__name__})"
+                ocr_method = f"{engine} (error: {type(e).__name__})"
 
     # Rebuild the flat full-text from the (possibly OCR-healed) per-page text.
     full_text = "".join(
@@ -258,7 +460,9 @@ def _extract(pdf_bytes: bytes) -> dict[str, Any]:
             "table_count": len(out_tables),
             "parser": "pdfplumber+ocr" if ocr_pages else "pdfplumber",
             "parser_version": pdfplumber.__version__,
+            "ocr_engine": engine,
             "ocr_pages": ocr_pages,
+            "ocr_counts": ocr_counts,
             "ocr_model": ocr_method,
             "extract_ms": ms,
         },
@@ -298,6 +502,15 @@ class handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802 (BaseHTTPRequestHandler convention)
         try:
+            # Optional per-request OCR engine override (?engine=tesseract|hybrid|
+            # gemma). Defaults to the OCR_ENGINE env var. Lets us A/B engines
+            # without redeploying or changing the production default.
+            engine_override: str | None = None
+            if "?" in self.path:
+                engine_override = (
+                    parse_qs(self.path.split("?", 1)[1]).get("engine") or [None]
+                )[0]
+
             length = int(self.headers.get("Content-Length", "0"))
             if length <= 0:
                 return self._send_json(400, {"error": "Empty body"})
@@ -312,6 +525,7 @@ class handler(BaseHTTPRequestHandler):
             pdf_bytes: bytes | None = None
             if content_type.startswith("application/json"):
                 payload = json.loads(raw.decode("utf-8"))
+                engine_override = engine_override or payload.get("engine")
                 storage_path = payload.get("storage_path")
                 pdf_url = payload.get("pdf_url")
                 b64 = payload.get("pdf_base64")
@@ -382,7 +596,7 @@ class handler(BaseHTTPRequestHandler):
             if not pdf_bytes or len(pdf_bytes) < 4 or not pdf_bytes.startswith(b"%PDF"):
                 return self._send_json(400, {"error": "Not a valid PDF"})
 
-            result = _extract(pdf_bytes)
+            result = _extract(pdf_bytes, engine=engine_override)
             return self._send_json(200, result)
         except Exception as e:
             return self._send_json(
@@ -390,6 +604,28 @@ class handler(BaseHTTPRequestHandler):
             )
 
     def do_GET(self) -> None:  # noqa: N802
+        # Diagnostic: ?selftest=tess downloads + runs the vendored tesseract and
+        # reports its version, confirming the binary works on this runtime.
+        if "selftest=tess" in self.path:
+            binp = _ensure_tesseract()
+            info: dict[str, Any] = {
+                "tesseract_available": bool(binp),
+                "bin": binp,
+                "ocr_engine": OCR_ENGINE,
+            }
+            if binp:
+                try:
+                    out = subprocess.run(
+                        [binp, "--version"], capture_output=True, timeout=20,
+                        env=_tess_env(),
+                    )
+                    info["version"] = (
+                        (out.stdout or out.stderr).decode("utf-8", "ignore")
+                        .splitlines()[:3]
+                    )
+                except Exception as e:
+                    info["error"] = f"{type(e).__name__}: {e}"
+            return self._send_json(200, info)
         return self._send_json(
             200,
             {
@@ -399,5 +635,6 @@ class handler(BaseHTTPRequestHandler):
                 "accepts": ["multipart/form-data (file=)", "application/json (pdf_base64)", "application/pdf raw"],
                 "parser": "pdfplumber",
                 "parser_version": pdfplumber.__version__,
+                "ocr_engine": OCR_ENGINE,
             },
         )
