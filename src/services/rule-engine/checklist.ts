@@ -883,6 +883,69 @@ function findAppendixSectionText(
   return best;
 }
 
+/**
+ * Compact, OCR-tolerant clause key for matching a reference name against an
+ * attachment HEADING: uppercase, drop parentheticals, strip all
+ * non-alphanumerics (so "AGG REGATE" === "AGGREGATE"), and drop a trailing
+ * CLAUSE / AGREEMENT / NOTICE word so "ARIAS Arbitration Agreement (As
+ * attached)" keys to the in-document heading "ARIAS ARBITRATION AGREEMENT".
+ */
+function clauseBodyKey(s: string): string {
+  return (s || "")
+    .toUpperCase()
+    .replace(/\([^)]*\)/g, " ")
+    .replace(/[^A-Z0-9]/g, "")
+    .replace(/(CLAUSE|AGREEMENT|NOTICE)$/, "");
+}
+
+/**
+ * Is this line an ALL-CAPS attachment heading (e.g. "ARIAS ARBITRATION
+ * AGREEMENT", "ASBESTOS EXCLUSION CLAUSE")? The incorporation-LIST rows are
+ * mixed case ("ARIAS Arbitration Agreement (As attached).") so this cleanly
+ * distinguishes a real attachment-section heading from a reference mention.
+ */
+function isAttachmentHeadingLine(s: string): boolean {
+  const t = (s || "").trim();
+  if (t.length < 4 || t.length > 80) return false;
+  const letters = t.replace(/[^A-Za-z]/g, "");
+  if (letters.length < 4) return false;
+  const upper = t.replace(/[^A-Z]/g, "");
+  return upper.length / letters.length >= 0.8;
+}
+
+/**
+ * Pull the in-document body for an incorporated "(As attached)" clause from the
+ * raw contract text. Reinsurance slips list the clause by name in a Conditions
+ * block and reproduce the full wording later under an ATTACHMENTS section. We
+ * find the ALL-CAPS heading matching the reference name and capture the lines
+ * that follow, up to the next heading. Returns the longest clean body, or null.
+ * This is what makes the "Extracted from contract" panel show the real clause
+ * text (Richard 05-31) rather than just the title.
+ */
+function findClauseBodyInText(
+  name: string,
+  fullText: string,
+): string | null {
+  const tk = clauseBodyKey(name);
+  if (!tk || tk.length < 4) return null;
+  const lines = (fullText || "").split("\n");
+  let best: string | null = null;
+  for (let i = 0; i < lines.length; i++) {
+    if (!isAttachmentHeadingLine(lines[i])) continue;
+    if (clauseBodyKey(lines[i]) !== tk) continue;
+    const body: string[] = [];
+    for (let j = i + 1; j < lines.length; j++) {
+      if (isAttachmentHeadingLine(lines[j])) break;
+      const ln = lines[j].trim();
+      if (ln) body.push(ln);
+      if (body.join(" ").length > 6000) break;
+    }
+    const text = body.join(" ").replace(/\s+/g, " ").trim();
+    if (text.length > 80 && (!best || text.length > best.length)) best = text;
+  }
+  return best;
+}
+
 export async function runDocumentMapChecklistBatch(
   contractId: string,
   workspaceId: string,
@@ -933,6 +996,9 @@ export async function runDocumentMapChecklistBatch(
   const batchHasRefRows = batch.some((c) => c.referenceName);
   let nameIndex = new Map<string, NameIndexRow>();
   let docMap: StructuredContract | null = null;
+  // Raw contract text — used to pull the in-document body of an incorporated
+  // "(As attached)" clause whose wording lives under an ATTACHMENTS section.
+  let fileContentText = "";
   if (batchHasRefRows) {
     try {
       nameIndex = await buildWorkspaceNameIndex(orgId);
@@ -941,11 +1007,15 @@ export async function runDocumentMapChecklistBatch(
     }
     try {
       const [row] = await db
-        .select({ structuredContent: contracts.structuredContent })
+        .select({
+          structuredContent: contracts.structuredContent,
+          fileContent: contracts.fileContent,
+        })
         .from(contracts)
         .where(eq(contracts.id, contractId))
         .limit(1);
       docMap = (row?.structuredContent as StructuredContract | null) ?? null;
+      fileContentText = (row?.fileContent as string | null) ?? "";
     } catch (err) {
       console.warn("[Checklist] document map load failed:", err);
     }
@@ -961,14 +1031,26 @@ export async function runDocumentMapChecklistBatch(
         candidate.referenceName,
         docMap,
       );
+      // The actual clause body reproduced under the ATTACHMENTS section of the
+      // raw contract text. When found, this is what we show in "Extracted from
+      // contract" (Richard 05-31: the panel was showing only the title).
+      const inDocBody = findClauseBodyInText(
+        candidate.referenceName,
+        fileContentText,
+      );
 
-      if (nameHit || appendixText) {
+      if (nameHit || appendixText || inDocBody) {
         const libraryStandard =
           nameHit?.clauseText ||
           appendixText ||
+          inDocBody ||
           "No library standard found.";
+        // Prefer the real in-document wording for the contract side; fall back
+        // to the reference title only when no body could be recovered.
+        const contractText = inDocBody || candidate.fullText;
+        const attachedNote = inDocBody || appendixText;
         const sourceNote = nameHit
-          ? appendixText
+          ? attachedNote
             ? `matched to library clause "${nameHit.clauseName}"${nameHit.code ? ` (${nameHit.code})` : ""}; full wording also attached in this document`
             : `matched to library clause "${nameHit.clauseName}"${nameHit.code ? ` (${nameHit.code})` : ""}`
           : "full wording attached in this document";
@@ -981,15 +1063,15 @@ export async function runDocumentMapChecklistBatch(
           metadata: {
             clauseName: candidate.heading,
             category: nameHit?.category || "Contract Provision",
-            documentText: candidate.fullText,
-            documentTextSnippet: candidate.fullText.substring(0, 300),
+            documentText: contractText,
+            documentTextSnippet: contractText.substring(0, 300),
             libraryStandard,
             reasoning: `Incorporated by reference "(As attached)" — ${sourceNote}. The attached wording is authoritative (100% match).`,
             confidence: 1,
             clauseCode: nameHit?.code || null,
             approvalStatus: nameHit?.status ?? null,
             matchType: "name-ref" as const,
-            libraryPlusContext: Boolean(nameHit && appendixText),
+            libraryPlusContext: Boolean(nameHit && attachedNote),
             isGlobal: true,
           },
         };
