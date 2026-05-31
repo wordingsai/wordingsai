@@ -265,8 +265,12 @@ def _ocr_page_tesseract(png_bytes: bytes) -> str:
             tf.write(img)
             imgpath = tf.name
         outbase = imgpath + "_out"
+        # --tessdata-dir explicitly: tesseract 4/5 changed TESSDATA_PREFIX
+        # semantics, so we point straight at the folder holding eng.traineddata.
+        tessdata = os.path.join(TESS_DIR, "tesseract", "share", "tessdata")
         subprocess.run(
-            [binp, imgpath, outbase, "-l", TESS_LANG, "--oem", "1", "--psm", TESS_PSM],
+            [binp, imgpath, outbase, "-l", TESS_LANG, "--oem", "1",
+             "--psm", TESS_PSM, "--tessdata-dir", tessdata],
             capture_output=True, timeout=90, env=_tess_env(),
         )
         txtpath = outbase + ".txt"
@@ -625,6 +629,21 @@ class handler(BaseHTTPRequestHandler):
                     )
                 except Exception as e:
                     info["error"] = f"{type(e).__name__}: {e}"
+            else:
+                # Surface WHY bootstrap failed (missing GLIBCXX/.so, bad SHA, no
+                # network) so a broken runtime is diagnosable in one call.
+                rawbin = os.path.join(TESS_DIR, "bin", "tesseract")
+                info["bin_exists"] = os.path.exists(rawbin)
+                if os.path.exists(rawbin):
+                    try:
+                        out = subprocess.run(
+                            [rawbin, "--version"], capture_output=True, timeout=20,
+                            env=_tess_env(),
+                        )
+                        info["rc"] = out.returncode
+                        info["stderr"] = out.stderr.decode("utf-8", "ignore")[:600]
+                    except Exception as e:
+                        info["run_error"] = f"{type(e).__name__}: {e}"
             return self._send_json(200, info)
         return self._send_json(
             200,
